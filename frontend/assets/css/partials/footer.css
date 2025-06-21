@@ -1,0 +1,136 @@
+/* Footer Styles */
+@import "../base.css";
+#footer {
+  background-color: var(--body-color);
+  padding: var(--spacing-medium) 0;
+  color: var(--dark-color);
+}
+
+.footer-content {
+  display: flex;
+  justify-content: space-between;
+  gap: var(--spacing-small);
+  margin-bottom: var(--spacing-small);
+}
+
+.footer-section {
+  flex: 1;
+  min-width: 200px;
+}
+
+.footer-section h3,
+.footer-section h4 {
+  color: var(--dark-color);
+  font-size: var(--h3-font-size);
+  margin-bottom: 10px;
+}
+
+.footer-section h3 {
+  color: hsl(0, 100%, 50%); /* Red color for "FIRST CAMBODIA" */
+}
+
+.footer-section p,
+.footer-section ul li a {
+  font-size: var(--small-font-size);
+  color: var(--dark-color-light);
+  line-height: 1.6;
+}
+
+.footer-section ul li {
+  margin-bottom: 8px;
+}
+
+.footer-section ul li a:hover {
+  color: var(--first-color);
+}
+
+.social-icons {
+  display: flex;
+  gap: 10px;
+  margin-top: 15px;
+}
+
+.social-icons a {
+  width: 30px;
+  height: 30px;
+  background-color: var(--first-color);
+  color: var(--white-color);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+}
+
+.social-icons a:hover {
+  background-color: var(--dark-color);
+}
+
+.footer-bottom {
+  text-align: center;
+  padding-top: var(--spacing-small);
+  border-top: 1px solid hsl(216, 14%, 90%);
+}
+
+.footer-bottom p {
+  font-size: var(--small-font-size);
+  color: var(--dark-color-light);
+}
+
+/* Responsive Design */
+@media screen and (max-width: 1023px) {
+  .footer-content {
+    flex-direction: column;
+    gap: var(--spacing-small);
+  }
+
+  .footer-section {
+    margin-bottom: var(--spacing-small);
+  }
+
+  .footer-section h3,
+  .footer-section h4 {
+    font-size: 1.4rem;
+  }
+
+  .footer-section p,
+  .footer-section ul li a {
+    font-size: 0.85rem;
+  }
+
+  .social-icons a {
+    width: 28px;
+    height: 28px;
+    font-size: 13px;
+  }
+}
+
+@media screen and (max-width: 767px) {
+  #footer {
+    padding: var(--spacing-small) 0;
+  }
+
+  .footer-section h3,
+  .footer-section h4 {
+    font-size: 1.2rem;
+  }
+
+  .footer-section p,
+  .footer-section ul li a {
+    font-size: 0.8rem;
+  }
+
+  .social-icons {
+    gap: 8px;
+  }
+
+  .social-icons a {
+    width: 25px;
+    height: 25px;
+    font-size: 12px;
+  }
+
+  .footer-bottom p {
+    font-size: 0.75rem;
+  }
+}

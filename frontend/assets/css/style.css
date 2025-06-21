@@ -1,0 +1,85 @@
+/* ====================
+   GLOBAL RESET & BASE
+==================== */
+:root {
+  --primary-color: #003087;
+  --secondary-color: #00205b;
+  --text-color: #333;
+  --bg-light: #f0f4f8;
+  --white-color: #ffffff;
+  --gray-color: #666;
+  --font-size-base: 16px;
+  --header-height: 60px;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html,
+body {
+  font-family: "Segoe UI", sans-serif;
+  font-size: var(--font-size-base);
+  line-height: 1.6;
+  color: var(--text-color);
+  background-color: #fff;
+}
+
+img {
+  max-width: 100%;
+  display: block;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+ul {
+  list-style: none;
+}
+
+/* Layout Helpers */
+.container {
+  width: 100%;
+  max-width: 1200px;
+  margin-inline: auto;
+  padding-inline: 15px;
+}
+
+.text-center {
+  text-align: center;
+}
+
+/* Reusable Buttons */
+.btn-custom {
+  background-color: var(--primary-color);
+  color: var(--white-color);
+  padding: 10px 20px;
+  border: none;
+  border-radius: 6px;
+  font-size: 1rem;
+  font-weight: 500;
+  transition: background-color 0.3s ease-in-out;
+  display: inline-block;
+}
+
+.btn-custom:hover {
+  background-color: var(--secondary-color);
+}
+
+/* Page Wrapper */
+.main {
+  padding-top: var(--header-height);
+}
+
+/* Footer Base */
+footer {
+  background: var(--primary-color);
+  color: var(--white-color);
+  text-align: center;
+  padding: 20px 0;
+  font-size: 0.9rem;
+}

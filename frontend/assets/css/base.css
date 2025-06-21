@@ -1,0 +1,83 @@
+/*=============== VARIABLES CSS ===============*/
+:root {
+  /*========== Layout ==========*/
+  --header-height: 60px;
+  --spacing-large: 60px;
+  --spacing-medium: 40px;
+  --spacing-small: 20px;
+
+  /*========== Colors ==========*/
+  --first-color: hsl(216, 96%, 64%);
+  --white-color: #fff;
+  --dark-color: #666;
+  --dark-color-light: hsl(216, 14%, 24%);
+  --body-color: #eeeeee;
+  --medium-sea-green: #3cb371;
+  --lime-green: rgb(50, 205, 50);
+  --green-color: rgb(0, 128, 0);
+
+  /*========== Typography ==========*/
+  --body-font: "Montserrat", sans-serif;
+  --normal-font-size: 0.938rem;
+  --small-font-size: 0.9rem;
+  --h1-font-size: 3.2rem;
+  --h2-font-size: 2.8rem;
+  --h3-font-size: 1.6rem;
+
+  /*========== Font Weight ==========*/
+  --font-medium: 500;
+  --font-semi-bold: 600;
+
+  /*========== Z-Index ==========*/
+  --z-tooltip: 10;
+  --z-fixed: 100;
+
+  /*========== Custom Sections ==========*/
+  --stats-dark-bg: #2d3e50;
+}
+
+/* Responsive Font Sizes for Large Screens */
+@media screen and (min-width: 1150px) {
+  :root {
+    --normal-font-size: 1rem;
+    --small-font-size: 0.875rem;
+  }
+}
+
+/*=============== BASE STYLES ===============*/
+* {
+  box-sizing: border-box;
+  padding: 0;
+  margin: 0;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: var(--body-font);
+  font-size: var(--normal-font-size);
+  background-color: var(--body-color);
+}
+
+ul {
+  list-style: none;
+}
+
+a {
+  text-decoration: none;
+}
+
+.img_logo {
+  display: block;
+  max-width: 100px;
+  height: auto;
+}
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 20px;
+  position: relative;
+}
