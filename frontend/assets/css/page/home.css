@@ -10,6 +10,10 @@
   overflow: auto;
   transition: all 0.3s ease-in-out;
 }
+.blur-box {
+  position: relative;
+  width: 100%;
+}
 
 .hero-section {
   position: relative;
@@ -271,7 +275,7 @@
 .clients-content {
   max-width: 1200px;
   margin: 0 auto 10px;
-  padding: 10px 30px;
+  padding: 10px 45px;
   text-align: center;
 }
 

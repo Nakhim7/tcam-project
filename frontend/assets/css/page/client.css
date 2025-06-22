@@ -1,0 +1,241 @@
+/*=============== GOOGLE FONTS ===============*/
+@import url("https://fonts.googleapis.com/css2?family=Montserrat:wght@100..900&display=swap");
+
+:root {
+  --primary-color: #3cb371;
+  --dark-color: #333;
+  --white-color: #fff;
+  --gray-color: #666;
+  --light-gray: #f8f9fa;
+  --header-height: 60px;
+  --font-bold: 700;
+  --font-semi-bold: 600;
+  --font-medium: 500;
+  --small-font-size: 0.875rem;
+}
+
+/*=============== CLIENTS PAGE ===============*/
+.main {
+  overflow-x: hidden;
+}
+
+.content-wrapper {
+  margin-top: calc(var(--header-height) + 37px);
+}
+
+/* Hero Section */
+.hero-section {
+  background: url("../images/banner/blue-bg.jpg") no-repeat center center/cover;
+  min-height: 300px;
+  padding: 40px 0;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  color: var(--white-color);
+}
+
+.hero-section::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, hsl(216, 96%, 64%), hsl(216, 96%, 74%));
+  opacity: 0.8;
+  z-index: 1;
+}
+
+.hero-container {
+  position: relative;
+  z-index: 2;
+  padding: 20px;
+}
+
+.hero-container h1 {
+  font-size: 3rem;
+  font-weight: var(--font-bold);
+  text-transform: uppercase;
+  margin-bottom: 1rem;
+  text-shadow: 0 2px 6px rgba(0, 0, 0, 0.5);
+}
+
+.hero-container p {
+  font-size: 1.2rem;
+  max-width: 600px;
+  margin: 0 auto;
+  font-weight: var(--font-medium);
+  text-shadow: 0 1px 4px rgba(0, 0, 0, 0.4);
+}
+
+/* Clients Section */
+.clients-section {
+  padding: 60px 0;
+  background-color: var(--light-gray);
+}
+
+.clients-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 1.5rem;
+}
+
+.client-grid {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr); /* Fixed 6 columns */
+  gap: 15px;
+  justify-items: center;
+  align-items: center;
+  max-width: 1200px; /* Ensure it fits within container */
+  margin: 0 auto;
+}
+
+.client-logo {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 170px; /* Adjusted for 6 per row within 1200px */
+  height: 120px; /* Equal height to width for proportional cards */
+  padding: 10px;
+  background-color: var(--white-color);
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.client-logo img {
+  max-height: 100px; /* Adjusted to fit within 120px height */
+  max-width: 100%;
+  object-fit: contain;
+  filter: grayscale(100%);
+  transition: filter 0.3s ease;
+}
+
+.client-logo:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.client-logo:hover img {
+  filter: grayscale(0%);
+}
+
+/* Work With Us Section */
+.work-with-us {
+  padding: 60px 0;
+  background-color: var(--white-color);
+  text-align: center;
+}
+
+.work-container {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 0 1.5rem;
+}
+
+.work-container h2 {
+  font-size: 2.5rem;
+  color: var(--dark-color);
+  font-weight: var(--font-bold);
+  margin-bottom: 1.5rem;
+  text-transform: uppercase;
+}
+
+.work-container p {
+  font-size: 1rem;
+  color: var(--gray-color);
+  line-height: 1.6;
+  margin-bottom: 1.5rem;
+}
+
+.contactus-btn {
+  background-color: var(--primary-color);
+  color: var(--white-color);
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  font-size: 1rem;
+  font-weight: var(--font-semi-bold);
+  text-decoration: none;
+  display: inline-block;
+  transition: background-color 0.3s ease, transform 0.3s ease;
+}
+
+.contactus-btn:hover {
+  background-color: #2e8b57;
+  transform: scale(1.05);
+}
+
+/* Responsive Design */
+@media (max-width: 1023px) {
+  .hero-container h1 {
+    font-size: 2.5rem;
+  }
+
+  .hero-container p {
+    font-size: 1rem;
+  }
+
+  .clients-section {
+    padding: 40px 0;
+  }
+
+  .client-grid {
+    grid-template-columns: repeat(4, 1fr); /* 4 columns on tablets */
+  }
+
+  .client-logo {
+    width: 140px;
+    height: 100px; /* Adjusted height for proportionality */
+  }
+
+  .client-logo img {
+    max-height: 80px; /* Adjusted for smaller card */
+  }
+
+  .work-container h2 {
+    font-size: 2rem;
+  }
+}
+
+@media (max-width: 767px) {
+  .hero-section {
+    min-height: 200px;
+    padding: 30px 0;
+  }
+
+  .hero-container h1 {
+    font-size: 2rem;
+  }
+
+  .hero-container p {
+    font-size: 0.9rem;
+  }
+
+  .clients-section {
+    padding: 30px 0;
+  }
+
+  .client-grid {
+    grid-template-columns: repeat(2, 1fr); /* 2 columns on mobiles */
+  }
+
+  .client-logo {
+    width: 120px;
+    height: 85px; /* Adjusted height for proportionality */
+  }
+
+  .client-logo img {
+    max-height: 65px; /* Adjusted for smaller card */
+  }
+
+  .work-container h2 {
+    font-size: 1.5rem;
+  }
+
+  .work-container p {
+    font-size: 0.9rem;
+  }
+}

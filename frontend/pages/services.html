@@ -1,0 +1,168 @@
+<div class="main">
+  <link rel="stylesheet" href="/frontend/assets/css/page/service.css" />
+  <!-- Hero Section -->
+  <section class="hero" aria-labelledby="hero-title">
+    <div class="hero__container">
+      <h1 class="hero__title" id="hero-title">
+        Transforming Businesses with IT Excellence
+      </h1>
+      <p class="hero__subtitle">
+        Discover our comprehensive IT services designed to empower your
+        organization with security, scalability, and innovation.
+      </p>
+      <a href="#contact" class="hero__cta" role="button">Get Started</a>
+    </div>
+  </section>
+
+  <!-- Services Section -->
+  <section class="services-page-section" aria-labelledby="services-title">
+    <div class="services__container">
+      <h2 class="services__title" id="services-title">Our Services</h2>
+      <div class="services__grid">
+        <!-- Card 1 -->
+        <div class="service-card">
+          <h3 class="service-card__title">Cybersecurity</h3>
+          <p class="service-card__description">
+            Safeguard your digital assets with robust solutions like threat
+            detection and audits.
+          </p>
+          <button
+            class="service-card__button"
+            data-target="service-cyber"
+            aria-controls="service-cyber"
+            aria-expanded="false"
+          >
+            Learn More
+          </button>
+          <div
+            class="service-card__details"
+            id="service-cyber"
+            aria-hidden="true"
+          >
+            <ul>
+              <li>24/7 threat monitoring</li>
+              <li>Advanced firewall setup</li>
+              <li>ISO 27001 compliance</li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- Card 2 -->
+        <div class="service-card">
+          <h3 class="service-card__title">Cloud Solutions</h3>
+          <p class="service-card__description">
+            Migration, hybrid cloud architectures, and disaster recovery.
+          </p>
+          <button
+            class="service-card__button"
+            data-target="service-cloud"
+            aria-controls="service-cloud"
+            aria-expanded="false"
+          >
+            Learn More
+          </button>
+          <div
+            class="service-card__details"
+            id="service-cloud"
+            aria-hidden="true"
+          >
+            <ul>
+              <li>Azure & AWS expertise</li>
+              <li>Scalable cloud storage</li>
+              <li>Disaster recovery planning</li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- Card 3 -->
+        <div class="service-card">
+          <h3 class="service-card__title">Digital Transformation</h3>
+          <p class="service-card__description">
+            AI, automation, and real-time analytics to digitize your business.
+          </p>
+          <button
+            class="service-card__button"
+            data-target="service-digital"
+            aria-controls="service-digital"
+            aria-expanded="false"
+          >
+            Learn More
+          </button>
+          <div
+            class="service-card__details"
+            id="service-digital"
+            aria-hidden="true"
+          >
+            <ul>
+              <li>Custom AI models</li>
+              <li>Workflow automation</li>
+              <li>Real-time analytics</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Why Choose Us Section -->
+  <section class="why-choose-us" aria-labelledby="why-choose-us-title">
+    <div class="why-choose-us__container">
+      <h2 class="why-choose-us__title" id="why-choose-us-title">
+        Why Choose Us?
+      </h2>
+      <div class="why-choose-us__grid">
+        <div class="why-choose-us__item">
+          <h3>Expert Team</h3>
+          <p>Certified professionals with deep industry knowledge.</p>
+        </div>
+        <div class="why-choose-us__item">
+          <h3>Innovative Solutions</h3>
+          <p>Leverage the latest technologies to solve complex problems.</p>
+        </div>
+        <div class="why-choose-us__item">
+          <h3>24/7 Support</h3>
+          <p>Always-on assistance to keep your operations running smoothly.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Contact Section -->
+  <section class="service-contact" id="contact" aria-labelledby="contact-title">
+    <div class="service-contact__container">
+      <h2 class="service-contact__title" id="contact-title">Contact Us</h2>
+      <p class="service-contact__text">
+        Have a project in mind? Reach out to us via the form or
+        <a href="mailto:contact@esecforte.com" class="service-contact__email">
+          contact@esecforte.com </a
+        >.
+      </p>
+      <form class="service-contact__form" id="contact-form" novalidate>
+        <input
+          type="text"
+          placeholder="Your Name"
+          class="service-contact__input"
+          required
+          aria-label="Your Name"
+        />
+        <input
+          type="email"
+          placeholder="Your Email"
+          class="service-contact__input"
+          required
+          aria-label="Your Email"
+        />
+        <textarea
+          placeholder="Your Message"
+          class="service-contact__textarea"
+          required
+          aria-label="Your Message"
+        ></textarea>
+        <button type="submit" class="service-contact__submit">
+          Send Message
+        </button>
+      </form>
+    </div>
+  </section>
+  <script src="/frontend/assets/js/service.js"></script>
+</div>

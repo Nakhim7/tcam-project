@@ -9,31 +9,22 @@ document.addEventListener("navigationLoaded", () => {
 });
 
 function initializeNavigation() {
-  // Select required and optional elements
   const navToggle = document.querySelector("#nav-toggle");
   const navMenu = document.querySelector("#nav-menu");
   const logo = document.querySelector(".navigation__logo");
-  const header = document.querySelector(".navbar") || {};
-  const topBar = document.querySelector(".top-bar") || {};
   const overlay = document.querySelector(".overlay");
-  const heroSection = document.querySelector(".hero-section") || {};
   const dropdownItems = document.querySelectorAll(
     ".navigation__item--dropdown"
   );
 
-  // Log elements for debugging
   console.log("Navigation elements:", {
     navToggle,
     navMenu,
     logo,
-    header,
-    topBar,
     overlay,
-    heroSection,
     dropdownItems: dropdownItems.length,
   });
 
-  // Check for critical elements
   if (!navToggle || !navMenu || !overlay || !logo) {
     console.error("Missing critical navigation elements:", {
       navToggle,
@@ -44,7 +35,6 @@ function initializeNavigation() {
     return;
   }
 
-  // Toggle nav menu
   navToggle.addEventListener("click", () => {
     const isActive = navMenu.classList.contains("active");
     navMenu.classList.toggle("active", !isActive);
@@ -54,7 +44,6 @@ function initializeNavigation() {
       : "ri-close-line";
     console.log("Menu toggled, active:", !isActive);
 
-    // Toggle dropdowns when menu opens/closes
     if (window.innerWidth <= 1030) {
       dropdownItems.forEach((item) => {
         if (!isActive) {
@@ -64,13 +53,12 @@ function initializeNavigation() {
     }
   });
 
-  // Logo click to open index.html
-  logo.addEventListener("click", () => {
-    window.location.href = "/index.html";
-    console.log("Redirecting to index.html");
+  logo.addEventListener("click", (e) => {
+    e.preventDefault();
+    $(document).trigger("contentLoaded", { page: "home" });
+    console.log("Logo clicked, loading home");
   });
 
-  // Close menu on outside click
   document.addEventListener("click", (e) => {
     if (
       !navMenu.contains(e.target) &&
@@ -85,7 +73,6 @@ function initializeNavigation() {
     }
   });
 
-  // Dropdown behavior
   dropdownItems.forEach((item) => {
     const link = item.querySelector(".navigation__link");
     if (link) {
@@ -120,7 +107,6 @@ function initializeNavigation() {
     }
   });
 
-  // Responsive menu reset with smooth transition
   let resizeTimeout;
   window.addEventListener("resize", () => {
     clearTimeout(resizeTimeout);
@@ -135,7 +121,7 @@ function initializeNavigation() {
         navMenu.style.transition = "opacity 0.3s ease, transform 0.3s ease";
         console.log("Menu and dropdowns reset on resize");
       }
-    }, 100); // Debounce resize for smooth transition
+    }, 100);
   });
 
   console.log("Navigation initialized successfully");

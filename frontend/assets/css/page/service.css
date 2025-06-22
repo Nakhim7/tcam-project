@@ -1,0 +1,336 @@
+@import url("/frontend/assets/css/base.css");
+
+:root {
+  --primary-green: #2e8b57;
+  --green-dark: #276c48;
+  --white: #ffffff;
+  --gray-light: #f1f1f1;
+  --text-dark: #333333;
+  --spacing-sm: 16px;
+  --spacing-md: 24px;
+  --spacing-lg: 40px;
+  --spacing-xl: 60px;
+  --border-radius: 8px;
+}
+
+/* Reset and Base Styles */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen,
+    Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
+  line-height: 1.6;
+}
+
+/* Hero Section */
+.hero {
+  background: linear-gradient(135deg, var(--primary-green), var(--green-dark));
+  color: var(--white);
+  padding: var(--spacing-xl) var(--spacing-sm);
+  text-align: center;
+}
+
+.hero__container {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.hero__title {
+  font-size: 2.5rem;
+  font-weight: 700;
+  margin-bottom: 1rem;
+}
+
+.hero__subtitle {
+  font-size: 1.1rem;
+  max-width: 700px;
+  margin: 0 auto 2rem;
+}
+
+.hero__cta {
+  display: inline-block;
+  background-color: var(--white);
+  color: var(--primary-green);
+  padding: 12px 28px;
+  border-radius: var(--border-radius);
+  text-decoration: none;
+  font-weight: 600;
+  transition: background-color 0.3s ease;
+}
+
+.hero__cta:hover {
+  background-color: #e6f4ec;
+}
+
+/* Services Section */
+.services-page-section {
+  background-color: var(--white);
+  padding: var(--spacing-xl) var(--spacing-sm);
+}
+
+.services__container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 var(--spacing-sm);
+}
+
+.services__title {
+  font-size: 2rem;
+  font-weight: bold;
+  color: var(--primary-green);
+  text-align: center;
+  margin-bottom: var(--spacing-lg);
+}
+
+.services__grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: var(--spacing-md);
+}
+
+/* Service Card */
+.service-card {
+  background-color: var(--gray-light);
+  border-radius: var(--border-radius);
+  padding: var(--spacing-md);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+  transition: transform 0.3s ease;
+}
+
+.service-card:hover {
+  transform: translateY(-4px);
+}
+
+.service-card__title {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: var(--primary-green);
+  margin-bottom: 0.5rem;
+}
+
+.service-card__description {
+  font-size: 0.95rem;
+  color: var(--text-dark);
+  margin-bottom: 1rem;
+}
+
+.service-card__button {
+  padding: 10px 18px;
+  font-size: 0.95rem;
+  background-color: var(--primary-green);
+  color: var(--white);
+  border: none;
+  border-radius: var(--border-radius);
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.service-card__button:hover {
+  background-color: var(--green-dark);
+}
+
+.service-card__details {
+  display: none;
+  margin-top: 1rem;
+  padding-top: 1rem;
+  border-top: 1px solid #ddd;
+  font-size: 0.9rem;
+}
+
+.service-card__details ul {
+  padding-left: 20px;
+  margin: 0;
+}
+
+.service-card__details li {
+  margin-bottom: 0.5rem;
+}
+
+.service-card__details.active {
+  display: block;
+}
+
+/* Why Choose Us Section */
+.why-choose-us {
+  position: relative;
+  padding: var(--spacing-xl) var(--spacing-sm);
+  background-color: var(--white);
+}
+
+.why-choose-us::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: url("/frontend/assets/img/map-blur.jpg") center/cover no-repeat;
+  opacity: 0.1;
+  z-index: 0;
+  filter: blur(6px);
+}
+
+.why-choose-us__container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 var(--spacing-sm);
+  position: relative;
+  z-index: 1;
+}
+
+.why-choose-us__title {
+  font-size: 2rem;
+  font-weight: bold;
+  color: var(--primary-green);
+  text-align: center;
+  margin-bottom: var(--spacing-lg);
+}
+
+.why-choose-us__grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: var(--spacing-md);
+}
+
+.why-choose-us__item {
+  background-color: var(--gray-light);
+  padding: var(--spacing-md);
+  border-radius: var(--border-radius);
+  text-align: center;
+}
+
+.why-choose-us__item h3 {
+  font-size: 1.25rem;
+  color: var(--primary-green);
+  margin-bottom: 0.5rem;
+}
+
+.why-choose-us__item p {
+  font-size: 0.95rem;
+  color: var(--text-dark);
+}
+
+/* Contact Section */
+.service-contact {
+  position: relative;
+  background-color: var(--primary-green);
+  color: var(--white);
+  padding: var(--spacing-xl) var(--spacing-sm);
+  text-align: center;
+}
+
+.service-contact::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: url("/frontend/assets/img/map-blur.jpg") center/cover no-repeat;
+  opacity: 0.1;
+  z-index: 0;
+  filter: blur(6px);
+}
+
+.service-contact__container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 var(--spacing-sm);
+  position: relative;
+  z-index: 1;
+}
+
+.service-contact__title {
+  font-size: 2rem;
+  margin-bottom: 1rem;
+}
+
+.service-contact__text {
+  font-size: 1rem;
+  margin-bottom: var(--spacing-md);
+}
+
+.service-contact__email {
+  color: #e0ffe0;
+  text-decoration: underline;
+}
+
+.service-contact__form {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-sm);
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.service-contact__input,
+.service-contact__textarea {
+  padding: 12px;
+  border: none;
+  border-radius: var(--border-radius);
+  font-size: 1rem;
+}
+
+.service-contact__textarea {
+  min-height: 120px;
+  resize: vertical;
+}
+
+.service-contact__submit {
+  padding: 12px;
+  background-color: var(--white);
+  color: var(--primary-green);
+  border: none;
+  border-radius: var(--border-radius);
+  cursor: pointer;
+  font-weight: bold;
+  transition: background-color 0.3s;
+}
+
+.service-contact__submit:hover {
+  background-color: #e6f4ec;
+}
+
+/* Responsive Design */
+@media screen and (max-width: 768px) {
+  .hero__title {
+    font-size: 2rem;
+  }
+
+  .services__grid,
+  .why-choose-us__grid {
+    grid-template-columns: 1fr;
+  }
+
+  .hero__subtitle {
+    font-size: 1rem;
+  }
+
+  .services__title,
+  .why-choose-us__title,
+  .service-contact__title {
+    font-size: 1.75rem;
+  }
+}
+
+@media screen and (max-width: 480px) {
+  .hero__title {
+    font-size: 1.75rem;
+  }
+
+  .hero__cta,
+  .service-card__button,
+  .service-contact__submit {
+    padding: 10px 20px;
+    font-size: 0.9rem;
+  }
+
+  .service-contact__input,
+  .service-contact__textarea {
+    font-size: 0.9rem;
+  }
+}
