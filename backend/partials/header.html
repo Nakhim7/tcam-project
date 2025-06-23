@@ -1,0 +1,63 @@
+<link rel="stylesheet" href="/backend/assets/css/partials/header.css" />
+<header class="admin-header">
+  <div class="header-left">
+    <div class="logo"><span class="logo-icon"></span> TCAM</div>
+  </div>
+
+  <div class="header-center">
+    <form class="search-form">
+      <input type="text" placeholder="Search..." />
+      <button type="submit"><i class="fas fa-search"></i></button>
+    </form>
+  </div>
+
+  <div class="header-right">
+    <button class="icon-btn" id="themeToggle" title="Toggle Theme">
+      <i class="fas fa-moon"></i>
+    </button>
+
+    <button class="icon-btn" title="Notifications">
+      <i class="fas fa-bell"></i>
+      <span class="badge">3</span>
+    </button>
+    <button class="icon-btn" title="Settings">
+      <i class="fas fa-cog"></i>
+    </button>
+    <select class="language-switcher" title="Language">
+      <option value="en">EN</option>
+      <option value="th">KH</option>
+    </select>
+
+    <!-- Profile Dropdown -->
+    <div class="profile-dropdown">
+      <button class="profile-btn" id="profileBtn">
+        <img src="https://via.placeholder.com/32" alt="Profile" />
+        <span class="username">Admin</span>
+        <i class="fas fa-caret-down"></i>
+      </button>
+
+      <div class="dropdown-menu" id="profileMenu">
+        <div class="profile-info">
+          <img src="https://via.placeholder.com/40" alt="User" />
+          <div>
+            <strong>Sahil Prasoon</strong>
+            <small>sahilprasoon@gmail.com</small>
+          </div>
+        </div>
+        <hr />
+        <a href="#" class="dropdown-item">
+          <i class="fas fa-cog"></i> Account Settings
+        </a>
+        <a href="#" class="dropdown-item">
+          <i class="fas fa-folder-open"></i> Manage Projects
+        </a>
+        <a href="#" class="dropdown-item">
+          <i class="fas fa-question-circle"></i> Help Center
+        </a>
+        <a href="#" class="dropdown-item logout">
+          <i class="fas fa-sign-out-alt"></i> Logout
+        </a>
+      </div>
+    </div>
+  </div>
+</header>

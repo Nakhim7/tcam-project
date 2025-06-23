@@ -1,0 +1,273 @@
+<!-- Dashboard Title -->
+<h2 class="dash-title">Dashboard</h2>
+
+<!-- Key Metrics -->
+<div class="dashboard-layout">
+  <div class="layout-item">
+    <div class="metrics-panel primary-metric">
+      <div class="panel-details flex-row">
+        <div class="metric-info">
+          <h5 class="metric-label">Total Users</h5>
+          <h3 class="metric-value">1,245</h3>
+        </div>
+        <span class="metric-icon icon-users"></span>
+      </div>
+    </div>
+  </div>
+  <div class="layout-item">
+    <div class="metrics-panel success-metric">
+      <div class="panel-details flex-row">
+        <div class="metric-info">
+          <h5 class="metric-label">Published Posts</h5>
+          <h3 class="metric-value">89</h3>
+        </div>
+        <span class="metric-icon icon-documents"></span>
+      </div>
+    </div>
+  </div>
+  <div class="layout-item">
+    <div class="metrics-panel warning-metric">
+      <div class="panel-details flex-row">
+        <div class="metric-info">
+          <h5 class="metric-label">Active Clients</h5>
+          <h3 class="metric-value">23</h3>
+        </div>
+        <span class="metric-icon icon-clients"></span>
+      </div>
+    </div>
+  </div>
+  <div class="layout-item">
+    <div class="metrics-panel info-metric">
+      <div class="panel-details flex-row">
+        <div class="metric-info">
+          <h5 class="metric-label">Unread Messages</h5>
+          <h3 class="metric-value">45</h3>
+        </div>
+        <span class="metric-icon icon-messages"></span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Action Controls -->
+<div class="dashboard-layout">
+  <div class="layout-item full-width">
+    <div class="control-panel">
+      <div class="panel-header">
+        <h5 class="panel-title">Action Controls</h5>
+      </div>
+      <div class="panel-content">
+        <div class="control-buttons">
+          <button class="control-button primary-action">
+            <span class="icon-plus"></span> Add User
+          </button>
+          <button class="control-button success-action">
+            <span class="icon-edit"></span> Update Post
+          </button>
+          <button class="control-button warning-action">
+            <span class="icon-upload"></span> Upload File
+          </button>
+          <button class="control-button danger-action">
+            <span class="icon-delete"></span> Remove Client
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Activity Logs and User Updates -->
+<div class="dashboard-layout">
+  <div class="layout-item wide-section">
+    <div class="log-panel">
+      <div class="panel-header">
+        <h5 class="panel-title">Recent Activity Log</h5>
+      </div>
+      <div class="panel-content no-padding">
+        <div class="table-container">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>User</th>
+                <th>Action</th>
+                <th>Date</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>1</td>
+                <td>John Doe</td>
+                <td>Created new post</td>
+                <td>2025-06-15</td>
+              </tr>
+              <tr>
+                <td>2</td>
+                <td>User Updated</td>
+                <td>Updated client profile</td>
+                <td>2025-06-14</td>
+              </tr>
+              <tr>
+                <td>3</td>
+                <td>Admin</td>
+                <td>Published news</td>
+                <td>2025-06-13</td>
+              </tr>
+              <tr>
+                <td>4</td>
+                <td>User M</td>
+                <td>Added new service</td>
+                <td>2023</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="layout-item narrow-section">
+    <div class="update-panel">
+      <div class="panel-content">
+        <h5 class="panel-title">User Updates</h5>
+        <ul class="update-list">
+          <li class="list-item flex-row">
+            <span class="status-icon success-indicator"></span>
+            <small><strong>John Doe</strong> created a post</small>
+          </li>
+          <li class="list-item flex-row">
+            <span class="status-icon primary-indicator"></span>
+            <small><strong>User M</strong> commented</small>
+          </li>
+          <li class="list-item flex-row">
+            <span class="status-icon warning-indicator"></span>
+            <small><strong>Admin</strong> logged in</small>
+          </li>
+          <li class="list-item flex-row">
+            <span class="status-icon info-indicator"></span>
+            <small><strong>User Updated</strong> adjusted settings</small>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Task Management -->
+<div class="dashboard-layout">
+  <div class="layout-item full-width">
+    <div class="task-panel">
+      <div class="panel-header">
+        <h5 class="panel-title">Task Management</h5>
+      </div>
+      <div class="panel-content">
+        <div class="table-container">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>Title</th>
+                <th>Assigned To</th>
+                <th>Status</th>
+                <th>Due Date</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>id001</td>
+                <td>Update Website Content</td>
+                <td>John Doe</td>
+                <td>In Progress</td>
+                <td>2025-06</td>
+                <td>
+                  <button class="control-button primary-action small-action">
+                    <span class="icon-edit"></span>
+                  </button>
+                  <button class="control-button danger-action small-action">
+                    <span class="icon-delete"></span>
+                  </button>
+                </td>
+              </tr>
+              <tr>
+                <td>id002</td>
+                <td>Fix Bugs</td>
+                <td>User Updated</td>
+                <td>Pending</td>
+                <td>2025-06</td>
+                <td>
+                  <button class="control-button primary-action small-action">
+                    <span class="icon-edit"></span>
+                  </button>
+                  <button class="control-button danger-action small-action">
+                    <span class="icon-delete"></span>
+                  </button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="action-area">
+          <button class="control-button primary-action" style="width: 150px">
+            <span class="icon-plus"></span> New Task
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- System Status and Notifications -->
+<div class="dashboard-layout">
+  <div class="layout-item half-section">
+    <div class="status-panel">
+      <div class="panel-content">
+        <h5 class="panel-title">System Status</h5>
+        <ul class="status-list">
+          <li class="list-item flex-row">
+            <span>Database</span>
+            <span class="status-label">Operational</span>
+          </li>
+          <li class="list-item flex-row">
+            <span>API</span>
+            <span class="status-label">Operational</span>
+          </li>
+          <li class="list-item flex-row">
+            <span>File Storage</span>
+            <span class="status-label">Maintenance</span>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+  <div class="layout-item half-section">
+    <div class="notification-panel">
+      <div class="panel-content">
+        <h5 class="panel-title">Notifications</h5>
+        <ul class="update-list">
+          <li class="list-item flex-row">
+            <span class="status-icon danger-indicator"></span>
+            <small>High CPU Usage Detected</small>
+          </li>
+          <li class="list-item flex-row">
+            <span class="status-icon info-indicator"></span>
+            <small>Maintenance Scheduled at 1 AM</small>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Analytics -->
+<div class="dashboard-layout">
+  <div class="layout-item full-width">
+    <div class="analytics-panel">
+      <div class="panel-content">
+        <h5 class="panel-title">Monthly Analytics</h5>
+        <div class="chart-area">
+          <span class="placeholder-text">📈 Analytics Chart</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

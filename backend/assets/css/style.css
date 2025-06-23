@@ -1,0 +1,152 @@
+/* ===== Reset and Base ===== */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body,
+html {
+  height: 100%;
+  font-family: "Segoe UI", sans-serif;
+  transition: all 0.3s ease;
+  background-color: #f5f7fa;
+  color: #2c3e50;
+}
+
+/* ===== Dark Theme (Sidebar Specific) ===== */
+.dark-theme .custom-sidebar {
+  background-color: #1f212b;
+  border-right: 1px solid #2a2d36;
+  color: #ccc;
+}
+
+.dark-theme .sidebar-header {
+  background-color: #232531;
+  border-bottom: 1px solid #2a2d36;
+}
+
+.dark-theme .sidebar-link {
+  color: #ccc;
+}
+
+.dark-theme .sidebar-link:hover {
+  background-color: #2c2f3a;
+  color: #fff;
+}
+
+.dark-theme .sidebar-toggle {
+  color: #eee;
+}
+
+.dark-theme .logout-link {
+  background-color: rgba(255, 99, 71, 0.3);
+  color: #ff6b6b;
+}
+
+.dark-theme .logout-link:hover {
+  background-color: rgba(255, 99, 71, 0.5);
+}
+
+/* ===== Main Content ===== */
+.main-content {
+  margin-left: 230px;
+  flex: 1;
+  height: 100vh;
+  overflow-y: auto;
+  overflow-x: hidden;
+  background-color: #f5f7fa;
+  padding: 20px;
+  transition: margin-left 0.3s ease;
+}
+
+.custom-sidebar.collapsed + .main-content {
+  margin-left: 80px;
+}
+
+.dark-theme .main-content {
+  background-color: #1f212b;
+}
+/* ===== Main Content ===== */
+.main-content {
+  margin-left: 230px;
+  flex: 1;
+  height: 100vh;
+  overflow-y: auto;
+  overflow-x: hidden;
+  background-color: #f5f7fa;
+  padding: 20px;
+  transition: margin-left 0.3s ease;
+}
+
+.custom-sidebar.collapsed + .main-content {
+  margin-left: 80px;
+}
+
+/* ===== Dark Theme ===== */
+.dark-theme {
+  background-color: #1c1e26;
+  color: #f5f5f5;
+}
+
+.dark-theme .custom-sidebar {
+  background-color: #1f212b;
+  border-right: 1px solid #2a2d36;
+  color: #ccc;
+}
+
+.dark-theme .sidebar-header {
+  background-color: #232531;
+  border-bottom: 1px solid #2a2d36;
+}
+
+.dark-theme .sidebar-link {
+  color: #ccc;
+}
+
+.dark-theme .sidebar-link:hover {
+  background-color: #2c2f3a;
+  color: #fff;
+}
+
+.dark-theme .sidebar-toggle {
+  color: #eee;
+}
+
+.dark-theme .logout-link {
+  background-color: rgba(255, 99, 71, 0.3);
+  color: #ff6b6b;
+}
+
+.dark-theme .logout-link:hover {
+  background-color: rgba(255, 99, 71, 0.5);
+}
+
+.dark-theme .main-content {
+  background-color: #1f212b;
+}
+
+.dark-theme .metrics-panel,
+.dark-theme .panel-content,
+.dark-theme .data-table th,
+.dark-theme .data-table td,
+.dark-theme .card,
+.dark-theme .action-panel {
+  background-color: #2c2f3a;
+  color: #eee;
+}
+
+.dark-theme .data-table th {
+  background-color: #232631;
+}
+
+.dark-theme .badge {
+  background-color: #ff6b6b;
+}
+
+/* ===== Admin Header (from header.css) ===== */
+.dark-theme .admin-header {
+  background: linear-gradient(90deg, #1f212b 0%, #2c2f3a 100%);
+  color: #f5f5f5;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+}
