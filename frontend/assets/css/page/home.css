@@ -2,20 +2,15 @@
 @import "../style.css";
 
 /* ========================
-     HERO SECTION
+     HOME HERO SECTION
 ======================== */
-#main-content {
+#home_main {
   display: block;
-  min-height: 400px; /* Or auto-update via JS */
   overflow: auto;
   transition: all 0.3s ease-in-out;
 }
-.blur-box {
-  position: relative;
-  width: 100%;
-}
 
-.hero-section {
+.home-hero {
   position: relative;
   overflow: hidden;
   padding: 100px 0;
@@ -24,7 +19,7 @@
   background-size: cover;
 }
 
-.hero-container {
+.home-hero__container {
   max-width: 1400px;
   min-height: 400px;
   margin: 0 auto;
@@ -37,37 +32,36 @@
   transition: background-image 1s ease-in-out;
 }
 
-.hero-text {
+.home-hero__text {
   flex: 1;
   padding-right: 50px;
 }
 
-.hero-slide {
+.home-hero__slide {
   display: none;
   opacity: 0;
   transition: opacity 0.5s ease-in-out;
 }
 
-.hero-slide.active {
+.home-hero__slide.active {
   display: block;
   opacity: 1;
 }
 
-.hero-title {
+.home-hero__title {
   font-size: 3rem;
   font-weight: bold;
   color: var(--white-color);
   text-transform: uppercase;
 }
 
-.hero-subtitle {
+.home-hero__subtitle {
   font-size: 1.5rem;
   color: var(--white-color);
   margin-bottom: 15px;
 }
 
-/* Timer Circles */
-.hero__timer-circles {
+.home-hero__timer-circles {
   position: absolute;
   top: 50%;
   right: 40px;
@@ -77,7 +71,7 @@
   gap: 15px;
 }
 
-.hero__timer-circle {
+.home-hero__timer-circle {
   width: 60px;
   height: 60px;
   border-radius: 50%;
@@ -88,11 +82,11 @@
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
 }
 
-.hero__timer-circle.active {
+.home-hero__timer-circle.active {
   background-color: var(--primary-color);
 }
 
-.hero__timer-circle img {
+.home-hero__timer-circle img {
   width: 40px;
   height: 40px;
   object-fit: contain;
@@ -102,7 +96,6 @@
   transform: translate(-50%, -50%);
 }
 
-/* Progress Animation */
 .progress-ring {
   position: absolute;
   top: 0;
@@ -116,8 +109,9 @@
   transition: stroke-dashoffset 0.1s linear;
 }
 
-.hero__timer-circle.active .progress-ring__circle {
+.home-hero__timer-circle.active .progress-ring__circle {
   animation: progress 5s linear forwards;
+  animation-fill-mode: forwards;
 }
 
 @keyframes progress {
@@ -126,7 +120,6 @@
   }
 }
 
-/* Button Styles */
 .btn-custom {
   background-color: #3cb371;
   color: #fff;
@@ -144,37 +137,37 @@
 }
 
 /* ========================
-     ABOUT SECTION
+     HOME ABOUT SECTION
 ======================== */
-.about-section {
+.home-about {
   padding: 60px 0;
   background-color: #fff;
 }
 
-.about-section .row {
+.home-about .row {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
 }
 
-.about-section .col-md-8 {
+.home-about .col-md-8 {
   flex: 0 0 65%;
   max-width: 65%;
   padding-right: 20px;
 }
 
-.about-section .col-md-4 {
+.home-about .col-md-4 {
   flex: 0 0 35%;
   max-width: 35%;
 }
 
-.about-section h2 {
+.home-about h2 {
   font-size: 2.5rem;
   font-weight: bold;
   margin-bottom: 20px;
 }
 
-.about-section p {
+.home-about p {
   font-size: 1rem;
   color: var(--gray-color);
   margin-bottom: 15px;
@@ -191,27 +184,27 @@
 }
 
 /* ========================
-     SERVICES SECTION
+     HOME SERVICES SECTION
 ======================== */
-.services {
+.home-services {
   padding: 60px 0;
   background-color: #fff;
 }
 
-.services__title {
+.home-services__title {
   font-size: 2rem;
   font-weight: bold;
   margin-bottom: 50px;
   text-align: center;
 }
 
-.services__grid {
+.home-services__grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
   gap: 30px;
 }
 
-.services__card {
+.home-services__card {
   background: #fff;
   border-radius: 12px;
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
@@ -220,31 +213,31 @@
   text-align: center;
 }
 
-.services__card:hover {
+.home-services__card:hover {
   transform: translateY(-10px);
 }
 
-.services__card:hover .services__subtitle,
-.services__card:hover .services__description {
+.home-services__card:hover .home-services__subtitle,
+.home-services__card:hover .home-services__description {
   color: #3cb371;
 }
 
-.services__image-wrapper {
+.home-services__image-wrapper {
   height: 180px;
   overflow: hidden;
 }
 
-.services__image {
+.home-services__image {
   width: 100%;
   height: 100%;
   object-fit: cover;
 }
 
-.services__content {
+.home-services__content {
   padding: 20px;
 }
 
-.services__subtitle {
+.home-services__subtitle {
   font-size: 1.25rem;
   font-weight: 600;
   margin-bottom: 10px;
@@ -252,34 +245,28 @@
   transition: color 0.3s ease;
 }
 
-.services__description {
+.home-services__description {
   font-size: 1rem;
   color: rgb(85, 85, 85);
   transition: color 0.3s ease;
 }
 
 /* ========================
-     CLIENTS SECTION
+     HOME CLIENTS SECTION
 ======================== */
-#main-content #clients {
+#home-clients {
   padding: 40px 0;
   text-align: center;
   background-color: var(--body-color);
-  display: block !important;
-  visibility: visible !important;
-  opacity: 1 !important;
-  min-height: 200px;
-  width: 100%;
 }
 
-.clients-content {
+.home-clients__content {
   max-width: 1200px;
-  margin: 0 auto 10px;
+  margin: 0 auto;
   padding: 10px 45px;
-  text-align: center;
 }
 
-.clients-content h2 {
+.home-clients__content h2 {
   font-size: 2rem;
   font-weight: bold;
   text-transform: uppercase;
@@ -287,72 +274,61 @@
   color: #333;
 }
 
-.clients-content p {
+.home-clients__content p {
   font-size: 1rem;
   color: #666;
   margin-bottom: 30px;
 }
 
-.client-list {
+.home-client-list {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(170px, 0.1fr));
   gap: 10px;
   justify-items: center;
 }
 
-.client-item {
+.home-client-item {
   background: #fff;
   border: 1px solid #e0e0e0;
   border-radius: 12px;
   padding: 10px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
+  width: 100%;
+  height: 100px;
   display: flex;
   justify-content: center;
   align-items: center;
-  width: 100%;
-  height: 100px;
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
-.client-item img {
+.home-client-item img {
   max-width: 100%;
   max-height: 80px;
   object-fit: contain;
 }
 
-.client-item:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
-}
-
 /* ========================
-     TECHNOLOGY PARTNERS SECTION
+     HOME TECH PARTNERS SECTION
 ======================== */
-#main-content #tech-partners {
+#home-tech-partners {
   background: url("../images/banner/banner_12.jpg") center/cover no-repeat;
   background-color: #1a1a1a;
   padding: 40px 0;
   color: #fff;
   text-align: center;
-  display: block !important;
-  visibility: visible !important;
-  opacity: 1 !important;
-  min-height: 200px;
-  width: 100%;
 }
 
-.partners-content {
+.home-partners__content {
   padding: 20px;
 }
 
-.partners-content h2 {
+.home-partners__content h2 {
   font-size: 2rem;
   font-weight: bold;
   margin-bottom: 10px;
   text-transform: uppercase;
 }
 
-.partners-content p {
+.home-partners__content p {
   font-size: 0.9rem;
   color: #ccc;
   max-width: 800px;
@@ -360,7 +336,7 @@
   line-height: 1.5;
 }
 
-.partner-logos {
+.home-partner-logos {
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
@@ -370,7 +346,7 @@
   margin: 0 auto;
 }
 
-.partner-item {
+.home-partner-item {
   background-color: #fff;
   border: 1px solid #e0e0e0;
   border-radius: 12px;
@@ -383,13 +359,13 @@
   transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
 }
 
-.partner-item img {
+.home-partner-item img {
   max-width: 100%;
   max-height: 80px;
   object-fit: contain;
 }
 
-.partner-item:hover {
+.home-partner-item:hover {
   transform: scale(1.05);
   box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
 }
@@ -414,20 +390,20 @@
      RESPONSIVE MEDIA QUERIES
 ======================== */
 @media screen and (max-width: 1023px) {
-  .hero-title {
+  .home-hero__title {
     font-size: 2.5rem;
   }
-  .hero-subtitle {
+  .home-hero__subtitle {
     font-size: 1.3rem;
   }
-  .about-section {
+  .home-about {
     padding: 40px 0;
   }
-  .services__grid {
+  .home-services__grid {
     gap: 20px;
   }
-  .about-section .col-md-8,
-  .about-section .col-md-4 {
+  .home-about .col-md-8,
+  .home-about .col-md-4 {
     flex: 0 0 100%;
     max-width: 100%;
     padding-right: 0;
@@ -436,33 +412,33 @@
 }
 
 @media screen and (max-width: 767px) {
-  .hero-container {
+  .home-hero__container {
     flex-direction: column;
     text-align: center;
   }
 
-  .hero__timer-circles {
+  .home-hero__timer-circles {
     display: none !important;
   }
 
-  .services__grid {
+  .home-services__grid {
     grid-template-columns: 1fr;
   }
 
-  .about-section h2,
-  .services__title,
-  .partners-content h2 {
+  .home-about h2,
+  .home-services__title,
+  .home-partners__content h2 {
     font-size: 1.6rem;
   }
 
-  .client-item,
-  .partner-item {
+  .home-client-item,
+  .home-partner-item {
     width: 45%;
     height: 80px;
   }
 
-  .client-item img,
-  .partner-item img {
+  .home-client-item img,
+  .home-partner-item img {
     max-height: 50px;
   }
 }

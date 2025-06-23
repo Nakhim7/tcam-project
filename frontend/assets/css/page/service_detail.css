@@ -1,0 +1,121 @@
+:root {
+  --primary-color: #2e8b57;
+  --white: #fff;
+  --gray: #f4f4f4;
+  --text-dark: #333;
+  --radius: 8px;
+  --spacing: 24px;
+}
+
+/* Hero */
+.service-detail-hero {
+  background: linear-gradient(135deg, var(--primary-color), #1f6c46);
+  color: var(--white);
+  padding: 80px 20px;
+  text-align: center;
+}
+
+.service-detail-hero__title {
+  font-size: 2.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.service-detail-hero__subtitle {
+  font-size: 1.2rem;
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+/* Content */
+.service-detail-content {
+  background: var(--white);
+  padding: 60px 20px;
+}
+
+.service-detail-content__heading {
+  text-align: center;
+  font-size: 2rem;
+  color: var(--primary-color);
+  margin-bottom: var(--spacing);
+}
+
+.service-detail-content__paragraph {
+  text-align: center;
+  max-width: 800px;
+  margin: 0 auto var(--spacing);
+  color: var(--text-dark);
+  font-size: 1.05rem;
+}
+
+.service-detail-features {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: var(--spacing);
+  max-width: 1000px;
+  margin: 0 auto;
+}
+
+.service-detail-feature {
+  background: var(--gray);
+  padding: var(--spacing);
+  border-radius: var(--radius);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+.service-detail-feature__title {
+  color: var(--primary-color);
+  margin-bottom: 0.5rem;
+  font-size: 1.2rem;
+}
+
+.service-detail-feature__desc {
+  color: #555;
+  font-size: 0.95rem;
+}
+
+/* CTA */
+.service-detail-cta {
+  background: var(--primary-color);
+  color: var(--white);
+  text-align: center;
+  padding: 60px 20px;
+}
+
+.service-detail-cta__title {
+  font-size: 2rem;
+  margin-bottom: 1rem;
+}
+
+.service-detail-cta__subtitle {
+  font-size: 1.1rem;
+  margin-bottom: 1.5rem;
+}
+
+.service-detail-cta__button {
+  background: var(--white);
+  color: var(--primary-color);
+  padding: 12px 24px;
+  border-radius: var(--radius);
+  text-decoration: none;
+  font-weight: bold;
+  transition: background 0.3s ease;
+}
+
+.service-detail-cta__button:hover {
+  background: #eaf5ee;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .service-detail-hero__title {
+    font-size: 2rem;
+  }
+
+  .service-detail-feature__title {
+    font-size: 1.1rem;
+  }
+
+  .service-detail-feature__desc {
+    font-size: 0.9rem;
+  }
+}

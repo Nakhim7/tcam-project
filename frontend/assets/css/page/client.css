@@ -15,28 +15,39 @@
 }
 
 /*=============== CLIENTS PAGE ===============*/
-.main {
-  overflow-x: hidden;
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
 }
 
-.content-wrapper {
-  margin-top: calc(var(--header-height) + 37px);
+body {
+  width: 100%;
+  margin: 0; /* Remove default body margins */
+}
+
+.main {
+  width: 100%; /* Ensure main takes full width */
+  overflow-x: hidden; /* Prevent horizontal overflow */
 }
 
 /* Hero Section */
-.hero-section {
+.client-hero {
   background: url("../images/banner/blue-bg.jpg") no-repeat center center/cover;
+  max-height: 300px;
   min-height: 300px;
-  padding: 40px 0;
-  position: relative;
   display: flex;
   align-items: center;
   justify-content: center;
   text-align: center;
   color: var(--white-color);
+  width: 100vw; /* Use viewport width for full page coverage */
+  margin-left: 50%;
+  transform: translateX(-50%); /* Center the element */
+  position: relative; /* Keep for positioning children */
 }
 
-.hero-section::before {
+.client-hero::before {
   content: "";
   position: absolute;
   top: 0;
@@ -48,13 +59,15 @@
   z-index: 1;
 }
 
-.hero-container {
+.client-hero-content {
   position: relative;
   z-index: 2;
   padding: 20px;
+  width: 100%; /* Ensure content takes full width of hero */
+  min-width: 0; /* Prevent width expansion due to padding */
 }
 
-.hero-container h1 {
+.client-hero-content h1 {
   font-size: 3rem;
   font-weight: var(--font-bold);
   text-transform: uppercase;
@@ -62,7 +75,7 @@
   text-shadow: 0 2px 6px rgba(0, 0, 0, 0.5);
 }
 
-.hero-container p {
+.client-hero-content p {
   font-size: 1.2rem;
   max-width: 600px;
   margin: 0 auto;
@@ -70,19 +83,52 @@
   text-shadow: 0 1px 4px rgba(0, 0, 0, 0.4);
 }
 
+/* Clients Header Section */
+.client-header {
+  padding: 20px 0;
+  text-align: center;
+  background-color: #fff;
+  border-bottom: 1px solid #ddd;
+  width: 100%; /* Ensure full width */
+}
+
+.client-header-content h1 {
+  color: #2c3e50;
+  font-size: 1.5rem;
+  font-weight: var(--font-bold);
+  margin-bottom: 10px;
+}
+
+.client-nav {
+  display: flex;
+  justify-content: center;
+  gap: 15px;
+}
+
+.nav-item {
+  color: #3498db;
+  text-decoration: none;
+  font-size: 0.9rem;
+  font-weight: var(--font-medium);
+}
+
+.nav-item:hover {
+  text-decoration: underline;
+}
+
 /* Clients Section */
-.clients-section {
+.client-showcase {
   padding: 60px 0;
   background-color: var(--light-gray);
 }
 
-.clients-container {
+.client-showcase-content {
   max-width: 1200px;
   margin: 0 auto;
   padding: 0 1.5rem;
 }
 
-.client-grid {
+.client-logo-grid {
   display: grid;
   grid-template-columns: repeat(6, 1fr); /* Fixed 6 columns */
   gap: 15px;
@@ -92,7 +138,7 @@
   margin: 0 auto;
 }
 
-.client-logo {
+.client-logo-item {
   display: flex;
   justify-content: center;
   align-items: center;
@@ -105,7 +151,7 @@
   transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
-.client-logo img {
+.client-logo-item img {
   max-height: 100px; /* Adjusted to fit within 120px height */
   max-width: 100%;
   object-fit: contain;
@@ -113,29 +159,29 @@
   transition: filter 0.3s ease;
 }
 
-.client-logo:hover {
+.client-logo-item:hover {
   transform: translateY(-5px);
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
 
-.client-logo:hover img {
+.client-logo-item:hover img {
   filter: grayscale(0%);
 }
 
 /* Work With Us Section */
-.work-with-us {
+.client-cta {
   padding: 60px 0;
   background-color: var(--white-color);
   text-align: center;
 }
 
-.work-container {
+.client-cta-content {
   max-width: 800px;
   margin: 0 auto;
   padding: 0 1.5rem;
 }
 
-.work-container h2 {
+.client-cta-content h2 {
   font-size: 2.5rem;
   color: var(--dark-color);
   font-weight: var(--font-bold);
@@ -143,14 +189,14 @@
   text-transform: uppercase;
 }
 
-.work-container p {
+.client-cta-content p {
   font-size: 1rem;
   color: var(--gray-color);
   line-height: 1.6;
   margin-bottom: 1.5rem;
 }
 
-.contactus-btn {
+.client-cta-button {
   background-color: var(--primary-color);
   color: var(--white-color);
   padding: 10px 20px;
@@ -163,79 +209,89 @@
   transition: background-color 0.3s ease, transform 0.3s ease;
 }
 
-.contactus-btn:hover {
+.client-cta-button:hover {
   background-color: #2e8b57;
   transform: scale(1.05);
 }
 
 /* Responsive Design */
 @media (max-width: 1023px) {
-  .hero-container h1 {
+  .client-hero-content h1 {
     font-size: 2.5rem;
   }
 
-  .hero-container p {
+  .client-hero-content p {
     font-size: 1rem;
   }
 
-  .clients-section {
+  .client-showcase {
     padding: 40px 0;
   }
 
-  .client-grid {
+  .client-logo-grid {
     grid-template-columns: repeat(4, 1fr); /* 4 columns on tablets */
   }
 
-  .client-logo {
+  .client-logo-item {
     width: 140px;
     height: 100px; /* Adjusted height for proportionality */
   }
 
-  .client-logo img {
+  .client-logo-item img {
     max-height: 80px; /* Adjusted for smaller card */
   }
 
-  .work-container h2 {
+  .client-cta-content h2 {
     font-size: 2rem;
   }
 }
 
 @media (max-width: 767px) {
-  .hero-section {
+  .client-hero {
     min-height: 200px;
     padding: 30px 0;
   }
 
-  .hero-container h1 {
+  .client-hero-content h1 {
     font-size: 2rem;
   }
 
-  .hero-container p {
+  .client-hero-content p {
     font-size: 0.9rem;
   }
 
-  .clients-section {
+  .client-showcase {
     padding: 30px 0;
   }
 
-  .client-grid {
+  .client-logo-grid {
     grid-template-columns: repeat(2, 1fr); /* 2 columns on mobiles */
   }
 
-  .client-logo {
+  .client-logo-item {
     width: 120px;
     height: 85px; /* Adjusted height for proportionality */
   }
 
-  .client-logo img {
+  .client-logo-item img {
     max-height: 65px; /* Adjusted for smaller card */
   }
 
-  .work-container h2 {
+  .client-cta-content h2 {
     font-size: 1.5rem;
   }
 
-  .work-container p {
+  .client-cta-content p {
     font-size: 0.9rem;
+  }
+
+  .client-nav {
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .nav-item {
+    display: block;
+    margin: 5px 0;
   }
 }

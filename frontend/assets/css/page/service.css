@@ -13,7 +13,7 @@
   --border-radius: 8px;
 }
 
-/* Reset and Base Styles */
+/* Reset and Base */
 * {
   box-sizing: border-box;
   margin: 0;
@@ -24,34 +24,42 @@ body {
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen,
     Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
   line-height: 1.6;
+  width: 100%; /* Ensure body takes full width */
+  margin: 0; /* Remove default margins */
 }
 
-/* Hero Section */
-.hero {
+/*=============== HERO SECTION ===============*/
+.service-hero {
   background: linear-gradient(135deg, var(--primary-green), var(--green-dark));
   color: var(--white);
   padding: var(--spacing-xl) var(--spacing-sm);
   text-align: center;
+  width: 100vw; /* Use viewport width for full page coverage */
+  position: relative;
+  left: 50%;
+  transform: translateX(-50%); /* Center the section */
 }
 
-.hero__container {
-  max-width: 1200px;
+.service-hero__container {
+  width: 100%; /* Take full width of parent */
+  /* max-width: 1200px; Removed to allow full width, add back if centering content is needed */
   margin: 0 auto;
+  padding: 0 var(--spacing-sm); /* Adjust padding for content */
 }
 
-.hero__title {
+.service-hero__title {
   font-size: 2.5rem;
   font-weight: 700;
   margin-bottom: 1rem;
 }
 
-.hero__subtitle {
+.service-hero__subtitle {
   font-size: 1.1rem;
   max-width: 700px;
   margin: 0 auto 2rem;
 }
 
-.hero__cta {
+.service-hero__cta {
   display: inline-block;
   background-color: var(--white);
   color: var(--primary-green);
@@ -62,23 +70,23 @@ body {
   transition: background-color 0.3s ease;
 }
 
-.hero__cta:hover {
+.service-hero__cta:hover {
   background-color: #e6f4ec;
 }
 
-/* Services Section */
-.services-page-section {
+/*=============== SERVICES SECTION ===============*/
+.service-services-section {
   background-color: var(--white);
   padding: var(--spacing-xl) var(--spacing-sm);
 }
 
-.services__container {
+.service-services__container {
   max-width: 1200px;
   margin: 0 auto;
   padding: 0 var(--spacing-sm);
 }
 
-.services__title {
+.service-services__title {
   font-size: 2rem;
   font-weight: bold;
   color: var(--primary-green);
@@ -86,13 +94,13 @@ body {
   margin-bottom: var(--spacing-lg);
 }
 
-.services__grid {
+.service-services__grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
   gap: var(--spacing-md);
 }
 
-/* Service Card */
+/*=============== SERVICE CARD ===============*/
 .service-card {
   background-color: var(--gray-light);
   border-radius: var(--border-radius);
@@ -154,14 +162,14 @@ body {
   display: block;
 }
 
-/* Why Choose Us Section */
-.why-choose-us {
+/*=============== WHY CHOOSE US SECTION ===============*/
+.service-why-choose-us {
   position: relative;
   padding: var(--spacing-xl) var(--spacing-sm);
   background-color: var(--white);
 }
 
-.why-choose-us::before {
+.service-why-choose-us::before {
   content: "";
   position: absolute;
   top: 0;
@@ -174,7 +182,7 @@ body {
   filter: blur(6px);
 }
 
-.why-choose-us__container {
+.service-why-choose-us__container {
   max-width: 1200px;
   margin: 0 auto;
   padding: 0 var(--spacing-sm);
@@ -182,7 +190,7 @@ body {
   z-index: 1;
 }
 
-.why-choose-us__title {
+.service-why-choose-us__title {
   font-size: 2rem;
   font-weight: bold;
   color: var(--primary-green);
@@ -190,31 +198,31 @@ body {
   margin-bottom: var(--spacing-lg);
 }
 
-.why-choose-us__grid {
+.service-why-choose-us__grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
   gap: var(--spacing-md);
 }
 
-.why-choose-us__item {
+.service-why-choose-us__item {
   background-color: var(--gray-light);
   padding: var(--spacing-md);
   border-radius: var(--border-radius);
   text-align: center;
 }
 
-.why-choose-us__item h3 {
+.service-why-choose-us__item h3 {
   font-size: 1.25rem;
   color: var(--primary-green);
   margin-bottom: 0.5rem;
 }
 
-.why-choose-us__item p {
+.service-why-choose-us__item p {
   font-size: 0.95rem;
   color: var(--text-dark);
 }
 
-/* Contact Section */
+/*=============== CONTACT SECTION ===============*/
 .service-contact {
   position: relative;
   background-color: var(--primary-green);
@@ -295,34 +303,34 @@ body {
   background-color: #e6f4ec;
 }
 
-/* Responsive Design */
+/*=============== RESPONSIVE DESIGN ===============*/
 @media screen and (max-width: 768px) {
-  .hero__title {
+  .service-hero__title {
     font-size: 2rem;
   }
 
-  .services__grid,
-  .why-choose-us__grid {
+  .service-services__grid,
+  .service-why-choose-us__grid {
     grid-template-columns: 1fr;
   }
 
-  .hero__subtitle {
+  .service-hero__subtitle {
     font-size: 1rem;
   }
 
-  .services__title,
-  .why-choose-us__title,
+  .service-services__title,
+  .service-why-choose-us__title,
   .service-contact__title {
     font-size: 1.75rem;
   }
 }
 
 @media screen and (max-width: 480px) {
-  .hero__title {
+  .service-hero__title {
     font-size: 1.75rem;
   }
 
-  .hero__cta,
+  .service-hero__cta,
   .service-card__button,
   .service-contact__submit {
     padding: 10px 20px;

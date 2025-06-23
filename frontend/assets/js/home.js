@@ -4,12 +4,13 @@ function initHomePage() {
   let slideInterval;
   let isInitialized = false;
 
-  const $main = $("#main-content .main");
+  const $main = $("#home_main");
   const $heroSection = $main.length
     ? $main.find("#heroContainer")
     : $("#heroContainer");
-  const $slides = $heroSection.find(".hero-slide");
-  const $timerCircles = $heroSection.find(".hero__timer-circle");
+
+  const $slides = $heroSection.find(".home-hero__slide");
+  const $timerCircles = $heroSection.find(".home-hero__timer-circle");
 
   if (!$heroSection.length || !$slides.length || !$timerCircles.length) {
     console.warn("⚠️ Hero section not found. Skipping slider initialization.");
@@ -45,7 +46,7 @@ function initHomePage() {
 
     const $circle = $timerCircles.eq(index).find(".progress-ring__circle");
     $circle.css("animation", "none");
-    void $circle[0].offsetWidth;
+    void $circle[0].offsetWidth; // Trigger reflow
     $circle.css("animation", "progress 5s linear forwards");
 
     currentSlide = index;
@@ -65,7 +66,6 @@ function initHomePage() {
     console.log("⏸️ Slider paused");
   }
 
-  // Initialize once DOM is ready
   try {
     $slides.attr("aria-hidden", "true");
     switchSlide(0);
@@ -83,7 +83,7 @@ function initHomePage() {
 
   $heroSection.on("mouseenter", stopSlider).on("mouseleave", startSlider);
 
-  // Preload backgrounds
+  // Preload background images
   $slides.each(function () {
     const bg = $(this).data("bg");
     if (bg) {
@@ -92,7 +92,7 @@ function initHomePage() {
     }
   });
 
-  // Preload circle thumbnails
+  // Preload thumbnails
   $timerCircles.each(function () {
     const src = $(this).find("img").attr("src");
     if (src) {
