@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Products Management</title>
+    <link rel="stylesheet" href="/backend/assets/css/pages/products.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+  </head>
+  <body>
+    <div class="products-container">
+      <div class="header">
+        <h2>Products Management</h2>
+        <button class="btn primary" id="addProductBtn">Add New Product</button>
+      </div>
+
+      <div class="search-filter">
+        <input
+          type="text"
+          id="searchInput"
+          placeholder="Search by name or ID..."
+          class="search-bar"
+        />
+        <select id="filterCategory" class="filter-select">
+          <option value="">All Categories</option>
+          <option value="Electronics">Electronics</option>
+          <option value="Clothing">Clothing</option>
+          <option value="Books">Books</option>
+        </select>
+      </div>
+
+      <table class="products-table">
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Name</th>
+            <th>Description</th>
+            <th>Price</th>
+            <th>Category</th>
+            <th>Stock</th>
+            <th>Status</th>
+            <th>Created At</th>
+            <th>Updated At</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>1</td>
+            <td>Product A</td>
+            <td>High-quality electronic gadget</td>
+            <td>$29.99</td>
+            <td>Electronics</td>
+            <td>50</td>
+            <td>Active</td>
+            <td>2025-06-01</td>
+            <td>2025-06-23</td>
+            <td class="actions">
+              <button class="action-btn view" title="View">
+                <i class="fas fa-eye"></i>
+              </button>
+              <button class="action-btn edit" title="Edit">
+                <i class="fas fa-edit"></i>
+              </button>
+              <button class="action-btn delete" title="Delete">
+                <i class="fas fa-trash-alt"></i>
+              </button>
+            </td>
+          </tr>
+          <tr>
+            <td>2</td>
+            <td>T-Shirt</td>
+            <td>Comfortable cotton t-shirt</td>
+            <td>$15.50</td>
+            <td>Clothing</td>
+            <td>100</td>
+            <td>Active</td>
+            <td>2025-06-10</td>
+            <td>2025-06-22</td>
+            <td class="actions">
+              <button class="action-btn view" title="View">
+                <i class="fas fa-eye"></i>
+              </button>
+              <button class="action-btn edit" title="Edit">
+                <i class="fas fa-edit"></i>
+              </button>
+              <button class="action-btn delete" title="Delete">
+                <i class="fas fa-trash-alt"></i>
+              </button>
+            </td>
+          </tr>
+          <!-- Add more rows as needed -->
+        </tbody>
+      </table>
+
+      <div class="pagination">
+        <button class="btn" id="prevPage">Previous</button>
+        <span id="pageInfo">Page 1 of 1</span>
+        <button class="btn" id="nextPage">Next</button>
+      </div>
+
+      <!-- Modal Form -->
+      <div class="modal-overlay" id="modalOverlay">
+        <div class="modal">
+          <h3 id="modalTitle">Add Product</h3>
+          <form id="productForm">
+            <label>
+              ID
+              <input type="text" name="id" required readonly />
+            </label>
+            <label>
+              Name
+              <input type="text" name="name" required />
+            </label>
+            <label>
+              Description
+              <textarea name="description" required></textarea>
+            </label>
+            <label>
+              Price
+              <input type="number" name="price" step="0.01" required />
+            </label>
+            <label>
+              Category
+              <select name="category" required>
+                <option value="Electronics">Electronics</option>
+                <option value="Clothing">Clothing</option>
+                <option value="Books">Books</option>
+              </select>
+            </label>
+            <label>
+              Stock
+              <input type="number" name="stock" required />
+            </label>
+            <label>
+              Status
+              <select name="status" required>
+                <option value="Active">Active</option>
+                <option value="Inactive">Inactive</option>
+              </select>
+            </label>
+            <label>
+              Created At
+              <input type="date" name="createdAt" required />
+            </label>
+            <label>
+              Updated At
+              <input type="date" name="updatedAt" required />
+            </label>
+            <div class="form-actions">
+              <button type="submit" class="btn primary">Save</button>
+              <button type="button" class="btn" id="closeModal">Cancel</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      document.addEventListener("DOMContentLoaded", () => {
+        const addProductBtn = document.getElementById("addProductBtn");
+        const modalOverlay = document.getElementById("modalOverlay");
+        const closeModal = document.getElementById("closeModal");
+        const productForm = document.getElementById("productForm");
+        const modalTitle = document.getElementById("modalTitle");
+
+        addProductBtn.addEventListener("click", () => {
+          modalTitle.textContent = "Add Product";
+          productForm.reset();
+          productForm.querySelector('[name="id"]').value = Date.now()
+            .toString()
+            .slice(-5);
+          productForm.querySelector('[name="createdAt"]').value = new Date()
+            .toISOString()
+            .split("T")[0];
+          productForm.querySelector('[name="updatedAt"]').value = new Date()
+            .toISOString()
+            .split("T")[0];
+          modalOverlay.style.display = "flex";
+        });
+
+        closeModal.addEventListener("click", () => {
+          modalOverlay.style.display = "none";
+        });
+
+        productForm.addEventListener("submit", (e) => {
+          e.preventDefault();
+          const formData = new FormData(productForm);
+          const product = Object.fromEntries(formData);
+          addProductToTable(product);
+          modalOverlay.style.display = "none";
+        });
+
+        function addProductToTable(product) {
+          const tbody = document.querySelector(".products-table tbody");
+          const row = document.createElement("tr");
+          row.innerHTML = `
+          <td>${product.id}</td>
+          <td>${product.name}</td>
+          <td>${product.description}</td>
+          <td>$${parseFloat(product.price).toFixed(2)}</td>
+          <td>${product.category}</td>
+          <td>${product.stock}</td>
+          <td>${product.status}</td>
+          <td>${product.createdAt}</td>
+          <td>${product.updatedAt}</td>
+          <td class="actions">
+            <button class="action-btn view" title="View"><i class="fas fa-eye"></i></button>
+            <button class="action-btn edit" title="Edit"><i class="fas fa-edit"></i></button>
+            <button class="action-btn delete" title="Delete"><i class="fas fa-trash-alt"></i></button>
+          </td>
+        `;
+          tbody.appendChild(row);
+        }
+
+        // Simple pagination (placeholder)
+        let currentPage = 1;
+        const rowsPerPage = 5;
+        function updatePagination() {
+          const rows = document.querySelectorAll(".products-table tbody tr");
+          const totalPages = Math.ceil(rows.length / rowsPerPage);
+          const start = (currentPage - 1) * rowsPerPage;
+          const end = start + rowsPerPage;
+          rows.forEach((row, index) => {
+            row.style.display = index >= start && index < end ? "" : "none";
+          });
+          document.getElementById(
+            "pageInfo"
+          ).textContent = `Page ${currentPage} of ${totalPages}`;
+        }
+
+        document.getElementById("prevPage").addEventListener("click", () => {
+          if (currentPage > 1) {
+            currentPage--;
+            updatePagination();
+          }
+        });
+
+        document.getElementById("nextPage").addEventListener("click", () => {
+          const rows = document.querySelectorAll(".products-table tbody tr");
+          const totalPages = Math.ceil(rows.length / rowsPerPage);
+          if (currentPage < totalPages) {
+            currentPage++;
+            updatePagination();
+          }
+        });
+
+        // Search and Filter (placeholder)
+        document.getElementById("searchInput").addEventListener("input", () => {
+          const searchTerm = document
+            .getElementById("searchInput")
+            .value.toLowerCase();
+          const category = document.getElementById("filterCategory").value;
+          const rows = document.querySelectorAll(".products-table tbody tr");
+          rows.forEach((row) => {
+            const id = row.cells[0].textContent.toLowerCase();
+            const name = row.cells[1].textContent.toLowerCase();
+            const cat = row.cells[4].textContent;
+            const matchesSearch =
+              id.includes(searchTerm) || name.includes(searchTerm);
+            const matchesCategory = !category || cat === category;
+            row.style.display = matchesSearch && matchesCategory ? "" : "none";
+          });
+          currentPage = 1;
+          updatePagination();
+        });
+
+        document
+          .getElementById("filterCategory")
+          .addEventListener("change", () => {
+            document
+              .getElementById("searchInput")
+              .dispatchEvent(new Event("input"));
+          });
+
+        updatePagination();
+      });
+    </script>
+  </body>
+</html>

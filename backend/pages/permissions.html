@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Permissions Management</title>
+    <link rel="stylesheet" href="/backend/assets/css/pages/roles-permissions.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+  </head>
+  <body>
+    <div class="permissions-container">
+      <div class="header">
+        <h2>Permissions Management</h2>
+        <div class="search-filter">
+          <input
+            type="text"
+            id="permissionSearch"
+            placeholder="Search by ID or permission..."
+            class="search-bar"
+          />
+          <select id="permissionRoleFilter" class="filter-select">
+            <option value="">All Roles</option>
+            <option>Admin</option>
+            <option>Editor</option>
+            <option>User</option>
+          </select>
+        </div>
+        <button class="btn primary" onclick="openPermissionModal()">
+          Add Permission
+        </button>
+      </div>
+
+      <table class="permissions-table">
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Role</th>
+            <th>Permission</th>
+            <th>Created At</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr data-id="1">
+            <td>1</td>
+            <td>Admin</td>
+            <td>read</td>
+            <td>2025-06-20 10:00:00</td>
+            <td class="actions">
+              <button class="btn small view" title="View">
+                <i class="fas fa-eye"></i>
+              </button>
+              <button class="btn small edit" title="Edit">
+                <i class="fas fa-edit"></i>
+              </button>
+              <button class="btn small delete" title="Delete">
+                <i class="fas fa-trash-alt"></i>
+              </button>
+            </td>
+          </tr>
+          <tr data-id="2">
+            <td>2</td>
+            <td>Editor</td>
+            <td>write</td>
+            <td>2025-06-25 17:17:00</td>
+            <td class="actions">
+              <button class="btn small view" title="View">
+                <i class="fas fa-eye"></i>
+              </button>
+              <button class="btn small edit" title="Edit">
+                <i class="fas fa-edit"></i>
+              </button>
+              <button class="btn small delete" title="Delete">
+                <i class="fas fa-trash-alt"></i>
+              </button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+
+      <div class="modal-overlay" id="permissionModalOverlay">
+        <div class="modal">
+          <h3 id="permissionModalTitle">Add Permission</h3>
+          <form id="permissionForm">
+            <label>
+              ID
+              <input type="text" name="id" required readonly />
+            </label>
+            <label>
+              Role
+              <select name="role">
+                <option>Admin</option>
+                <option>Editor</option>
+                <option>User</option>
+              </select>
+            </label>
+            <label>
+              Permission
+              <input type="text" name="permission" required />
+            </label>
+            <label>
+              Created At
+              <input type="datetime-local" name="created_at" required />
+            </label>
+            <div class="form-actions">
+              <button type="submit" class="btn primary">Save</button>
+              <button
+                type="button"
+                class="btn"
+                onclick="closePermissionModal()"
+              >
+                Cancel
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      function openPermissionModal() {
+        document.getElementById("permissionModalOverlay").style.display =
+          "flex";
+        document.getElementById("permissionForm").reset();
+        document.querySelector('[name="id"]').value = Date.now()
+          .toString()
+          .slice(-5);
+        document.querySelector('[name="created_at"]').value = new Date()
+          .toISOString()
+          .slice(0, 16);
+      }
+
+      function closePermissionModal() {
+        document.getElementById("permissionModalOverlay").style.display =
+          "none";
+      }
+
+      document
+        .getElementById("permissionForm")
+        .addEventListener("submit", (e) => {
+          e.preventDefault();
+          const formData = new FormData(e.target);
+          const permission = Object.fromEntries(formData);
+          addPermissionToTable(permission);
+          closePermissionModal();
+        });
+
+      function addPermissionToTable(permission) {
+        const tbody = document.querySelector(".permissions-table tbody");
+        const row = document.createElement("tr");
+        row.dataset.id = permission.id;
+        row.innerHTML = `
+          <td>${permission.id}</td>
+          <td>${permission.role}</td>
+          <td>${permission.permission}</td>
+          <td>${permission.created_at}</td>
+          <td class="actions">
+            <button class="btn small view" title="View" data-id="${permission.id}"><i class="fas fa-eye"></i></button>
+            <button class="btn small edit" title="Edit" data-id="${permission.id}"><i class="fas fa-edit"></i></button>
+            <button class="btn small delete" title="Delete" data-id="${permission.id}"><i class="fas fa-trash-alt"></i></button>
+          </td>
+        `;
+        tbody.appendChild(row);
+        bindActions(row);
+      }
+
+      function bindActions(row) {
+        row
+          .querySelector(".btn.small.view")
+          .addEventListener("click", () =>
+            alert(`Viewing Permission: ${row.cells[2].textContent}`)
+          );
+        row.querySelector(".btn.small.edit").addEventListener("click", () => {
+          const id = row.dataset.id;
+          editPermission(id);
+        });
+        row
+          .querySelector(".btn.small.delete")
+          .addEventListener("click", () => row.remove());
+      }
+
+      function editPermission(id) {
+        const row = document.querySelector(`tr[data-id="${id}"]`);
+        openPermissionModal();
+        document
+          .getElementById("permissionForm")
+          .querySelector('[name="id"]').value = row.cells[0].textContent;
+        document
+          .getElementById("permissionForm")
+          .querySelector('[name="role"]').value = row.cells[1].textContent;
+        document
+          .getElementById("permissionForm")
+          .querySelector('[name="permission"]').value =
+          row.cells[2].textContent;
+        document
+          .getElementById("permissionForm")
+          .querySelector('[name="created_at"]').value =
+          row.cells[3].textContent;
+      }
+
+      document.addEventListener("DOMContentLoaded", () => {
+        const permissionSearch = document.getElementById("permissionSearch");
+        const permissionRoleFilter = document.getElementById(
+          "permissionRoleFilter"
+        );
+        const rows = document.querySelectorAll(".permissions-table tbody tr");
+
+        function filterPermissions() {
+          const searchTerm = permissionSearch.value.toLowerCase();
+          const roleValue = permissionRoleFilter.value;
+          rows.forEach((row) => {
+            const id = row.cells[0].textContent.toLowerCase();
+            const role = row.cells[1].textContent;
+            const permission = row.cells[2].textContent.toLowerCase();
+            const searchMatch =
+              id.includes(searchTerm) || permission.includes(searchTerm);
+            const roleMatch = !roleValue || role === roleValue;
+            row.style.display = searchMatch && roleMatch ? "" : "none";
+          });
+        }
+
+        permissionSearch.addEventListener("input", filterPermissions);
+        permissionRoleFilter.addEventListener("change", filterPermissions);
+
+        document
+          .querySelectorAll(".permissions-table tbody tr")
+          .forEach(bindActions);
+      });
+    </script>
+  </body>
+</html>

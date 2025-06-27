@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Roles Management</title>
+    <link
+      rel="stylesheet"
+      href="/backend/assets/css/pages/roles-permissions.css"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+  </head>
+  <body>
+    <div class="roles-container">
+      <div class="header">
+        <h2>Roles Management</h2>
+        <div class="search-filter">
+          <input
+            type="text"
+            id="roleSearch"
+            placeholder="Search by ID or name..."
+            class="search-bar"
+          />
+        </div>
+        <button class="btn primary" onclick="openRoleModal()">Add Role</button>
+      </div>
+
+      <table class="roles-table">
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Name</th>
+            <th>Description</th>
+            <th>Created At</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr data-id="1">
+            <td>1</td>
+            <td>Admin</td>
+            <td>Full access</td>
+            <td>2025-06-20 10:00:00</td>
+            <td class="actions">
+              <button class="btn small view" title="View">
+                <i class="fas fa-eye"></i>
+              </button>
+              <button class="btn small edit" title="Edit">
+                <i class="fas fa-edit"></i>
+              </button>
+              <button class="btn small delete" title="Delete">
+                <i class="fas fa-trash-alt"></i>
+              </button>
+            </td>
+          </tr>
+          <tr data-id="2">
+            <td>2</td>
+            <td>Editor</td>
+            <td>Content management</td>
+            <td>2025-06-25 17:17:00</td>
+            <td class="actions">
+              <button class="btn small view" title="View">
+                <i class="fas fa-eye"></i>
+              </button>
+              <button class="btn small edit" title="Edit">
+                <i class="fas fa-edit"></i>
+              </button>
+              <button class="btn small delete" title="Delete">
+                <i class="fas fa-trash-alt"></i>
+              </button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+
+      <div class="modal-overlay" id="roleModalOverlay">
+        <div class="modal">
+          <h3 id="roleModalTitle">Add Role</h3>
+          <form id="roleForm">
+            <label>
+              ID
+              <input type="text" name="id" required readonly />
+            </label>
+            <label>
+              Name
+              <input type="text" name="name" required />
+            </label>
+            <label>
+              Description
+              <input type="text" name="description" required />
+            </label>
+            <label>
+              Created At
+              <input type="datetime-local" name="created_at" required />
+            </label>
+            <div class="form-actions">
+              <button type="submit" class="btn primary">Save</button>
+              <button type="button" class="btn" onclick="closeRoleModal()">
+                Cancel
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      function openRoleModal() {
+        document.getElementById("roleModalOverlay").style.display = "flex";
+        document.getElementById("roleForm").reset();
+        document.querySelector('[name="id"]').value = Date.now()
+          .toString()
+          .slice(-5);
+        document.querySelector('[name="created_at"]').value = new Date()
+          .toISOString()
+          .slice(0, 16);
+      }
+
+      function closeRoleModal() {
+        document.getElementById("roleModalOverlay").style.display = "none";
+      }
+
+      document.getElementById("roleForm").addEventListener("submit", (e) => {
+        e.preventDefault();
+        const formData = new FormData(e.target);
+        const role = Object.fromEntries(formData);
+        addRoleToTable(role);
+        closeRoleModal();
+      });
+
+      function addRoleToTable(role) {
+        const tbody = document.querySelector(".roles-table tbody");
+        const row = document.createElement("tr");
+        row.dataset.id = role.id;
+        row.innerHTML = `
+          <td>${role.id}</td>
+          <td>${role.name}</td>
+          <td>${role.description}</td>
+          <td>${role.created_at}</td>
+          <td class="actions">
+            <button class="btn small view" title="View" data-id="${role.id}"><i class="fas fa-eye"></i></button>
+            <button class="btn small edit" title="Edit" data-id="${role.id}"><i class="fas fa-edit"></i></button>
+            <button class="btn small delete" title="Delete" data-id="${role.id}"><i class="fas fa-trash-alt"></i></button>
+          </td>
+        `;
+        tbody.appendChild(row);
+        bindActions(row);
+      }
+
+      function bindActions(row) {
+        row
+          .querySelector(".btn.small.view")
+          .addEventListener("click", () =>
+            alert(`Viewing Role: ${row.cells[1].textContent}`)
+          );
+        row.querySelector(".btn.small.edit").addEventListener("click", () => {
+          const id = row.dataset.id;
+          editRole(id);
+        });
+        row
+          .querySelector(".btn.small.delete")
+          .addEventListener("click", () => row.remove());
+      }
+
+      function editRole(id) {
+        const row = document.querySelector(`tr[data-id="${id}"]`);
+        openRoleModal();
+        document.getElementById("roleForm").querySelector('[name="id"]').value =
+          row.cells[0].textContent;
+        document
+          .getElementById("roleForm")
+          .querySelector('[name="name"]').value = row.cells[1].textContent;
+        document
+          .getElementById("roleForm")
+          .querySelector('[name="description"]').value =
+          row.cells[2].textContent;
+        document
+          .getElementById("roleForm")
+          .querySelector('[name="created_at"]').value =
+          row.cells[3].textContent;
+      }
+
+      document.addEventListener("DOMContentLoaded", () => {
+        const roleSearch = document.getElementById("roleSearch");
+        const rows = document.querySelectorAll(".roles-table tbody tr");
+
+        function filterRoles() {
+          const searchTerm = roleSearch.value.toLowerCase();
+          rows.forEach((row) => {
+            const id = row.cells[0].textContent.toLowerCase();
+            const name = row.cells[1].textContent.toLowerCase();
+            const searchMatch =
+              id.includes(searchTerm) || name.includes(searchTerm);
+            row.style.display = searchMatch ? "" : "none";
+          });
+        }
+
+        roleSearch.addEventListener("input", filterRoles);
+
+        document.querySelectorAll(".roles-table tbody tr").forEach(bindActions);
+      });
+    </script>
+  </body>
+</html>

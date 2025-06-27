@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Jobs Management</title>
+    <link rel="stylesheet" href="/backend/assets/css/pages/jobs-contacts.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+  </head>
+  <body>
+    <div class="jobs-container">
+      <div class="header">
+        <h2>Jobs Management</h2>
+        <button class="btn primary" id="addJobBtn">Add New Job</button>
+      </div>
+
+      <div class="search-filter">
+        <input
+          type="text"
+          id="searchInput"
+          placeholder="Search by ID or title..."
+          class="search-bar"
+        />
+      </div>
+
+      <table class="jobs-table">
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Title</th>
+            <th>Location</th>
+            <th>Salary</th>
+            <th>Description</th>
+            <th>Posted At</th>
+            <th>Created At</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody id="jobsTbody">
+          <tr data-id="1">
+            <td>1</td>
+            <td>AI Developer</td>
+            <td>Remote</td>
+            <td>$80,000 - $100,000</td>
+            <td>Develop AI models and... (read more)</td>
+            <td>2025-06-20 09:00:00</td>
+            <td>2025-06-20 08:30:00</td>
+            <td class="actions">
+              <button class="action-btn view" title="View">
+                <i class="fas fa-eye"></i>
+              </button>
+              <button class="action-btn edit" title="Edit">
+                <i class="fas fa-edit"></i>
+              </button>
+              <button class="action-btn delete" title="Delete">
+                <i class="fas fa-trash-alt"></i>
+              </button>
+            </td>
+          </tr>
+          <tr data-id="2">
+            <td>2</td>
+            <td>Web Designer</td>
+            <td>Bangkok, TH</td>
+            <td>$50,000 - $70,000</td>
+            <td>Design responsive websites... (read more)</td>
+            <td>2025-06-25 15:20:00</td>
+            <td>2025-06-25 14:50:00</td>
+            <td class="actions">
+              <button class="action-btn view" title="View">
+                <i class="fas fa-eye"></i>
+              </button>
+              <button class="action-btn edit" title="Edit">
+                <i class="fas fa-edit"></i>
+              </button>
+              <button class="action-btn delete" title="Delete">
+                <i class="fas fa-trash-alt"></i>
+              </button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+
+      <div class="pagination">
+        <button class="btn" id="prevPage">Previous</button>
+        <span id="pageInfo">Page 1 of 1</span>
+        <button class="btn" id="nextPage">Next</button>
+      </div>
+
+      <div class="modal-overlay" id="modalOverlay">
+        <div class="modal">
+          <h3 id="modalTitle">Add Job</h3>
+          <form id="jobForm">
+            <label>
+              ID
+              <input type="text" name="id" required readonly />
+            </label>
+            <label>
+              Title
+              <input type="text" name="title" required />
+            </label>
+            <label>
+              Location
+              <input type="text" name="location" required />
+            </label>
+            <label>
+              Salary
+              <input type="text" name="salary" required />
+            </label>
+            <label>
+              Description
+              <textarea name="description" required></textarea>
+            </label>
+            <label>
+              Posted At
+              <input type="datetime-local" name="posted_at" required />
+            </label>
+            <label>
+              Created At
+              <input type="datetime-local" name="created_at" required />
+            </label>
+            <div class="form-actions">
+              <button type="submit" class="btn primary">Save</button>
+              <button type="button" class="btn" id="closeModal">Cancel</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      document.addEventListener("DOMContentLoaded", () => {
+        const addJobBtn = document.getElementById("addJobBtn");
+        const modalOverlay = document.getElementById("modalOverlay");
+        const closeModal = document.getElementById("closeModal");
+        const jobForm = document.getElementById("jobForm");
+        const modalTitle = document.getElementById("modalTitle");
+        let editJobId = null;
+
+        addJobBtn.addEventListener("click", () => {
+          modalTitle.textContent = "Add Job";
+          jobForm.reset();
+          jobForm.querySelector('[name="id"]').value = Date.now()
+            .toString()
+            .slice(-5);
+          const now = new Date().toISOString().slice(0, 16);
+          jobForm.querySelector('[name="posted_at"]').value = now;
+          jobForm.querySelector('[name="created_at"]').value = now;
+          modalOverlay.style.display = "flex";
+        });
+
+        closeModal.addEventListener("click", () => {
+          modalOverlay.style.display = "none";
+          jobForm.reset();
+          editJobId = null;
+        });
+
+        jobForm.addEventListener("submit", (e) => {
+          e.preventDefault();
+          const formData = new FormData(jobForm);
+          const job = Object.fromEntries(formData);
+          if (editJobId) {
+            updateJobInTable(job);
+          } else {
+            addJobToTable(job);
+          }
+          modalOverlay.style.display = "none";
+          jobForm.reset();
+          editJobId = null;
+          updatePagination();
+        });
+
+        function addJobToTable(job) {
+          const tbody = document.querySelector(".jobs-table tbody");
+          const row = document.createElement("tr");
+          row.dataset.id = job.id;
+          const descriptionPreview =
+            job.description.length > 30
+              ? job.description.slice(0, 30) + "... (read more)"
+              : job.description;
+          row.innerHTML = `
+            <td>${job.id}</td>
+            <td>${job.title}</td>
+            <td>${job.location}</td>
+            <td>${job.salary}</td>
+            <td>${descriptionPreview}</td>
+            <td>${job.posted_at}</td>
+            <td>${job.created_at}</td>
+            <td class="actions">
+              <button class="action-btn view" title="View" data-id="${job.id}"><i class="fas fa-eye"></i></button>
+              <button class="action-btn edit" title="Edit" data-id="${job.id}"><i class="fas fa-edit"></i></button>
+              <button class="action-btn delete" title="Delete" data-id="${job.id}"><i class="fas fa-trash-alt"></i></button>
+            </td>
+          `;
+          tbody.appendChild(row);
+          bindActionButtons(row);
+        }
+
+        function updateJobInTable(job) {
+          const row = document.querySelector(`tr[data-id="${editJobId}"]`);
+          if (row) {
+            const descriptionPreview =
+              job.description.length > 30
+                ? job.description.slice(0, 30) + "... (read more)"
+                : job.description;
+            row.innerHTML = `
+              <td>${job.id}</td>
+              <td>${job.title}</td>
+              <td>${job.location}</td>
+              <td>${job.salary}</td>
+              <td>${descriptionPreview}</td>
+              <td>${job.posted_at}</td>
+              <td>${job.created_at}</td>
+              <td class="actions">
+                <button class="action-btn view" title="View" data-id="${job.id}"><i class="fas fa-eye"></i></button>
+                <button class="action-btn edit" title="Edit" data-id="${job.id}"><i class="fas fa-edit"></i></button>
+                <button class="action-btn delete" title="Delete" data-id="${job.id}"><i class="fas fa-trash-alt"></i></button>
+              </td>
+            `;
+            row.dataset.id = job.id;
+            bindActionButtons(row);
+          }
+        }
+
+        function bindActionButtons(row) {
+          row
+            .querySelector(".action-btn.view")
+            .addEventListener("click", viewJob);
+          row
+            .querySelector(".action-btn.edit")
+            .addEventListener("click", editJob);
+          row
+            .querySelector(".action-btn.delete")
+            .addEventListener("click", deleteJob);
+        }
+
+        function viewJob(e) {
+          const id = e.target.closest("button").dataset.id;
+          const row = document.querySelector(`tr[data-id="${id}"]`);
+          const title = row.cells[1].textContent;
+          alert(`Viewing Job: ${title}\nID: ${id}`);
+        }
+
+        function editJob(e) {
+          editJobId = e.target.closest("button").dataset.id;
+          const row = document.querySelector(`tr[data-id="${editJobId}"]`);
+          modalTitle.textContent = "Edit Job";
+          jobForm.querySelector('[name="id"]').value = row.cells[0].textContent;
+          jobForm.querySelector('[name="title"]').value =
+            row.cells[1].textContent;
+          jobForm.querySelector('[name="location"]').value =
+            row.cells[2].textContent;
+          jobForm.querySelector('[name="salary"]').value =
+            row.cells[3].textContent;
+          jobForm.querySelector('[name="description"]').value =
+            row.cells[4].textContent.replace("... (read more)", "");
+          jobForm.querySelector('[name="posted_at"]').value =
+            row.cells[5].textContent;
+          jobForm.querySelector('[name="created_at"]').value =
+            row.cells[6].textContent;
+          modalOverlay.style.display = "flex";
+        }
+
+        function deleteJob(e) {
+          const id = e.target.closest("button").dataset.id;
+          const row = document.querySelector(`tr[data-id="${id}"]`);
+          row.remove();
+          updatePagination();
+        }
+
+        let currentPage = 1;
+        const rowsPerPage = 5;
+        function updatePagination() {
+          const rows = document.querySelectorAll(".jobs-table tbody tr");
+          const totalPages = Math.ceil(rows.length / rowsPerPage);
+          const start = (currentPage - 1) * rowsPerPage;
+          const end = start + rowsPerPage;
+          rows.forEach((row, index) => {
+            row.style.display = index >= start && index < end ? "" : "none";
+          });
+          document.getElementById(
+            "pageInfo"
+          ).textContent = `Page ${currentPage} of ${totalPages || 1}`;
+        }
+
+        document.getElementById("searchInput").addEventListener("input", () => {
+          const searchTerm = document
+            .getElementById("searchInput")
+            .value.toLowerCase();
+          const rows = document.querySelectorAll(".jobs-table tbody tr");
+          rows.forEach((row) => {
+            const id = row.cells[0].textContent.toLowerCase();
+            const title = row.cells[1].textContent.toLowerCase();
+            const matches =
+              id.includes(searchTerm) || title.includes(searchTerm);
+            row.style.display = matches ? "" : "none";
+          });
+          currentPage = 1;
+          updatePagination();
+        });
+
+        document.querySelectorAll(".jobs-table tbody tr").forEach((row) => {
+          bindActionButtons(row);
+        });
+        updatePagination();
+      });
+    </script>
+  </body>
+</html>

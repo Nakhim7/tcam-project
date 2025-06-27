@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Contact Management</title>
+    <link rel="stylesheet" href="/backend/assets/css/pages/jobs-contacts.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+  </head>
+  <body>
+    <div class="contacts-container">
+      <div class="header">
+        <h2>Contact Management</h2>
+        <button class="btn primary" id="addContactBtn">Add New Contact</button>
+      </div>
+
+      <div class="search-filter">
+        <input
+          type="text"
+          id="searchInput"
+          placeholder="Search by ID or name..."
+          class="search-bar"
+        />
+      </div>
+
+      <table class="contacts-table">
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Name</th>
+            <th>Email</th>
+            <th>Phone</th>
+            <th>Message</th>
+            <th>Submitted At</th>
+            <th>Created At</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody id="contactsTbody">
+          <tr data-id="1">
+            <td>1</td>
+            <td>John Doe</td>
+            <td>johndoe@email.com</td>
+            <td>+1-555-123-4567</td>
+            <td>Interested in your services... (read more)</td>
+            <td>2025-06-20 10:00:00</td>
+            <td>2025-06-20 09:30:00</td>
+            <td class="actions">
+              <button class="action-btn view" title="View">
+                <i class="fas fa-eye"></i>
+              </button>
+              <button class="action-btn edit" title="Edit">
+                <i class="fas fa-edit"></i>
+              </button>
+              <button class="action-btn delete" title="Delete">
+                <i class="fas fa-trash-alt"></i>
+              </button>
+            </td>
+          </tr>
+          <tr data-id="2">
+            <td>2</td>
+            <td>Jane Smith</td>
+            <td>janesmith@email.com</td>
+            <td>+66-2-123-4567</td>
+            <td>Need support for project... (read more)</td>
+            <td>2025-06-25 15:20:00</td>
+            <td>2025-06-25 15:00:00</td>
+            <td class="actions">
+              <button class="action-btn view" title="View">
+                <i class="fas fa-eye"></i>
+              </button>
+              <button class="action-btn edit" title="Edit">
+                <i class="fas fa-edit"></i>
+              </button>
+              <button class="action-btn delete" title="Delete">
+                <i class="fas fa-trash-alt"></i>
+              </button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+
+      <div class="pagination">
+        <button class="btn" id="prevPage">Previous</button>
+        <span id="pageInfo">Page 1 of 1</span>
+        <button class="btn" id="nextPage">Next</button>
+      </div>
+
+      <div class="modal-overlay" id="modalOverlay">
+        <div class="modal">
+          <h3 id="modalTitle">Add Contact</h3>
+          <form id="contactForm">
+            <label>
+              ID
+              <input type="text" name="id" required readonly />
+            </label>
+            <label>
+              Name
+              <input type="text" name="name" required />
+            </label>
+            <label>
+              Email
+              <input type="email" name="email" required />
+            </label>
+            <label>
+              Phone
+              <input type="text" name="phone" required />
+            </label>
+            <label>
+              Message
+              <textarea name="message" required></textarea>
+            </label>
+            <label>
+              Submitted At
+              <input type="datetime-local" name="submitted_at" required />
+            </label>
+            <label>
+              Created At
+              <input type="datetime-local" name="created_at" required />
+            </label>
+            <div class="form-actions">
+              <button type="submit" class="btn primary">Save</button>
+              <button type="button" class="btn" id="closeModal">Cancel</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      document.addEventListener("DOMContentLoaded", () => {
+        const addContactBtn = document.getElementById("addContactBtn");
+        const modalOverlay = document.getElementById("modalOverlay");
+        const closeModal = document.getElementById("closeModal");
+        const contactForm = document.getElementById("contactForm");
+        const modalTitle = document.getElementById("modalTitle");
+        let editContactId = null;
+
+        addContactBtn.addEventListener("click", () => {
+          modalTitle.textContent = "Add Contact";
+          contactForm.reset();
+          contactForm.querySelector('[name="id"]').value = Date.now()
+            .toString()
+            .slice(-5);
+          const now = new Date().toISOString().slice(0, 16);
+          contactForm.querySelector('[name="submitted_at"]').value = now;
+          contactForm.querySelector('[name="created_at"]').value = now;
+          modalOverlay.style.display = "flex";
+        });
+
+        closeModal.addEventListener("click", () => {
+          modalOverlay.style.display = "none";
+          contactForm.reset();
+          editContactId = null;
+        });
+
+        contactForm.addEventListener("submit", (e) => {
+          e.preventDefault();
+          const formData = new FormData(contactForm);
+          const contact = Object.fromEntries(formData);
+          if (editContactId) {
+            updateContactInTable(contact);
+          } else {
+            addContactToTable(contact);
+          }
+          modalOverlay.style.display = "none";
+          contactForm.reset();
+          editContactId = null;
+          updatePagination();
+        });
+
+        function addContactToTable(contact) {
+          const tbody = document.querySelector(".contacts-table tbody");
+          const row = document.createElement("tr");
+          row.dataset.id = contact.id;
+          const messagePreview =
+            contact.message.length > 30
+              ? contact.message.slice(0, 30) + "... (read more)"
+              : contact.message;
+          row.innerHTML = `
+            <td>${contact.id}</td>
+            <td>${contact.name}</td>
+            <td>${contact.email}</td>
+            <td>${contact.phone}</td>
+            <td>${messagePreview}</td>
+            <td>${contact.submitted_at}</td>
+            <td>${contact.created_at}</td>
+            <td class="actions">
+              <button class="action-btn view" title="View" data-id="${contact.id}"><i class="fas fa-eye"></i></button>
+              <button class="action-btn edit" title="Edit" data-id="${contact.id}"><i class="fas fa-edit"></i></button>
+              <button class="action-btn delete" title="Delete" data-id="${contact.id}"><i class="fas fa-trash-alt"></i></button>
+            </td>
+          `;
+          tbody.appendChild(row);
+          bindActionButtons(row);
+        }
+
+        function updateContactInTable(contact) {
+          const row = document.querySelector(`tr[data-id="${editContactId}"]`);
+          if (row) {
+            const messagePreview =
+              contact.message.length > 30
+                ? contact.message.slice(0, 30) + "... (read more)"
+                : contact.message;
+            row.innerHTML = `
+              <td>${contact.id}</td>
+              <td>${contact.name}</td>
+              <td>${contact.email}</td>
+              <td>${contact.phone}</td>
+              <td>${messagePreview}</td>
+              <td>${contact.submitted_at}</td>
+              <td>${contact.created_at}</td>
+              <td class="actions">
+                <button class="action-btn view" title="View" data-id="${contact.id}"><i class="fas fa-eye"></i></button>
+                <button class="action-btn edit" title="Edit" data-id="${contact.id}"><i class="fas fa-edit"></i></button>
+                <button class="action-btn delete" title="Delete" data-id="${contact.id}"><i class="fas fa-trash-alt"></i></button>
+              </td>
+            `;
+            row.dataset.id = contact.id;
+            bindActionButtons(row);
+          }
+        }
+
+        function bindActionButtons(row) {
+          row
+            .querySelector(".action-btn.view")
+            .addEventListener("click", viewContact);
+          row
+            .querySelector(".action-btn.edit")
+            .addEventListener("click", editContact);
+          row
+            .querySelector(".action-btn.delete")
+            .addEventListener("click", deleteContact);
+        }
+
+        function viewContact(e) {
+          const id = e.target.closest("button").dataset.id;
+          const row = document.querySelector(`tr[data-id="${id}"]`);
+          const name = row.cells[1].textContent;
+          alert(`Viewing Contact: ${name}\nID: ${id}`);
+        }
+
+        function editContact(e) {
+          editContactId = e.target.closest("button").dataset.id;
+          const row = document.querySelector(`tr[data-id="${editContactId}"]`);
+          modalTitle.textContent = "Edit Contact";
+          contactForm.querySelector('[name="id"]').value =
+            row.cells[0].textContent;
+          contactForm.querySelector('[name="name"]').value =
+            row.cells[1].textContent;
+          contactForm.querySelector('[name="email"]').value =
+            row.cells[2].textContent;
+          contactForm.querySelector('[name="phone"]').value =
+            row.cells[3].textContent;
+          contactForm.querySelector('[name="message"]').value =
+            row.cells[4].textContent.replace("... (read more)", "");
+          contactForm.querySelector('[name="submitted_at"]').value =
+            row.cells[5].textContent;
+          contactForm.querySelector('[name="created_at"]').value =
+            row.cells[6].textContent;
+          modalOverlay.style.display = "flex";
+        }
+
+        function deleteContact(e) {
+          const id = e.target.closest("button").dataset.id;
+          const row = document.querySelector(`tr[data-id="${id}"]`);
+          row.remove();
+          updatePagination();
+        }
+
+        let currentPage = 1;
+        const rowsPerPage = 5;
+        function updatePagination() {
+          const rows = document.querySelectorAll(".contacts-table tbody tr");
+          const totalPages = Math.ceil(rows.length / rowsPerPage);
+          const start = (currentPage - 1) * rowsPerPage;
+          const end = start + rowsPerPage;
+          rows.forEach((row, index) => {
+            row.style.display = index >= start && index < end ? "" : "none";
+          });
+          document.getElementById(
+            "pageInfo"
+          ).textContent = `Page ${currentPage} of ${totalPages || 1}`;
+        }
+
+        document.getElementById("searchInput").addEventListener("input", () => {
+          const searchTerm = document
+            .getElementById("searchInput")
+            .value.toLowerCase();
+          const rows = document.querySelectorAll(".contacts-table tbody tr");
+          rows.forEach((row) => {
+            const id = row.cells[0].textContent.toLowerCase();
+            const name = row.cells[1].textContent.toLowerCase();
+            const matches =
+              id.includes(searchTerm) || name.includes(searchTerm);
+            row.style.display = matches ? "" : "none";
+          });
+          currentPage = 1;
+          updatePagination();
+        });
+
+        document.querySelectorAll(".contacts-table tbody tr").forEach((row) => {
+          bindActionButtons(row);
+        });
+        updatePagination();
+      });
+    </script>
+  </body>
+</html>
+w

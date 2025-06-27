@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>User Management</title>
+    <link rel="stylesheet" href="users.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+  </head>
+  <body>
+    <div class="user-management">
+      <div class="users-header">
+        <h2>User Management</h2>
+        <div class="search-filter">
+          <input
+            type="text"
+            id="searchInput"
+            placeholder="Search by ID, username, or email..."
+            class="search-bar"
+          />
+          <select id="roleFilter" class="filter-select">
+            <option value="">All Roles</option>
+            <option>Admin</option>
+            <option>Editor</option>
+            <option>User</option>
+          </select>
+
+          <select id="statusFilter" class="filter-select">
+            <option value="">All Statuses</option>
+            <option>Active</option>
+            <option>Inactive</option>
+          </select>
+        </div>
+        <button class="btn primary" onclick="openModal()">Add User</button>
+      </div>
+
+      <table class="user-table">
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Username</th>
+            <th>Email</th>
+            <th>Contact</th>
+            <th>Role</th>
+            <th>Gender</th>
+            <th>Status</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>001</td>
+            <td>jdoe</td>
+            <td>jdoe@example.com</td>
+            <td>+855 10 123 456</td>
+            <td>Admin</td>
+            <td>Male</td>
+            <td>Active</td>
+            <td class="actions">
+              <button class="btn small view" title="View">
+                <i class="fas fa-eye"></i>
+              </button>
+              <button class="btn small edit" title="Edit">
+                <i class="fas fa-edit"></i>
+              </button>
+              <button class="btn small delete" title="Delete">
+                <i class="fas fa-trash-alt"></i>
+              </button>
+            </td>
+          </tr>
+          <tr>
+            <td>002</td>
+            <td>asmith</td>
+            <td>asmith@example.com</td>
+            <td>+855 10 789 012</td>
+            <td>Editor</td>
+            <td>Female</td>
+            <td>Inactive</td>
+            <td class="actions">
+              <button class="btn small view" title="View">
+                <i class="fas fa-eye"></i>
+              </button>
+              <button class="btn small edit" title="Edit">
+                <i class="fas fa-edit"></i>
+              </button>
+              <button class="btn small delete" title="Delete">
+                <i class="fas fa-trash-alt"></i>
+              </button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Modal Form -->
+    <div class="modal-overlay" id="modalOverlay">
+      <div class="modal">
+        <h3>Add/Edit User</h3>
+        <form id="userForm">
+          <label>
+            Username
+            <input type="text" name="username" required />
+          </label>
+          <label>
+            Email
+            <input type="email" name="email" required />
+          </label>
+          <label>
+            Contact
+            <input type="text" name="contact" />
+          </label>
+          <label>
+            Password
+            <input type="password" name="password" required />
+          </label>
+          <label>
+            Role
+            <select name="role">
+              <option>Admin</option>
+              <option>Editor</option>
+              <option>User</option>
+            </select>
+          </label>
+          <label>
+            Gender
+            <select name="gender">
+              <option>Male</option>
+              <option>Female</option>
+              <option>Other</option>
+            </select>
+          </label>
+          <label>
+            Status
+            <select name="status">
+              <option>Active</option>
+              <option>Inactive</option>
+            </select>
+          </label>
+
+          <div class="form-actions">
+            <button type="submit" class="btn primary">Save</button>
+            <button type="button" class="btn" onclick="closeModal()">
+              Cancel
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <script>
+      function openModal() {
+        document.getElementById("modalOverlay").style.display = "flex";
+      }
+
+      function closeModal() {
+        document.getElementById("modalOverlay").style.display = "none";
+      }
+
+      // Handle search and filter
+      document.addEventListener("DOMContentLoaded", () => {
+        const searchInput = document.getElementById("searchInput");
+        const roleFilter = document.getElementById("roleFilter");
+        const genderFilter = document.getElementById("genderFilter");
+        const statusFilter = document.getElementById("statusFilter");
+        const rows = document.querySelectorAll(".user-table tbody tr");
+
+        function filterTable() {
+          const searchTerm = searchInput.value.toLowerCase();
+          const roleValue = roleFilter.value;
+          const genderValue = genderFilter.value;
+          const statusValue = statusFilter.value;
+
+          rows.forEach((row) => {
+            const id = row.cells[0].textContent.toLowerCase();
+            const username = row.cells[1].textContent.toLowerCase();
+            const email = row.cells[2].textContent.toLowerCase();
+            const role = row.cells[4].textContent;
+            const gender = row.cells[5].textContent;
+            const status = row.cells[6].textContent;
+
+            const searchMatch =
+              id.includes(searchTerm) ||
+              username.includes(searchTerm) ||
+              email.includes(searchTerm);
+            const roleMatch = !roleValue || role === roleValue;
+            const genderMatch = !genderValue || gender === genderValue;
+            const statusMatch = !statusValue || status === statusValue;
+
+            row.style.display =
+              searchMatch && roleMatch && genderMatch && statusMatch
+                ? ""
+                : "none";
+          });
+        }
+
+        searchInput.addEventListener("input", filterTable);
+        roleFilter.addEventListener("change", filterTable);
+        genderFilter.addEventListener("change", filterTable);
+        statusFilter.addEventListener("change", filterTable);
+
+        // Optional: Handle form submission
+        document
+          .getElementById("userForm")
+          .addEventListener("submit", function (e) {
+            e.preventDefault();
+            // handle saving logic
+            closeModal();
+          });
+      });
+    </script>
+  </body>
+</html>

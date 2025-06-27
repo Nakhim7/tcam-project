@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Clients/Partners Management</title>
+    <link rel="stylesheet" href="/backend/assets/css/pages/clients.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+  </head>
+  <body>
+    <div class="clients-partners-container">
+      <div class="header">
+        <h2>Clients/Partners Management</h2>
+        <button class="btn primary" id="addClientPartnerBtn">
+          Add New Client/Partner
+        </button>
+      </div>
+
+      <div class="search-filter">
+        <input
+          type="text"
+          id="searchInput"
+          placeholder="Search by ID or name..."
+          class="search-bar"
+        />
+      </div>
+
+      <table class="clients-partners-table">
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Name</th>
+            <th>Logo</th>
+            <th>Website</th>
+            <th>Created At</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody id="clientsPartnersTbody">
+          <tr data-id="1">
+            <td>1</td>
+            <td>Tech Solutions Inc.</td>
+            <td>
+              <img
+                src="https://via.placeholder.com/50"
+                alt="Logo"
+                class="thumbnail-image"
+              />
+            </td>
+            <td>https://techsolutions.com</td>
+            <td>2025-06-20 10:00:00</td>
+            <td class="actions">
+              <button class="action-btn view" title="View">
+                <i class="fas fa-eye"></i>
+              </button>
+              <button class="action-btn edit" title="Edit">
+                <i class="fas fa-edit"></i>
+              </button>
+              <button class="action-btn delete" title="Delete">
+                <i class="fas fa-trash-alt"></i>
+              </button>
+            </td>
+          </tr>
+          <tr data-id="2">
+            <td>2</td>
+            <td>Green Energy Co.</td>
+            <td>
+              <img
+                src="https://via.placeholder.com/50"
+                alt="Logo"
+                class="thumbnail-image"
+              />
+            </td>
+            <td>-</td>
+            <td>2025-06-25 16:36:00</td>
+            <td class="actions">
+              <button class="action-btn view" title="View">
+                <i class="fas fa-eye"></i>
+              </button>
+              <button class="action-btn edit" title="Edit">
+                <i class="fas fa-edit"></i>
+              </button>
+              <button class="action-btn delete" title="Delete">
+                <i class="fas fa-trash-alt"></i>
+              </button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+
+      <div class="pagination">
+        <button class="btn" id="prevPage">Previous</button>
+        <span id="pageInfo">Page 1 of 1</span>
+        <button class="btn" id="nextPage">Next</button>
+      </div>
+
+      <div class="modal-overlay" id="modalOverlay">
+        <div class="modal">
+          <h3 id="modalTitle">Add Client/Partner</h3>
+          <form id="clientPartnerForm">
+            <label>
+              ID
+              <input type="text" name="id" required readonly />
+            </label>
+            <label>
+              Name
+              <input type="text" name="name" required />
+            </label>
+            <label>
+              Logo URL
+              <input
+                type="text"
+                name="logo"
+                required
+                placeholder="e.g., https://via.placeholder.com/50"
+              />
+            </label>
+            <label>
+              Website
+              <input type="text" name="website" />
+            </label>
+            <label>
+              Created At
+              <input type="datetime-local" name="created_at" required />
+            </label>
+            <div class="form-actions">
+              <button type="submit" class="btn primary">Save</button>
+              <button type="button" class="btn" id="closeModal">Cancel</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      document.addEventListener("DOMContentLoaded", () => {
+        const addClientPartnerBtn = document.getElementById(
+          "addClientPartnerBtn"
+        );
+        const modalOverlay = document.getElementById("modalOverlay");
+        const closeModal = document.getElementById("closeModal");
+        const clientPartnerForm = document.getElementById("clientPartnerForm");
+        const modalTitle = document.getElementById("modalTitle");
+        let editClientPartnerId = null;
+
+        addClientPartnerBtn.addEventListener("click", () => {
+          modalTitle.textContent = "Add Client/Partner";
+          clientPartnerForm.reset();
+          clientPartnerForm.querySelector('[name="id"]').value = Date.now()
+            .toString()
+            .slice(-5);
+          clientPartnerForm.querySelector('[name="created_at"]').value =
+            new Date().toISOString().slice(0, 16);
+          modalOverlay.style.display = "flex";
+        });
+
+        closeModal.addEventListener("click", () => {
+          modalOverlay.style.display = "none";
+          clientPartnerForm.reset();
+          editClientPartnerId = null;
+        });
+
+        clientPartnerForm.addEventListener("submit", (e) => {
+          e.preventDefault();
+          const formData = new FormData(clientPartnerForm);
+          const clientPartner = Object.fromEntries(formData);
+          if (editClientPartnerId) {
+            updateClientPartnerInTable(clientPartner);
+          } else {
+            addClientPartnerToTable(clientPartner);
+          }
+          modalOverlay.style.display = "none";
+          clientPartnerForm.reset();
+          editClientPartnerId = null;
+          updatePagination();
+        });
+
+        function addClientPartnerToTable(clientPartner) {
+          const tbody = document.querySelector(".clients-partners-table tbody");
+          const row = document.createElement("tr");
+          row.dataset.id = clientPartner.id;
+          row.innerHTML = `
+            <td>${clientPartner.id}</td>
+            <td>${clientPartner.name}</td>
+            <td><img src="${
+              clientPartner.logo
+            }" alt="Logo" class="thumbnail-image"></td>
+            <td>${clientPartner.website || "-"}</td>
+            <td>${clientPartner.created_at}</td>
+            <td class="actions">
+              <button class="action-btn view" title="View" data-id="${
+                clientPartner.id
+              }"><i class="fas fa-eye"></i></button>
+              <button class="action-btn edit" title="Edit" data-id="${
+                clientPartner.id
+              }"><i class="fas fa-edit"></i></button>
+              <button class="action-btn delete" title="Delete" data-id="${
+                clientPartner.id
+              }"><i class="fas fa-trash-alt"></i></button>
+            </td>
+          `;
+          tbody.appendChild(row);
+          bindActionButtons(row);
+        }
+
+        function updateClientPartnerInTable(clientPartner) {
+          const row = document.querySelector(
+            `tr[data-id="${editClientPartnerId}"]`
+          );
+          if (row) {
+            row.innerHTML = `
+              <td>${clientPartner.id}</td>
+              <td>${clientPartner.name}</td>
+              <td><img src="${
+                clientPartner.logo
+              }" alt="Logo" class="thumbnail-image"></td>
+              <td>${clientPartner.website || "-"}</td>
+              <td>${clientPartner.created_at}</td>
+              <td class="actions">
+                <button class="action-btn view" title="View" data-id="${
+                  clientPartner.id
+                }"><i class="fas fa-eye"></i></button>
+                <button class="action-btn edit" title="Edit" data-id="${
+                  clientPartner.id
+                }"><i class="fas fa-edit"></i></button>
+                <button class="action-btn delete" title="Delete" data-id="${
+                  clientPartner.id
+                }"><i class="fas fa-trash-alt"></i></button>
+              </td>
+            `;
+            row.dataset.id = clientPartner.id;
+            bindActionButtons(row);
+          }
+        }
+
+        function bindActionButtons(row) {
+          row
+            .querySelector(".action-btn.view")
+            .addEventListener("click", viewClientPartner);
+          row
+            .querySelector(".action-btn.edit")
+            .addEventListener("click", editClientPartner);
+          row
+            .querySelector(".action-btn.delete")
+            .addEventListener("click", deleteClientPartner);
+        }
+
+        function viewClientPartner(e) {
+          const id = e.target.closest("button").dataset.id;
+          const row = document.querySelector(`tr[data-id="${id}"]`);
+          const name = row.cells[1].textContent;
+          alert(`Viewing Client/Partner: ${name}\nID: ${id}`);
+        }
+
+        function editClientPartner(e) {
+          editClientPartnerId = e.target.closest("button").dataset.id;
+          const row = document.querySelector(
+            `tr[data-id="${editClientPartnerId}"]`
+          );
+          modalTitle.textContent = "Edit Client/Partner";
+          clientPartnerForm.querySelector('[name="id"]').value =
+            row.cells[0].textContent;
+          clientPartnerForm.querySelector('[name="name"]').value =
+            row.cells[1].textContent;
+          clientPartnerForm.querySelector('[name="logo"]').value =
+            row.cells[2].querySelector("img").src;
+          clientPartnerForm.querySelector('[name="website"]').value =
+            row.cells[3].textContent === "-" ? "" : row.cells[3].textContent;
+          clientPartnerForm.querySelector('[name="created_at"]').value =
+            row.cells[4].textContent;
+          modalOverlay.style.display = "flex";
+        }
+
+        function deleteClientPartner(e) {
+          const id = e.target.closest("button").dataset.id;
+          const row = document.querySelector(`tr[data-id="${id}"]`);
+          row.remove();
+          updatePagination();
+        }
+
+        let currentPage = 1;
+        const rowsPerPage = 5;
+        function updatePagination() {
+          const rows = document.querySelectorAll(
+            ".clients-partners-table tbody tr"
+          );
+          const totalPages = Math.ceil(rows.length / rowsPerPage);
+          const start = (currentPage - 1) * rowsPerPage;
+          const end = start + rowsPerPage;
+          rows.forEach((row, index) => {
+            row.style.display = index >= start && index < end ? "" : "none";
+          });
+          document.getElementById(
+            "pageInfo"
+          ).textContent = `Page ${currentPage} of ${totalPages || 1}`;
+        }
+
+        document.getElementById("searchInput").addEventListener("input", () => {
+          const searchTerm = document
+            .getElementById("searchInput")
+            .value.toLowerCase();
+          const rows = document.querySelectorAll(
+            ".clients-partners-table tbody tr"
+          );
+          rows.forEach((row) => {
+            const id = row.cells[0].textContent.toLowerCase();
+            const name = row.cells[1].textContent.toLowerCase();
+            const matches =
+              id.includes(searchTerm) || name.includes(searchTerm);
+            row.style.display = matches ? "" : "none";
+          });
+          currentPage = 1;
+          updatePagination();
+        });
+
+        document
+          .querySelectorAll(".clients-partners-table tbody tr")
+          .forEach((row) => {
+            bindActionButtons(row);
+          });
+        updatePagination();
+      });
+    </script>
+  </body>
+</html>

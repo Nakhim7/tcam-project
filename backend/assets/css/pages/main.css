@@ -1,5 +1,3 @@
-/* /backend/assets/css/pages/main.css */
-
 /* Reset and Base Styles */
 * {
   box-sizing: border-box;
@@ -15,6 +13,9 @@ body {
   margin: 0;
   padding: 0;
   overflow-x: hidden; /* Prevent horizontal scroll */
+}
+.dash-title {
+  margin-left: 2rem;
 }
 
 /* Layout Wrapper */
@@ -314,6 +315,25 @@ body {
 .placeholder-text {
   color: #7f8c8d;
   font-size: 1rem;
+}
+@media (min-width: 1600px) {
+  .dashboard-layout {
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 30px;
+    padding: 30px 60px;
+  }
+
+  .metrics-panel {
+    padding: 25px;
+  }
+
+  .metric-value {
+    font-size: 2rem;
+  }
+
+  .panel-title {
+    font-size: 1.3rem;
+  }
 }
 
 /* Responsive Design */

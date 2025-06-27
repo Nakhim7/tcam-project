@@ -125,7 +125,10 @@ html {
 .dark-theme .main-content {
   background-color: #1f212b;
 }
-
+.dark-theme .panel-header {
+  background-color: #2c2f3a;
+  color: white;
+}
 .dark-theme .metrics-panel,
 .dark-theme .panel-content,
 .dark-theme .data-table th,
