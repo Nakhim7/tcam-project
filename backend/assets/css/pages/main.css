@@ -8,7 +8,6 @@
 body {
   font-family: "Arial", "Helvetica Neue", sans-serif;
   line-height: 1.6;
-  background-color: #f5f7fa;
   color: #2c3e50;
   margin: 0;
   padding: 0;
@@ -49,7 +48,7 @@ body {
   ); /* Reduced from 300px */
   gap: 20px;
   padding: 20px 30px;
-  max-width: 1400px;
+  max-width: 1600px;
   margin: 0 auto;
 }
 

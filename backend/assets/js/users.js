@@ -1,264 +1,214 @@
-$(document).ready(function () {
-  // Sample data
-  let users = [
-    {
-      id: 1,
-      username: "john_doe",
-      email: "john@example.com",
-      password: "pass123",
-      address: "123 Main St",
-      contact: "555-0123",
-      gender: "male",
-      role: "admin",
-    },
-    {
-      id: 2,
-      username: "jane_smith",
-      email: "jane@example.com",
-      password: "pass456",
-      address: "456 Oak Ave",
-      contact: "555-0456",
-      gender: "female",
-      role: "user",
-    },
-    {
-      id: 3,
-      username: "bob_jones",
-      email: "bob@example.com",
-      password: "pass789",
-      address: "789 Pine Rd",
-      contact: "555-0789",
-      gender: "male",
-      role: "user",
-    },
-    {
-      id: 4,
-      username: "alice_brown",
-      email: "alice@example.com",
-      password: "pass101",
-      address: "101 Elm St",
-      contact: "555-0101",
-      gender: "female",
-      role: "admin",
-    },
-    {
-      id: 5,
-      username: "charlie_davis",
-      email: "charlie@example.com",
-      password: "pass202",
-      address: "202 Birch Ln",
-      contact: "555-0202",
-      gender: "other",
-      role: "user",
-    },
-    {
-      id: 6,
-      username: "emma_wilson",
-      email: "emma@example.com",
-      password: "pass303",
-      address: "303 Cedar Dr",
-      contact: "555-0303",
-      gender: "female",
-      role: "user",
-    },
-  ];
+$(function () {
+  let currentUserId = null;
 
-  // Pagination settings
-  const usersPerPage = 5;
-  let currentPage = 1;
+  // Load users when page loads
+  loadUsers();
 
-  // Initialize users page after content is loaded
-  function initUsersPage() {
-    // Get DOM elements
-    const userForm = $("#user_form");
-    const userIdInput = $("#user_id");
-    const usernameInput = $("#user_username");
-    const emailInput = $("#user_email");
-    const passwordInput = $("#user_password");
-    const addressInput = $("#user_address");
-    const contactInput = $("#user_contact");
-    const genderInput = $("#user_gender");
-    const roleInput = $("#user_role");
-    const formTitle = $("#user_form_title");
-    const cancelBtn = $("#user_cancel_btn");
-    const usersTbody = $("#user_tbody");
-    const addUserBtn = $("#user_add_btn");
-    const userModal = $("#user_modal");
-    const closeModal = $("#user_close_modal");
-    const prevPageBtn = $("#user_prev_page");
-    const nextPageBtn = $("#user_next_page");
-    const pageInfo = $("#user_page_info");
-
-    // Render users table with pagination
-    function renderUsers() {
-      usersTbody.empty();
-      const start = (currentPage - 1) * usersPerPage;
-      const end = start + usersPerPage;
-      const paginatedUsers = users.slice(start, end);
-
-      paginatedUsers.forEach((user) => {
-        const row = $(`
-          <tr>
-            <td>${user.id}</td>
-            <td>${user.username}</td>
-            <td>${user.email}</td>
-            <td>********</td>
-            <td>${user.address}</td>
-            <td>${user.contact}</td>
-            <td>${user.gender}</td>
-            <td>${user.role}</td>
-            <td>
-              <button class="action-btn edit" data-id="${user.id}" title="Edit">
-                <i class="fas fa-edit"></i>
-              </button>
-              <button class="action-btn delete" data-id="${user.id}" title="Delete">
-                <i class="fas fa-trash"></i>
-              </button>
-            </td>
-          </tr>
-        `);
-        usersTbody.append(row);
+  async function loadUsers() {
+    try {
+      const response = await fetch(`${API_BASE}/users`, {
+        headers: getAuthHeaders(),
       });
 
-      // Update pagination controls
-      const totalPages = Math.ceil(users.length / usersPerPage);
-      pageInfo.text(`Page ${currentPage} of ${totalPages}`);
-      prevPageBtn.prop("disabled", currentPage === 1);
-      nextPageBtn.prop("disabled", currentPage === totalPages);
+      if (!response.ok) throw new Error("Failed to fetch users");
+
+      const result = await response.json();
+      const users = result.data || result;
+
+      renderUserTable(users);
+    } catch (err) {
+      console.error("Error loading users:", err);
+      $("#noResults").show();
     }
-
-    // Reset form and close modal
-    function resetForm() {
-      userForm[0].reset();
-      userIdInput.val("");
-      formTitle.text("Add New User");
-      cancelBtn.hide();
-      userModal.hide();
-    }
-
-    // Populate form for editing
-    function populateForm(user) {
-      userIdInput.val(user.id);
-      usernameInput.val(user.username);
-      emailInput.val(user.email);
-      passwordInput.val(user.password);
-      addressInput.val(user.address);
-      contactInput.val(user.contact);
-      genderInput.val(user.gender);
-      roleInput.val(user.role);
-      formTitle.text("Edit User");
-      cancelBtn.show();
-      userModal.show();
-    }
-
-    // Show modal
-    function showModal() {
-      userModal.show();
-    }
-
-    // Handle form submission (Create/Update)
-    userForm.on("submit", function (e) {
-      e.preventDefault();
-      const userId = userIdInput.val();
-      const userData = {
-        username: usernameInput.val(),
-        email: emailInput.val(),
-        password: passwordInput.val(),
-        address: addressInput.val(),
-        contact: contactInput.val(),
-        gender: genderInput.val(),
-        role: roleInput.val(),
-      };
-
-      if (userId) {
-        // Update user
-        const index = users.findIndex((u) => u.id == userId);
-        if (index !== -1) {
-          users[index] = { id: parseInt(userId), ...userData };
-          // TODO: Add API call, e.g.:
-          // $.ajax({
-          //   url: `/api/users/${userId}`,
-          //   method: "PUT",
-          //   contentType: "application/json",
-          //   data: JSON.stringify(userData)
-          // });
-        }
-      } else {
-        // Create user
-        const newUser = { id: users.length + 1, ...userData };
-        users.push(newUser);
-        // TODO: Add API call, e.g.:
-        // $.ajax({
-        //   url: "/api/users",
-        //   method: "POST",
-        //   contentType: "application/json",
-        //   data: JSON.stringify(userData)
-        // });
-      }
-
-      renderUsers();
-      resetForm();
-    });
-
-    // Handle table actions (Edit/Delete)
-    usersTbody.on("click", ".action-btn", function (e) {
-      const target = $(this);
-      const userId = target.data("id");
-      const user = users.find((u) => u.id == userId);
-
-      if (target.hasClass("edit")) {
-        // Select user for editing
-        populateForm(user);
-      } else if (target.hasClass("delete")) {
-        // Delete user
-        if (confirm(`Are you sure you want to delete ${user.username}?`)) {
-          users = users.filter((u) => u.id != userId);
-          renderUsers();
-          // TODO: Add API call, e.g.:
-          // $.ajax({
-          //   url: `/api/users/${userId}`,
-          //   method: "DELETE"
-          // });
-        }
-      }
-    });
-
-    // Handle add user button
-    addUserBtn.on("click", function () {
-      resetForm();
-      showModal();
-    });
-
-    // Handle close modal
-    closeModal.on("click", resetForm);
-
-    // Handle cancel button
-    cancelBtn.on("click", resetForm);
-
-    // Handle pagination
-    prevPageBtn.on("click", function () {
-      if (currentPage > 1) {
-        currentPage--;
-        renderUsers();
-      }
-    });
-
-    nextPageBtn.on("click", function () {
-      if (currentPage < Math.ceil(users.length / usersPerPage)) {
-        currentPage++;
-        renderUsers();
-      }
-    });
-
-    // Initial render
-    renderUsers();
   }
 
-  // Ensure users page initializes after content load
-  $("#dashboardContent").on("page:users:loaded", initUsersPage);
+  function renderUserTable(users) {
+    const $tbody = $("#userTableBody");
+    $tbody.empty();
 
-  // If users page is already loaded, initialize immediately
-  if (window.location.hash.includes("users")) {
-    initUsersPage();
+    if (!users.length) {
+      $("#noResults").show();
+      return;
+    }
+
+    $("#noResults").hide();
+
+    users.forEach((user) => {
+      const row = `
+        <tr>
+          <td>${user.id}</td>
+          <td>${user.username || user.name}</td>
+          <td>${user.email}</td>
+          <td>${user.role || "user"}</td>
+          <td>${user.status || "active"}</td>
+          <td class="actions">
+            <button class="action-btn view" title="View" data-id="${user.id}">
+              <i class="fas fa-eye"></i>
+            </button>
+            <button class="action-btn edit" title="Edit" data-id="${user.id}">
+              <i class="fas fa-edit"></i>
+            </button>
+            <button class="action-btn delete" title="Delete" data-id="${
+              user.id
+            }">
+              <i class="fas fa-trash-alt"></i>
+            </button>
+          </td>
+        </tr>`;
+      $tbody.append(row);
+    });
+
+    $(".view").on("click", viewUser);
+    $(".edit").on("click", openEditModal);
+    $(".delete").on("click", openDeleteModal);
   }
+
+  function viewUser(event) {
+    const userId = $(event.currentTarget).data("id");
+
+    fetch(`${API_BASE}/users/${userId}`, {
+      headers: getAuthHeaders(),
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        const user = data.data || data;
+        $("#viewUserId").text(user.id);
+        $("#viewName").text(user.username || user.name);
+        $("#viewEmail").text(user.email);
+        $("#viewRole").text(user.role || "N/A");
+        $("#viewStatus").text(user.status || "active");
+        $("#viewModalOverlay").show();
+      })
+      .catch((err) => {
+        console.error("Error viewing user:", err);
+        alert("Failed to load user details.");
+      });
+  }
+
+  function openEditModal(event) {
+    const userId = $(event.currentTarget).data("id");
+    $("#modalTitle").text("Edit User");
+    $("#userId").val(userId);
+
+    fetch(`${API_BASE}/users/${userId}`, {
+      headers: getAuthHeaders(),
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        const user = data.data || data;
+        $("#name").val(user.username || user.name);
+        $("#email").val(user.email);
+        $("#role").val(user.role || "user");
+        $("#status").val(user.status || "active");
+        $("#password").val("");
+        $("#password").prop("required", false);
+        $("#modalOverlay").show();
+      })
+      .catch((err) => {
+        console.error("Error loading user for edit:", err);
+        alert("Could not load user details.");
+      });
+  }
+
+  window.openModal = function (mode) {
+    $("#modalTitle").text("Add User");
+    $("#userId").val("");
+    $("#name").val("");
+    $("#email").val("");
+    $("#password").val("");
+    $("#role").val("user");
+    $("#status").val("active");
+    $("#password").prop("required", true);
+    $("#modalOverlay").show();
+  };
+
+  window.closeModal = function () {
+    $("#modalOverlay").hide();
+    $("#userForm")[0].reset();
+  };
+
+  function openDeleteModal(event) {
+    currentUserId = $(event.currentTarget).data("id");
+    $("#deleteModalOverlay").show();
+  }
+
+  window.closeDeleteModal = function () {
+    $("#deleteModalOverlay").hide();
+    currentUserId = null;
+  };
+
+  window.closeViewModal = function () {
+    $("#viewModalOverlay").hide();
+  };
+
+  $("#userForm").on("submit", async function (e) {
+    e.preventDefault();
+    const userId = $("#userId").val();
+    const payload = {
+      username: $("#name").val(),
+      email: $("#email").val(),
+      role: $("#role").val(),
+      status: $("#status").val(),
+    };
+
+    const password = $("#password").val();
+    if (password) payload.password = password;
+
+    const url = userId ? `${API_BASE}/users/${userId}` : `${API_BASE}/users`;
+    const method = userId ? "PUT" : "POST";
+
+    try {
+      const response = await fetch(url, {
+        method,
+        headers: getAuthHeaders(),
+        body: JSON.stringify(payload),
+      });
+
+      if (!response.ok) throw new Error("Save failed");
+
+      closeModal();
+      loadUsers();
+    } catch (err) {
+      console.error("Error saving user:", err);
+      alert("Failed to save user.");
+    }
+  });
+
+  $("#confirmDelete").on("click", async function () {
+    if (!currentUserId) return;
+
+    try {
+      const res = await fetch(`${API_BASE}/users/${currentUserId}`, {
+        method: "DELETE",
+        headers: getAuthHeaders(),
+      });
+
+      if (!res.ok) throw new Error("Delete failed");
+
+      closeDeleteModal();
+      loadUsers();
+    } catch (err) {
+      console.error("Error deleting user:", err);
+      alert("Failed to delete user.");
+    }
+  });
+
+  $("#searchInput").on("input", function () {
+    const term = $(this).val().toLowerCase();
+
+    fetch(`${API_BASE}/users`, {
+      headers: getAuthHeaders(),
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        let users = data.data || data;
+        users = users.filter((u) => {
+          return (
+            u.username?.toLowerCase().includes(term) ||
+            u.email?.toLowerCase().includes(term)
+          );
+        });
+        renderUserTable(users);
+      });
+  });
 });

@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Login - TCAM Admin</title>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+    <link rel="stylesheet" href="/backend/assets/css/pages/auth.css" />
+    <link rel="icon" href="../assets/images/favicon.png" />
+  </head>
+  <body>
+    <div class="login-wrapper">
+      <h2>Let's sign up!</h2>
+      <div class="social-login">
+        <a href="#" class="google-login"
+          ><i class="fab fa-google"></i> Sign up with Google</a
+        >
+        <a href="#" class="facebook-login"
+          ><i class="fab fa-facebook"></i> Sign up with Facebook</a
+        >
+      </div>
+      <form id="loginForm" method="POST">
+        <input
+          type="hidden"
+          name="csrf_token"
+          id="csrf_token"
+          value="random_csrf_token_here"
+        />
+        <input
+          type="email"
+          id="email"
+          name="email"
+          placeholder="Email"
+          required
+        />
+        <input
+          type="password"
+          id="password"
+          name="password"
+          placeholder="Password"
+          required
+        />
+        <button type="submit">Sign up</button>
+        <div class="forgot-password"><a href="#">Forgot password?</a></div>
+      </form>
+      <div id="notification"></div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+      $("#loginForm").on("submit", async function (e) {
+        e.preventDefault();
+        const email = $("#email").val();
+        const password = $("#password").val();
+        const csrf_token = $("#csrf_token").val();
+
+        try {
+          const res = await fetch("http://localhost:8000/api/login", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              "X-CSRF-Token": csrf_token,
+            },
+            body: JSON.stringify({ email, password, csrf_token }),
+          });
+
+          const data = await res.json();
+
+          if (res.ok) {
+            localStorage.setItem("token", data.token);
+            window.location.href = "/backend/index.html";
+          } else {
+            $("#notification").text(data.message || "Login failed");
+          }
+        } catch (err) {
+          $("#notification").text("Network error");
+        }
+      });
+    </script>
+  </body>
+</html>

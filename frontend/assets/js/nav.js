@@ -16,6 +16,8 @@ function initializeNavigation() {
   const dropdownItems = document.querySelectorAll(
     ".navigation__item--dropdown"
   );
+  const navLinks = document.querySelectorAll(".navigation__link");
+  const contactBtn = document.querySelector(".contact-btn");
 
   console.log("Navigation elements:", {
     navToggle,
@@ -35,6 +37,7 @@ function initializeNavigation() {
     return;
   }
 
+  // Mobile toggle behavior
   navToggle.addEventListener("click", () => {
     const isActive = navMenu.classList.contains("active");
     navMenu.classList.toggle("active", !isActive);
@@ -53,12 +56,15 @@ function initializeNavigation() {
     }
   });
 
+  // Logo click triggers home
   logo.addEventListener("click", (e) => {
     e.preventDefault();
+    window.location.hash = "#home";
     $(document).trigger("contentLoaded", { page: "home" });
     console.log("Logo clicked, loading home");
   });
 
+  // Click outside menu closes everything
   document.addEventListener("click", (e) => {
     if (
       !navMenu.contains(e.target) &&
@@ -73,6 +79,7 @@ function initializeNavigation() {
     }
   });
 
+  // Dropdown logic
   dropdownItems.forEach((item) => {
     const link = item.querySelector(".navigation__link");
     if (link) {
@@ -83,12 +90,11 @@ function initializeNavigation() {
           dropdownItems.forEach((otherItem) =>
             otherItem.classList.remove("show-dropdown")
           );
-          if (!isActive) {
-            item.classList.add("show-dropdown");
-          }
+          if (!isActive) item.classList.add("show-dropdown");
           console.log("Dropdown toggled on mobile:", item);
         }
       });
+
       link.addEventListener("mouseenter", () => {
         if (window.innerWidth > 1030) {
           dropdownItems.forEach((otherItem) =>
@@ -98,6 +104,7 @@ function initializeNavigation() {
           console.log("Dropdown shown on hover:", item);
         }
       });
+
       item.addEventListener("mouseleave", () => {
         if (window.innerWidth > 1030) {
           item.classList.remove("show-dropdown");
@@ -107,6 +114,7 @@ function initializeNavigation() {
     }
   });
 
+  // Window resize behavior
   let resizeTimeout;
   window.addEventListener("resize", () => {
     clearTimeout(resizeTimeout);
@@ -123,6 +131,26 @@ function initializeNavigation() {
       }
     }, 100);
   });
+
+  // Highlight Active Nav
+  function highlightActiveLink() {
+    const hash = window.location.hash.replace("#", "") || "home";
+
+    navLinks.forEach((link) => {
+      const page = link.getAttribute("data-page");
+      link.classList.toggle("active", page === hash);
+    });
+
+    if (contactBtn) {
+      const page = contactBtn.getAttribute("data-page");
+      contactBtn.classList.toggle("active", page === hash);
+    }
+
+    console.log("Active navigation highlighted:", hash);
+  }
+
+  highlightActiveLink();
+  window.addEventListener("hashchange", highlightActiveLink);
 
   console.log("Navigation initialized successfully");
 }

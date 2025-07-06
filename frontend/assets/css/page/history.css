@@ -1,0 +1,186 @@
+/*=============== GOOGLE FONTS ===============*/
+@import url("https://fonts.googleapis.com/css2?family=Montserrat:wght@100..900&display=swap");
+
+:root {
+  --primary-color: #3cb371;
+  --dark-color: #333;
+  --white-color: #fff;
+  --gray-color: #666;
+  --light-gray: #f0f4f8;
+  --header-height: 60px;
+  --font-semi-bold: 600;
+  --font-medium: 500;
+  --small-font-size: 0.875rem;
+  --normal-font-size: 1rem;
+  --spacing-sm: 1rem;
+  --spacing-md: 1.5rem;
+}
+
+/*=============== REUSABLE CSS CLASSES ===============*/
+.history-container {
+  max-width: 1140px;
+  margin: 0 auto;
+  padding: 0 var(--spacing-sm);
+  width: 100%;
+}
+
+/*=============== HISTORY PAGE ===============*/
+.history-main {
+  overflow-x: hidden;
+}
+
+/* Hero Section */
+.history-hero-section {
+  min-height: 400px;
+  background: url("../images/banner/b4.jpg") no-repeat center center/cover;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  color: var(--white-color);
+  background-color: #2e8b57;
+  position: relative;
+  padding: 20px;
+}
+
+.history-hero-content {
+  padding: var(--spacing-md);
+}
+
+.history-hero-title {
+  font-size: 3rem;
+  font-weight: var(--font-semi-bold);
+  text-transform: uppercase;
+  margin-bottom: var(--spacing-sm);
+}
+
+.history-hero-subtitle {
+  font-size: 1.5rem;
+  color: var(--white-color);
+  margin-bottom: var(--spacing-md);
+  max-width: 800px;
+}
+
+/* Timeline Section */
+.history-timeline-section {
+  padding: var(--spacing-md) 0;
+  background-color: var(--light-gray);
+}
+
+.history-timeline-wrapper {
+  position: relative;
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.history-timeline-wrapper::after {
+  content: "";
+  position: absolute;
+  width: 6px;
+  background-color: var(--primary-color);
+  top: 0;
+  bottom: 0;
+  left: 50%;
+  margin-left: -3px;
+}
+
+.history-timeline-item {
+  padding: var(--spacing-md) 0;
+  position: relative;
+  width: 50%;
+}
+
+.history-timeline-item:nth-child(even) {
+  margin-left: 50%;
+}
+
+.history-timeline-year {
+  font-size: 1.2rem;
+  color: var(--dark-color);
+  font-weight: var(--font-semi-bold);
+  margin-bottom: var(--spacing-sm);
+}
+
+.history-timeline-content {
+  padding: var(--spacing-sm);
+  background-color: var(--white-color);
+  border-radius: 5px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.history-timeline-title {
+  font-size: 1.5rem;
+  color: var(--dark-color);
+  font-weight: var(--font-semi-bold);
+  margin-bottom: 0.5rem;
+}
+
+.history-timeline-text {
+  font-size: var(--normal-font-size);
+  color: var(--gray-color);
+  line-height: 1.6;
+}
+
+.history-timeline-item::before {
+  content: "";
+  position: absolute;
+  width: 12px;
+  height: 12px;
+  background-color: var(--primary-color);
+  border: 2px solid var(--white-color);
+  border-radius: 50%;
+  top: calc(var(--spacing-md) + 6px);
+  right: -6px;
+}
+
+.history-timeline-item:nth-child(even)::before {
+  left: -6px;
+}
+
+/* Responsive Design */
+@media (max-width: 1023px) {
+  .history-hero-title {
+    font-size: 2.5rem;
+  }
+  .history-hero-subtitle {
+    font-size: 1.3rem;
+  }
+  .history-timeline-wrapper::after {
+    left: 20px;
+  }
+  .history-timeline-item {
+    width: 100%;
+    margin-left: 0;
+  }
+  .history-timeline-item:nth-child(even) {
+    margin-left: 0;
+  }
+  .history-timeline-item::before {
+    left: 10px;
+  }
+  .history-timeline-item:nth-child(even)::before {
+    left: 10px;
+  }
+}
+
+@media (max-width: 767px) {
+  .history-hero-section {
+    min-height: 300px;
+    padding: 40px 0;
+  }
+  .history-hero-title {
+    font-size: 2rem;
+  }
+  .history-hero-subtitle {
+    font-size: 1.1rem;
+  }
+  .history-timeline-section {
+    padding: var(--spacing-sm) 0;
+  }
+  .history-timeline-title {
+    font-size: 1.3rem;
+  }
+  .history-timeline-year {
+    font-size: 1rem;
+  }
+}

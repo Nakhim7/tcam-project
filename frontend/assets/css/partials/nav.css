@@ -296,11 +296,23 @@ body {
     opacity: 0;
     transform: translateX(-100%);
   }
-  .navigation__menu.active {
-    display: flex;
-    opacity: 1;
-    transform: translateX(0);
+  .navigation__link.active,
+  .contact-btn.active {
+    color: var(--medium-sea-green);
+    font-weight: bold;
+    position: relative;
   }
+
+  .navigation__link.active::after {
+    content: "";
+    position: absolute;
+    bottom: -4px;
+    left: 0;
+    width: 100%;
+    height: 2px;
+    background-color: var(--medium-sea-green);
+  }
+
   .navigation__list {
     flex-direction: column;
     gap: 20px;

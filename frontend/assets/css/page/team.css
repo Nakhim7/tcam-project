@@ -2,7 +2,7 @@
 @import url("/frontend/assets/css/base.css");
 
 /*=============== MAIN CONTENT ===============*/
-.main {
+.leadership-main {
   background-color: #f0f4f8; /* Light blue-gray background */
   color: #2d3748;
   padding: var(--spacing-xl) var(--spacing-sm);
@@ -13,7 +13,10 @@
 }
 
 /*=============== HERO SECTION ===============*/
-.hero-section {
+.leadership-hero-section {
+  overflow: hidden;
+  margin-top: 3rem;
+  min-height: 300px;
   background: linear-gradient(135deg, #4a90e2, #63b3ed);
   color: #ffffff;
   padding: var(--spacing-xl) 0;
@@ -21,14 +24,14 @@
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
 }
 
-.hero-content {
+.leadership-hero-content {
+  padding-top: 2rem;
   max-width: 1200px;
   margin: 0 auto;
   padding: 0 var(--spacing-sm);
 }
 
-
-.hero-title {
+.leadership-hero-title {
   font-size: calc(var(--h1-font-size) * 1.1);
   font-weight: var(--font-bold);
   margin-bottom: 1rem;
@@ -36,7 +39,7 @@
   letter-spacing: 1px;
 }
 
-.hero-subtitle {
+.leadership-hero-subtitle {
   font-size: var(--normal-font-size);
   max-width: 700px;
   margin: 0 auto 2rem;
@@ -58,22 +61,25 @@
   gap: 15px;
 }
 
-.team-profile-card {
+.leadership-team-profile-card {
   background-color: #ffffff;
   border-radius: 10px;
   padding: 15px;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
   text-align: center;
-  align-items: center;
   transition: transform 0.3s ease, box-shadow 0.3s ease;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
 }
 
-.team-profile-card:hover {
+.leadership-team-profile-card:hover {
   transform: translateY(-5px);
   box-shadow: 0 6px 18px rgba(0, 0, 0, 0.1);
 }
 
-.team-profile-img {
+.leadership-team-profile-img {
   width: 150px;
   height: 150px;
   object-fit: cover;
@@ -81,20 +87,21 @@
   margin-bottom: var(--spacing-sm);
   border: 3px solid #4a90e2;
   transition: transform 0.3s ease;
+  display: block;
 }
 
-.team-profile-card:hover .team-profile-img {
+.leadership-team-profile-card:hover .leadership-team-profile-img {
   transform: scale(1.05);
 }
 
-.team-profile-name {
+.leadership-team-profile-name {
   font-size: var(--normal-font-size);
   font-weight: var(--font-bold);
   color: #2d3748;
   margin-bottom: 0.5rem;
 }
 
-.team-profile-title {
+.leadership-team-profile-title {
   font-size: var(--small-font-size);
   color: #718096;
   margin-bottom: 1rem;
@@ -102,20 +109,43 @@
   letter-spacing: 0.5px;
 }
 
-.team-profile-desc {
+.leadership-team-profile-desc {
   font-size: var(--small-font-size);
   color: #4a5568;
   line-height: 1.5;
+  margin: 0;
+  position: relative;
+}
+
+.desc-text {
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.read-more {
+  display: inline-block;
+  color: #4a90e2;
+  text-decoration: none;
+  font-size: var(--smaller-font-size);
+  margin-top: 0.5rem;
+  cursor: pointer;
+}
+
+.read-more:hover {
+  text-decoration: underline;
 }
 
 /*=============== RESPONSIVE DESIGN ===============*/
 @media screen and (max-width: 1023px) {
-  .main {
+  .leadership-main {
     padding: var(--spacing-large) var(--spacing-sm);
     gap: var(--spacing-large);
   }
 
-  .hero-title {
+  .leadership-hero-title {
     font-size: calc(var(--h1-font-size) * 0.9);
   }
 
@@ -123,23 +153,23 @@
     grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
   }
 
-  .team-profile-img {
+  .leadership-team-profile-img {
     width: 120px;
     height: 120px;
   }
 }
 
 @media screen and (max-width: 767px) {
-  .main {
+  .leadership-main {
     padding: var(--spacing-medium) var(--spacing-xs);
     gap: var(--spacing-md);
   }
 
-  .hero-title {
+  .leadership-hero-title {
     font-size: calc(var(--h1-font-size) * 0.8);
   }
 
-  .hero-subtitle {
+  .leadership-hero-subtitle {
     font-size: var(--small-font-size);
   }
 
@@ -147,20 +177,20 @@
     grid-template-columns: 1fr;
   }
 
-  .team-profile-img {
+  .leadership-team-profile-img {
     width: 100px;
     height: 100px;
   }
 
-  .team-profile-name {
+  .leadership-team-profile-name {
     font-size: var(--small-font-size);
   }
 
-  .team-profile-title {
+  .leadership-team-profile-title {
     font-size: var(--smaller-font-size);
   }
 
-  .team-profile-desc {
+  .leadership-team-profile-desc {
     font-size: var(--smaller-font-size);
   }
 }

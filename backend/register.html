@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Register - TCAM Admin</title>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+    <link rel="stylesheet" href="/backend/assets/css/pages/auth.css" />
+    <link rel="icon" href="../assets/images/favicon.png" />
+  </head>
+  <body>
+    <div class="login-wrapper">
+      <h2>Create your account</h2>
+      <form id="registerForm">
+        <input
+          type="text"
+          id="name"
+          name="name"
+          placeholder="Full Name"
+          required
+        />
+        <input
+          type="email"
+          id="email"
+          name="email"
+          placeholder="Email"
+          required
+        />
+        <input
+          type="password"
+          id="password"
+          name="password"
+          placeholder="Password"
+          required
+        />
+        <input
+          type="password"
+          id="password_confirmation"
+          name="password_confirmation"
+          placeholder="Confirm Password"
+          required
+        />
+        <button type="submit">Register</button>
+      </form>
+      <p class="form-footer">
+        Already have an account? <a href="login.html">Login here</a>
+      </p>
+      <div id="notification"></div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+      $("#registerForm").on("submit", async function (e) {
+        e.preventDefault();
+
+        const name = $("#name").val();
+        const email = $("#email").val();
+        const password = $("#password").val();
+        const password_confirmation = $("#password_confirmation").val();
+
+        try {
+          const res = await fetch("http://localhost:8000/api/register", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              name,
+              email,
+              password,
+              password_confirmation,
+            }),
+          });
+
+          const data = await res.json();
+
+          if (res.ok) {
+            localStorage.setItem("token", data.token);
+            window.location.href = "/backend/index.html";
+          } else {
+            $("#notification").text(data.message || "Registration failed");
+          }
+        } catch (err) {
+          $("#notification").text("Network error");
+        }
+      });
+    </script>
+  </body>
+</html>
