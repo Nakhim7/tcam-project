@@ -10,16 +10,18 @@ function initHomePage() {
     : $("#heroContainer");
 
   const $slides = $heroSection.find(".home-hero__slide");
-  const $timerCircles = $heroSection.find(".home-hero__timer-circle");
+  const $progressLine = $heroSection.find(".home-hero__progress-line");
 
-  if (!$heroSection.length || !$slides.length || !$timerCircles.length) {
-    console.warn("⚠️ Hero section not found. Skipping slider initialization.");
+  if (!$heroSection.length || !$slides.length || !$progressLine.length) {
+    console.warn(
+      "⚠️ Hero section or progress line not found. Skipping slider initialization."
+    );
     return;
   }
 
   if (isInitialized) {
     clearInterval(slideInterval);
-    $timerCircles.off("click");
+    $progressLine.off("click");
     $heroSection.off("mouseenter mouseleave");
     console.log("♻️ Re-initializing hero slider...");
   }
@@ -30,10 +32,10 @@ function initHomePage() {
     if (index < 0 || index >= $slides.length) return;
 
     $slides.removeClass("active").attr("aria-hidden", "true");
-    $timerCircles.removeClass("active");
+    $progressLine.removeClass("active");
 
     $slides.eq(index).addClass("active").attr("aria-hidden", "false");
-    $timerCircles.eq(index).addClass("active");
+    $progressLine.addClass("active");
 
     const bgImage = $slides.eq(index).data("bg");
     if (bgImage) {
@@ -44,10 +46,9 @@ function initHomePage() {
         .css("background-color", "#f0f0f0");
     }
 
-    const $circle = $timerCircles.eq(index).find(".progress-ring__circle");
-    $circle.css("animation", "none");
-    void $circle[0].offsetWidth; // Trigger reflow
-    $circle.css("animation", "progress 5s linear forwards");
+    $progressLine.css("animation", "none");
+    void $progressLine[0].offsetWidth;
+    $progressLine.css("animation", "progress 7s linear forwards");
 
     currentSlide = index;
   }
@@ -57,7 +58,7 @@ function initHomePage() {
     slideInterval = setInterval(() => {
       currentSlide = (currentSlide + 1) % $slides.length;
       switchSlide(currentSlide);
-    }, 5000);
+    }, 7000);
     console.log("▶️ Slider started");
   }
 
@@ -74,16 +75,15 @@ function initHomePage() {
     console.error("❌ Error starting slider:", err);
   }
 
-  $timerCircles.on("click", function () {
-    const index = $(this).data("slide");
+  $progressLine.on("click", function () {
     stopSlider();
-    switchSlide(index);
+    currentSlide = (currentSlide + 1) % $slides.length;
+    switchSlide(currentSlide);
     startSlider();
   });
 
   $heroSection.on("mouseenter", stopSlider).on("mouseleave", startSlider);
 
-  // Preload background images
   $slides.each(function () {
     const bg = $(this).data("bg");
     if (bg) {
@@ -92,15 +92,9 @@ function initHomePage() {
     }
   });
 
-  // Preload thumbnails
-  $timerCircles.each(function () {
-    const src = $(this).find("img").attr("src");
-    if (src) {
-      const img = new Image();
-      img.src = src;
-    }
-  });
-
   isInitialized = true;
   console.log("✅ Hero slider initialized successfully");
 }
+
+// 👇 Make it globally accessible for load-components.js
+window.initHomePage = initHomePage;
