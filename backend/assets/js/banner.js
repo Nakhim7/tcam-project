@@ -1,40 +1,58 @@
-// banner.js
-
-window.initBannerPage = function () {
-  const API_BASE = window.API_BASE_URL || "/api";
-
-  const getAuthHeaders = window.getAuthHeadersMultipart; // or getAuthHeadersJson for JSON
-
+$(function () {
   console.log("banner.js initialized");
   let currentSliderId = null;
   let currentPage = 1;
   const rowsPerPage = 5;
 
+  // Check authentication
+  if (!window.getToken()) {
+    alert("Please log in to view sliders.");
+    window.location.href = "/login"; // Adjust to your login page
+    return;
+  }
   loadSliders();
 
-  async function loadSliders() {
+  async function loadSliders(page = 1, search = "") {
     try {
-      console.log("Loading sliders...");
+      console.log("Fetching sliders with page:", page, "search:", search);
       $(".loading-indicator").show();
       $("#noResults").hide();
-      const response = await fetch(`${API_BASE}/sliders`, {
-        headers: getAuthHeaders(),
-      });
-      console.log("Fetch response:", response.status);
-      if (!response.ok)
-        throw new Error(`Failed to fetch sliders: ${response.statusText}`);
-      const result = await response.json();
-      console.log("Sliders data:", result);
-      const sliders = result.data || result;
+      const result = await window.API.getSliders(page, search);
+      console.log("API Response:", JSON.stringify(result, null, 2));
+
+      if (!result || typeof result !== "object") {
+        throw new Error("Invalid API response");
+      }
+
+      const sliders = Array.isArray(result.data)
+        ? result.data
+        : Array.isArray(result)
+        ? result
+        : [];
+      const pagination = result.meta || {
+        current_page: result.current_page || 1,
+        last_page: result.last_page || 1,
+      };
+
+      currentPage = pagination.current_page;
+      if (!sliders.length) {
+        console.warn("No sliders found in response");
+        $("#noResults").show();
+        return;
+      }
+
       renderSliderTable(sliders);
+      updatePagination(pagination);
     } catch (err) {
-      console.error("Error loading sliders:", err);
+      console.error("Error loading sliders:", err.message, err);
       $("#noResults").show();
+      alert(`Failed to load sliders: ${err.message || "Unknown error"}`);
     } finally {
       $(".loading-indicator").hide();
     }
   }
 
+  // Render sliders table
   function renderSliderTable(sliders) {
     const $tbody = $("#bannersTbody");
     $tbody.empty();
@@ -49,15 +67,19 @@ window.initBannerPage = function () {
     sliders.forEach((slider) => {
       const row = `
         <tr class="banner-row-${slider.id}" data-id="${slider.id}">
-          <td>${slider.id}</td>
+          <td>${slider.id || "N/A"}</td>
           <td><img src="${
             slider.image_url || "https://via.placeholder.com/100x50"
           }" alt="Slider Image" class="preview-img"></td>
           <td>${slider.title || "-"}</td>
           <td>${slider.link_url || "-"}</td>
-          <td>${slider.order}</td>
+          <td>${slider.order || "0"}</td>
           <td>${slider.status ? "Yes" : "No"}</td>
-          <td>${slider.created_at}</td>
+          <td>${
+            slider.created_at
+              ? new Date(slider.created_at).toLocaleString()
+              : "-"
+          }</td>
           <td class="actions">
             <button class="action-btn view" title="View" data-id="${slider.id}">
               <i class="fas fa-eye"></i>
@@ -75,278 +97,237 @@ window.initBannerPage = function () {
       $tbody.append(row);
     });
 
-    updatePagination();
+    // Bind event handlers
+    $(".view").off("click").on("click", viewSlider);
+    $(".edit").off("click").on("click", openEditModal);
+    $(".delete").off("click").on("click", openDeleteModal);
   }
 
+  // Update pagination controls
+  function updatePagination(pagination) {
+    const totalPages = pagination.last_page || 1;
+    $("#pageInfo").text(`Page ${currentPage} of ${totalPages}`);
+    $("#prevPage").prop("disabled", currentPage === 1);
+    $("#nextPage").prop("disabled", currentPage === totalPages);
+  }
+
+  // View slider details
   async function viewSlider(event) {
     const sliderId = $(event.currentTarget).data("id");
     console.log("Viewing slider:", sliderId);
+
+    $("#viewModalOverlay").css("display", "flex").fadeIn(200);
+    $(".view-banner-modal")
+      .removeClass("transform-out")
+      .addClass("transform-in");
+    $(".loading-indicator").show();
+    $(".view-banner-body").hide();
+
     try {
-      const res = await fetch(`${API_BASE}/sliders/${sliderId}`, {
-        headers: getAuthHeaders(),
-      });
-      const data = await res.json();
+      const data = await window.API.getSlider(sliderId);
+      console.log("View slider data:", JSON.stringify(data, null, 2));
       const slider = data.data || data;
-      $("#viewBannerId").text(slider.id);
+      $("#viewBannerId").text(slider.id || "N/A");
       $("#viewTitle").text(slider.title || "-");
       $("#viewShortDescription").text(slider.short_description || "-");
       $("#viewLink").text(slider.link_url || "-");
-      $("#viewOrder").text(slider.order);
+      $("#viewOrder").text(slider.order || "0");
       $("#viewActive").text(slider.status ? "Yes" : "No");
-      $("#viewCreatedAt").text(slider.created_at);
+      $("#viewCreatedAt").text(
+        slider.created_at ? new Date(slider.created_at).toLocaleString() : "-"
+      );
       $("#viewImage")
-        .attr("src", slider.image_url || "")
+        .attr("src", slider.image_url || "https://via.placeholder.com/100x50")
         .toggle(!!slider.image_url);
-      $("#viewModalOverlay").fadeIn(300);
-      $(".view-banner-modal")
-        .removeClass("transform-out")
-        .addClass("transform-in");
+      $(".loading-indicator").fadeOut(200);
+      $(".view-banner-body").fadeIn(200);
     } catch (err) {
-      console.error("Error viewing slider:", err);
-      alert("Failed to load slider details.");
+      console.error("Error viewing slider:", err.message, err);
+      alert(`Failed to load slider details: ${err.message || "Unknown error"}`);
+      closeViewModal();
     }
   }
 
+  // Open edit modal
   async function openEditModal(event) {
     currentSliderId = $(event.currentTarget).data("id");
     console.log("Editing slider:", currentSliderId);
     $("#modalTitle").text("Edit Slider");
     $("#bannerId").val(currentSliderId);
     $("#bannerForm")[0].reset();
-    $("#modalOverlay").fadeIn(300);
-    $(".popup-box").removeClass("transform-out").addClass("transform-in");
+    $("#modalOverlay").css("display", "flex").fadeIn(200);
+    $(".banner-form-modal")
+      .removeClass("transform-out")
+      .addClass("transform-in");
     $(".loading-indicator").show();
     $(".banner-form-modal form").hide();
 
     try {
-      const res = await fetch(`${API_BASE}/sliders/${currentSliderId}`, {
-        headers: getAuthHeaders(),
-      });
-      const data = await res.json();
+      const data = await window.API.getSlider(currentSliderId);
+      console.log("Edit slider data:", JSON.stringify(data, null, 2));
       const slider = data.data || data;
       $("#title").val(slider.title || "");
       $("#short_description").val(slider.short_description || "");
       $("#link").val(slider.link_url || "");
-      $("#order").val(slider.order);
+      $("#order").val(slider.order || "0");
       $("#active").val(slider.status.toString());
-      $(".custom-file-label").text(
-        slider.image_url ? slider.image_url.split("/").pop() : "Choose file"
-      );
+      $("#image_file").prop("required", false); // Image not required for edit
       $("#preview").attr(
         "src",
-        slider.image_url || "https://via.placeholder.com/100x50"
+        slider.image_url ||
+          "https://via.placeholder.com/100x100.png?text=Preview"
       );
-      $(".banner-form-modal form").show();
+      $(".banner-form-modal form").fadeIn(200);
     } catch (err) {
-      console.error("Error loading slider for edit:", err);
-      alert("Could not load slider details.");
+      console.error("Error loading slider for edit:", err.message, err);
+      alert(`Could not load slider details: ${err.message || "Unknown error"}`);
       closeModal();
     } finally {
-      $(".loading-indicator").hide();
+      $(".loading-indicator").fadeOut(200);
     }
   }
 
+  // Open delete modal
   function openDeleteModal(event) {
     currentSliderId = $(event.currentTarget).data("id");
     console.log("Deleting slider:", currentSliderId);
-    $("#deleteModalOverlay").fadeIn(300);
+    $("#deleteModalOverlay").css("display", "flex").fadeIn(200);
     $(".delete-banner-modal")
       .removeClass("transform-out")
       .addClass("transform-in");
   }
 
+  // Handle form submission
   async function handleFormSubmit(e) {
     e.preventDefault();
     const sliderId = $("#bannerId").val();
-    const method = sliderId ? "PUT" : "POST";
-    const url = sliderId
-      ? `${API_BASE}/sliders/${sliderId}`
-      : `${API_BASE}/sliders`;
-
     const formData = new FormData();
     formData.append("title", $("#title").val());
     formData.append("short_description", $("#short_description").val());
     formData.append("link_url", $("#link").val());
     formData.append("order", $("#order").val());
     formData.append("status", $("#active").val() === "true");
-
     const imageFile = $("#image_file")[0].files[0];
     if (imageFile) {
       formData.append("image", imageFile);
     }
 
     try {
-      const response = await fetch(url, {
-        method,
-        headers: {
-          Authorization: getAuthHeaders().Authorization,
-          Accept: "application/json",
-        },
-        body: formData,
-      });
-
-      if (!response.ok) throw new Error(`Save failed: ${response.statusText}`);
-      console.log("Slider saved successfully");
+      const result = await window.API.saveSlider(sliderId, formData);
+      console.log("Save slider response:", JSON.stringify(result, null, 2));
+      alert(result.message || "Slider saved successfully");
       closeModal();
-      loadSliders();
+      loadSliders(currentPage);
     } catch (err) {
-      console.error("Error saving slider:", err);
-      alert("Failed to save slider.");
+      console.error("Error saving slider:", err.message, err);
+      alert(`Failed to save slider: ${err.message || "Unknown error"}`);
     }
   }
 
+  // Delete slider
   async function deleteSlider() {
     if (!currentSliderId) return;
     try {
-      const response = await fetch(`${API_BASE}/sliders/${currentSliderId}`, {
-        method: "DELETE",
-        headers: getAuthHeaders(),
-      });
-      if (!response.ok)
-        throw new Error(`Delete failed: ${response.statusText}`);
-      console.log("Slider deleted successfully");
+      const result = await window.API.deleteSlider(currentSliderId);
+      console.log("Delete slider response:", JSON.stringify(result, null, 2));
       closeDeleteModal();
-      loadSliders();
+      loadSliders(currentPage);
     } catch (err) {
-      console.error("Error deleting slider:", err);
-      alert("Failed to delete slider.");
+      console.error("Error deleting slider:", err.message, err);
+      alert(`Failed to delete slider: ${err.message || "Unknown error"}`);
     }
   }
 
-  function updatePagination() {
-    const rows = $("#bannersTbody tr");
-    const totalPages = Math.max(1, Math.ceil(rows.length / rowsPerPage));
-    if (currentPage > totalPages) currentPage = totalPages;
-    const start = (currentPage - 1) * rowsPerPage;
-    const end = start + rowsPerPage;
+  // Close modals
+  window.closeModal = function () {
+    $("#modalOverlay").fadeOut(200);
+    $(".banner-form-modal")
+      .removeClass("transform-in")
+      .addClass("transform-out");
+    $("#bannerForm")[0].reset();
+    $("#warningToast").fadeOut(200);
+    currentSliderId = null;
+  };
 
-    rows.each((i, row) => {
-      $(row).css("display", i >= start && i < end ? "" : "none");
-    });
+  window.closeViewModal = function () {
+    $("#viewModalOverlay").fadeOut(200);
+    $(".view-banner-modal")
+      .removeClass("transform-in")
+      .addClass("transform-out");
+    $(".view-banner-body").hide();
+  };
 
-    $("#pageInfo").text(`Page ${currentPage} of ${totalPages}`);
-    $("#prevPage").prop("disabled", currentPage === 1);
-    $("#nextPage").prop("disabled", currentPage === totalPages);
-  }
+  window.closeDeleteModal = function () {
+    $("#deleteModalOverlay").fadeOut(200);
+    $(".delete-banner-modal")
+      .removeClass("transform-in")
+      .addClass("transform-out");
+    currentSliderId = null;
+  };
 
-  // Bind events once
-  $(document).on("click", ".view", viewSlider);
-  $(document).on("click", ".edit", openEditModal);
-  $(document).on("click", ".delete", openDeleteModal);
-  $(document).on("click", "#confirmDelete", deleteSlider);
-  $(document).on("submit", "#bannerForm", handleFormSubmit);
+  // Pagination
+  window.changePage = function (page) {
+    if (page < 1) return;
+    const searchTerm = $("#searchInput").val();
+    loadSliders(page, searchTerm);
+  };
 
-  $(document).on("input", "#searchInput", function () {
-    const term = $(this).val().toLowerCase();
-    console.log("Searching for:", term);
-    fetch(`${API_BASE}/sliders`, {
-      headers: getAuthHeaders(),
-    })
-      .then((res) => res.json())
-      .then((data) => {
-        let sliders = data.data || data;
-        sliders = sliders.filter((s) =>
-          [s.id, s.title, s.short_description].some((field) =>
-            field?.toString().toLowerCase().includes(term)
-          )
-        );
-        renderSliderTable(sliders);
-      })
-      .catch((err) => {
-        console.error("Error searching sliders:", err);
-        $("#noResults").show();
-      });
-  });
-
-  $(document).on("click", ".popup-btn", function (e) {
+  // Bind events
+  $("#prevPage").on("click", () => changePage(currentPage - 1));
+  $("#nextPage").on("click", () => changePage(currentPage + 1));
+  $("#bannerForm").on("submit", handleFormSubmit);
+  $("#confirmDelete").on("click", deleteSlider);
+  $(".popup-btn").on("click", function (e) {
     $("#modalTitle").text("Add New Slider");
     $("#bannerId").val("");
     $("#bannerForm")[0].reset();
     $("#active").val("false");
-    $(".custom-file-label").text("Choose file");
-    $("#preview").attr("src", "https://via.placeholder.com/100x50");
-    $("#modalOverlay").fadeIn(300);
-    $(".popup-box").removeClass("transform-out").addClass("transform-in");
+    $("#image_file").prop("required", true);
+    $("#preview").attr(
+      "src",
+      "https://via.placeholder.com/100x100.png?text=Preview"
+    );
+    $("#modalOverlay").css("display", "flex").fadeIn(200);
+    $(".banner-form-modal")
+      .removeClass("transform-out")
+      .addClass("transform-in");
     $(".loading-indicator").hide();
     $(".banner-form-modal form").show();
     e.preventDefault();
   });
-
-  $(document).on("click", ".popup-close", function (e) {
-    closeModal();
-    e.preventDefault();
-  });
-
-  $(document).on("click", ".banner-form-popup", function (e) {
-    if (e.target.classList.contains("banner-form-popup")) {
-      $("#warningToast").fadeIn(200).addClass("toast-show");
+  $("#modalOverlay").on("click", function (e) {
+    if (e.target.id === "modalOverlay") {
+      $("#warningToast").fadeIn(200).addClass("show");
       setTimeout(() => {
-        $("#warningToast").fadeOut(200).removeClass("toast-show");
+        $("#warningToast").fadeOut(200).removeClass("show");
       }, 2000);
     }
   });
-
-  $(document).on("click", ".close-toast", function (e) {
-    $("#warningToast").fadeOut(200).removeClass("toast-show");
+  $(".popup-close").on("click", closeModal);
+  $(".close-toast").on("click", function (e) {
+    $("#warningToast").fadeOut(200).removeClass("show");
     e.preventDefault();
   });
-
-  $(document).on("change", "#image_file", function () {
+  $("#image_file").on("change", function () {
     const file = this.files[0];
     if (file) {
-      $(".custom-file-label").text(file.name);
       const reader = new FileReader();
       reader.onload = function (e) {
         $("#preview").attr("src", e.target.result);
       };
       reader.readAsDataURL(file);
     } else {
-      $(".custom-file-label").text("Choose file");
-      $("#preview").attr("src", "https://via.placeholder.com/100x50");
+      $("#preview").attr(
+        "src",
+        "https://via.placeholder.com/100x100.png?text=Preview"
+      );
     }
   });
 
-  function closeModal() {
-    $("#modalOverlay").fadeOut(300);
-    $(".popup-box").removeClass("transform-in").addClass("transform-out");
-    $("#bannerForm")[0].reset();
-    $("#warningToast").hide();
-    currentSliderId = null;
-  }
-
-  function closeViewModal() {
-    $("#viewModalOverlay").fadeOut(300);
-    $(".view-banner-modal")
-      .removeClass("transform-in")
-      .addClass("transform-out");
-  }
-
-  function closeDeleteModal() {
-    $("#deleteModalOverlay").fadeOut(300);
-    $(".delete-banner-modal")
-      .removeClass("transform-in")
-      .addClass("transform-out");
-    currentSliderId = null;
-  }
-
-  // Expose close functions globally if needed
-  window.closeModal = closeModal;
-  window.closeViewModal = closeViewModal;
-  window.closeDeleteModal = closeDeleteModal;
-
-  $(document).on("click", "#prevPage", () => {
-    if (currentPage > 1) {
-      currentPage--;
-      updatePagination();
-    }
+  // Search functionality
+  $("#searchInput").on("input", function () {
+    const term = $(this).val();
+    currentPage = 1;
+    loadSliders(1, term);
   });
-
-  $(document).on("click", "#nextPage", () => {
-    const rows = $("#bannersTbody tr");
-    const totalPages = Math.ceil(rows.length / rowsPerPage);
-    if (currentPage < totalPages) {
-      currentPage++;
-      updatePagination();
-    }
-  });
-};
+});

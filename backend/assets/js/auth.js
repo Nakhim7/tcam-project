@@ -1,4 +1,4 @@
-const API_BASE = "http://localhost:8000/api"; // Laravel API base
+const API_BASE = "http://localhost:8000/api";
 
 function getToken() {
   return localStorage.getItem("token");
@@ -11,17 +11,14 @@ function getAuthHeaders() {
   };
 }
 
-// Redirect to login if not logged in
 function requireAuth() {
   if (!getToken()) {
     window.location.href = "/backend/login.html";
   }
 }
 
-// Call this at the top of index.html or main.js
 requireAuth();
 
-// ✅ Fetch current user profile
 async function fetchProfile() {
   try {
     const res = await fetch(`${API_BASE}/users`, {
@@ -38,7 +35,6 @@ async function fetchProfile() {
   }
 }
 
-// ✅ Insert user info into the header
 async function insertUserInfo() {
   const profile = await fetchProfile();
   if (profile) {
@@ -48,13 +44,11 @@ async function insertUserInfo() {
   }
 }
 
-// ✅ Logout
 function logout() {
   localStorage.removeItem("token");
   window.location.href = "/backend/login.html";
 }
 
-// ✅ Init when page loads
 $(function () {
   insertUserInfo();
 

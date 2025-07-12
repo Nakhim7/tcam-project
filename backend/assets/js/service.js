@@ -29,6 +29,7 @@ $(function () {
         $("#noResults").show();
         return;
       }
+
       renderServiceTable(services);
       updatePagination(services);
     } catch (err) {
@@ -50,14 +51,20 @@ $(function () {
     $("#noResults").hide();
 
     services.forEach((service) => {
+      //  const imageSrc = `http://127.0.0.1:8000/storage/services/${service.icon_url}`;
       const row = `
         <tr class="service-row-${service.id}">
           <td>${service.id || "N/A"}</td>
           <td>${service.name || "N/A"}</td>
           <td>${service.description || "-"}</td>
-          <td><img src="${
-            service.icon_url || "https://via.placeholder.com/50"
-          }" alt="Service Icon" class="preview-img" /></td>
+           <td>
+  <img src="http://127.0.0.1:8000/storage/services/${
+    service.icon_url
+  }" alt="Icon" width="40" height="40" />
+
+
+
+    </td>
           <td>${
             service.created_at
               ? new Date(service.created_at).toLocaleString()
@@ -194,10 +201,7 @@ $(function () {
         $("#name").val(service.name || "");
         $("#description").val(service.description || "");
         $("#icon_url").val(""); // Reset file input
-        $("#preview").attr(
-          "src",
-          service.icon_url || "https://via.placeholder.com/80"
-        );
+        $("#preview").attr("src", service.icon_url);
         $(".user-form-modal .loading-indicator").fadeOut(200);
         $(".user-form-modal form").fadeIn(200);
       })
@@ -222,7 +226,7 @@ $(function () {
       .removeClass("transform-in")
       .addClass("transform-out");
     $("#serviceForm")[0].reset();
-    $("#preview").attr("src", "https://via.placeholder.com/80");
+    $("#preview").attr("src", "https://placehold.co/100x50");
     $("#warningToast").fadeOut(200);
   };
 
@@ -235,147 +239,11 @@ $(function () {
     $(".user-view-modal .view-form-content").css("display", "none");
   };
 
-  window.closeDeleteModal = function () {
-    $("#deleteModalOverlay").fadeOut(200);
-    $(".popup-box.delete-user-modal")
-      .removeClass("transform-in")
-      .addClass("transform-out");
-    currentServiceId = null;
-  };
-
-  window.changePage = function (page) {
-    if (page < 1) return;
-    fetch(`${API_BASE}/services`)
-      .then((res) => {
-        if (!res.ok) {
-          return res
-            .json()
-            .then((errorData) => {
-              throw new Error(
-                `HTTP error! status: ${res.status} ${
-                  errorData.message || res.statusText
-                }`
-              );
-            })
-            .catch(() => {
-              throw new Error(`HTTP error! status: ${res.status}`);
-            });
-        }
-        return res.json();
-      })
-      .then((data) => {
-        console.log("Pagination services response:", data);
-        const services = Array.isArray(data.data)
-          ? data.data
-          : Array.isArray(data)
-          ? data
-          : [];
-        const totalPages = Math.ceil(services.length / rowsPerPage) || 1;
-        if (page > totalPages) return;
-        currentPage = page;
-        renderServiceTable(services);
-        updatePagination(services);
-      })
-      .catch((err) => {
-        console.error("Error changing page:", err.message);
-        $("#noResults").show();
-        alert(`Failed to change page: ${err.message}`);
-      });
-  };
-
-  $("#serviceForm").on("submit", async function (e) {
-    e.preventDefault();
-
-    const serviceId = $("#serviceId").val();
-    const method = serviceId ? "PUT" : "POST";
-    const url = serviceId
-      ? `${API_BASE}/services/${serviceId}`
-      : `${API_BASE}/services`;
-
-    const formData = new FormData();
-    formData.append("name", $("#name").val());
-    formData.append("description", $("#description").val());
-
-    const iconFile = $("#icon_url")[0].files[0];
-    if (iconFile) {
-      formData.append("icon", iconFile); // Match backend field name
-    }
-
-    try {
-      const response = await fetch(url, {
-        method,
-        headers: {
-          Authorization: getAuthHeaders().Authorization,
-          Accept: "application/json",
-        },
-        body: formData,
-      });
-
-      if (!response.ok) {
-        const errorData = await response.json().catch(() => ({}));
-        throw new Error(
-          `Save failed: ${response.status} ${
-            errorData.message || response.statusText
-          }`
-        );
-      }
-      console.log("Save service response:", await response.json());
-      closeModal();
-      loadServices();
-    } catch (err) {
-      console.error("Error saving service:", err.message);
-      alert(`Failed to save service: ${err.message}`);
-    }
-  });
-
-  $("#searchInput").on("input", function () {
-    const term = $(this).val().toLowerCase();
-
-    fetch(`${API_BASE}/services`)
-      .then((res) => {
-        if (!res.ok) {
-          return res
-            .json()
-            .then((errorData) => {
-              throw new Error(
-                `HTTP error! status: ${res.status} ${
-                  errorData.message || res.statusText
-                }`
-              );
-            })
-            .catch(() => {
-              throw new Error(`HTTP error! status: ${res.status}`);
-            });
-        }
-        return res.json();
-      })
-      .then((data) => {
-        console.log("Search services response:", data);
-        let services = Array.isArray(data.data)
-          ? data.data
-          : Array.isArray(data)
-          ? data
-          : [];
-        services = services.filter((s) =>
-          [s.name, s.id.toString(), s.description].some((field) =>
-            field?.toLowerCase().includes(term)
-          )
-        );
-        renderServiceTable(services);
-        updatePagination(services);
-      })
-      .catch((err) => {
-        console.error("Error searching services:", err.message);
-        $("#noResults").show();
-        alert(`Failed to search services: ${err.message}`);
-      });
-  });
-
   $(".popup-btn").click(function (e) {
     $("#modalTitle").text("Add New Service");
     $("#serviceId").val("");
     $("#serviceForm")[0].reset();
-    $("#preview").attr("src", "https://via.placeholder.com/80");
+    $("#preview").attr("src", "https://placehold.co/100x50");
     $("#modalOverlay").css("display", "flex").fadeIn(200);
     $(".popup-box.user-form-modal")
       .removeClass("transform-out")
@@ -413,7 +281,7 @@ $(function () {
       };
       reader.readAsDataURL(file);
     } else {
-      $("#preview").attr("src", "https://via.placeholder.com/80");
+      $("#preview").attr("src", "https://placehold.co/100x50");
     }
   });
 

@@ -38,9 +38,9 @@ $(function () {
           <td>${product.name}</td>
           <td>${product.p_code}</td>
           <td>${product.description || "-"}</td>
-          <td><img src="${
-            product.image_url || "https://placehold.it/50x50"
-          }" alt="Product Image" class="preview-img" /></td>
+         <td><img src="${
+           product.image_url || "https://placehold.it/50x50"
+         }" alt="Product Image" class="preview-img" /></td>
           <td>${product.created_by || "-"}</td>
           <td>${product.updated_by || "-"}</td>
           <td class="actions">
