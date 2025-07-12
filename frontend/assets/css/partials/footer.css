@@ -1,136 +1,120 @@
-/* Footer Styles */
-@import "../base.css";
 #footer {
-  background-color: var(--body-color);
-  padding: var(--spacing-medium) 0;
-  color: var(--dark-color);
+  background-image: url("https://images.unsplash.com/photo-1522202176988-66273c2b6e5c?ixlib=rb-4.0.3&auto=format&fit=crop&w=1350&q=80");
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  color: var(--white-color);
+  position: relative;
+  z-index: 0;
+}
+
+#footer::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.85); /* Slight dark overlay */
+  z-index: -1;
+}
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
 }
 
 .footer-content {
   display: flex;
+  flex-wrap: wrap;
   justify-content: space-between;
-  gap: var(--spacing-small);
-  margin-bottom: var(--spacing-small);
+  gap: 40px;
 }
 
 .footer-section {
   flex: 1;
-  min-width: 200px;
-}
-
-.footer-section h3,
-.footer-section h4 {
-  color: var(--dark-color);
-  font-size: var(--h3-font-size);
-  margin-bottom: 10px;
+  min-width: 240px;
 }
 
 .footer-section h3 {
-  color: hsl(0, 100%, 50%); /* Red color for "FIRST CAMBODIA" */
+  color: hsl(150, 50%, 60%);
+  font-size: 1.1rem;
+  margin-bottom: 15px;
+  text-transform: uppercase;
 }
 
 .footer-section p,
-.footer-section ul li a {
-  font-size: var(--small-font-size);
-  color: var(--dark-color-light);
+.footer-section a {
+  color: rgba(255, 255, 255, 0.9);
+  font-size: 0.95rem;
   line-height: 1.6;
+  text-decoration: none;
+}
+
+.footer-section ul {
+  list-style: none;
+  padding: 0;
 }
 
 .footer-section ul li {
-  margin-bottom: 8px;
+  margin-bottom: 10px;
 }
 
 .footer-section ul li a:hover {
   color: var(--first-color);
+  text-decoration: underline;
 }
 
 .social-icons {
   display: flex;
-  gap: 10px;
-  margin-top: 15px;
+  gap: 12px;
+  margin-top: 20px;
+  justify-content: center; /* Center the social icons */
 }
 
 .social-icons a {
-  width: 30px;
-  height: 30px;
-  background-color: var(--first-color);
+  width: 32px;
+  height: 32px;
+  background-color: rgba(255, 255, 255, 0.2);
   color: var(--white-color);
   border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 14px;
+  font-size: 16px;
+  transition: all 0.3s ease;
+  border: 1px solid rgba(255, 255, 255, 0.3);
 }
 
 .social-icons a:hover {
-  background-color: var(--dark-color);
+  background-color: var(--first-color);
+  color: var(--white-color);
+  transform: scale(1.1);
 }
 
 .footer-bottom {
   text-align: center;
-  padding-top: var(--spacing-small);
-  border-top: 1px solid hsl(216, 14%, 90%);
+  margin-top: 40px;
+  padding-top: 20px;
+  border-top: 1px solid rgba(255, 255, 255, 0.3);
 }
 
 .footer-bottom p {
-  font-size: var(--small-font-size);
-  color: var(--dark-color-light);
+  font-size: 0.85rem;
+  color: rgba(255, 255, 255, 0.8);
 }
 
-/* Responsive Design */
-@media screen and (max-width: 1023px) {
+/* Responsive */
+@media screen and (max-width: 768px) {
   .footer-content {
     flex-direction: column;
-    gap: var(--spacing-small);
+    text-align: center;
+    align-items: center;
   }
 
   .footer-section {
-    margin-bottom: var(--spacing-small);
-  }
-
-  .footer-section h3,
-  .footer-section h4 {
-    font-size: 1.4rem;
-  }
-
-  .footer-section p,
-  .footer-section ul li a {
-    font-size: 0.85rem;
-  }
-
-  .social-icons a {
-    width: 28px;
-    height: 28px;
-    font-size: 13px;
-  }
-}
-
-@media screen and (max-width: 767px) {
-  #footer {
-    padding: var(--spacing-small) 0;
-  }
-
-  .footer-section h3,
-  .footer-section h4 {
-    font-size: 1.2rem;
-  }
-
-  .footer-section p,
-  .footer-section ul li a {
-    font-size: 0.8rem;
+    margin-bottom: 30px;
   }
 
   .social-icons {
-    gap: 8px;
-  }
-
-  .social-icons a {
-    width: 25px;
-    height: 25px;
-    font-size: 12px;
-  }
-
-  .footer-bottom p {
-    font-size: 0.75rem;
+    justify-content: center;
   }
 }

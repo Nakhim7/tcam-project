@@ -1,113 +1,158 @@
-<nav class="navbar">
-  <div class="navigation-wrapper">
-    <div class="navigation-inner">
-      <div class="navigation">
-        <!-- Mobile Logo + Toggle Group -->
-        <div class="navigation__mobile">
-          <!-- Logo on the left -->
-          <a href="index.html" class="navigation__logo navigation__link">
-            <img src="assets/images/logo2.png" alt="TCAM Solutions" />
-          </a>
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Navigation Menu</title>
+    <link rel="stylesheet" href="styles.css" />
+    <!-- Include Remix Icons for menu/close icons -->
+    <link
+      href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
+    <nav class="navbar">
+      <div class="navigation-wrapper">
+        <div class="navigation-inner">
+          <div class="navigation">
+            <!-- Mobile Logo + Toggle Group -->
+            <div class="navigation__mobile">
+              <a href="index.html" class="navigation__logo navigation__link">
+                <img src="assets/images/logo2.png" alt="TCAM Solutions" />
+              </a>
+              <div class="navigation__toggle" id="nav-toggle">
+                <i class="ri-menu-line"></i>
+              </div>
+            </div>
 
-          <!-- Menu Toggle on the right -->
-          <div class="navigation__toggle" id="nav-toggle">
-            <i class="ri-menu-line"></i>
+            <!-- Desktop Menu -->
+            <div class="navigation__menu" id="nav-menu">
+              <ul class="navigation__list">
+                <li>
+                  <a href="#home" class="navigation__link" data-page="home"
+                    >Home</a
+                  >
+                </li>
+
+                <li class="navigation__item--dropdown">
+                  <a
+                    href="#aboutus"
+                    class="navigation__link"
+                    data-page="aboutus"
+                    >About Us <i class="ri-arrow-down-s-line"></i
+                  ></a>
+                  <ul class="navigation__dropdown">
+                    <li>
+                      <a
+                        href="#teams"
+                        class="navigation__dropdown-link"
+                        data-page="teams"
+                        >Our Team</a
+                      >
+                    </li>
+                    <li>
+                      <a href="#" class="navigation__dropdown-link"
+                        >Our Mission</a
+                      >
+                    </li>
+                    <li>
+                      <a href="#" class="navigation__dropdown-link">History</a>
+                    </li>
+                  </ul>
+                </li>
+
+                <li class="navigation__item--dropdown">
+                  <a
+                    href="#services"
+                    class="navigation__link"
+                    data-page="services"
+                    >Services <i class="ri-arrow-down-s-line"></i
+                  ></a>
+                  <ul class="navigation__dropdown">
+                    <li>
+                      <a href="#" class="navigation__dropdown-link"
+                        >Consulting</a
+                      >
+                    </li>
+                    <li>
+                      <a href="#" class="navigation__dropdown-link"
+                        >Development</a
+                      >
+                    </li>
+                    <li>
+                      <a href="#" class="navigation__dropdown-link">Support</a>
+                    </li>
+                  </ul>
+                </li>
+
+                <li class="navigation__item--dropdown">
+                  <a
+                    href="#clients"
+                    class="navigation__link"
+                    data-page="clients"
+                    >Clients <i class="ri-arrow-down-s-line"></i
+                  ></a>
+                  <ul class="navigation__dropdown">
+                    <li>
+                      <a href="#" class="navigation__dropdown-link">Client</a>
+                    </li>
+                    <li>
+                      <a href="#" class="navigation__dropdown-link">Partner</a>
+                    </li>
+                    <li>
+                      <a
+                        href="#career"
+                        class="navigation__dropdown-link"
+                        data-page="career"
+                        >Careers</a
+                      >
+                    </li>
+                  </ul>
+                </li>
+
+                <li class="navigation__item--dropdown">
+                  <a
+                    href="#products"
+                    class="navigation__link"
+                    data-page="products"
+                    >Products <i class="ri-arrow-down-s-line"></i
+                  ></a>
+                  <ul class="navigation__dropdown">
+                    <li>
+                      <a href="#" class="navigation__dropdown-link"
+                        >Product 1</a
+                      >
+                    </li>
+                    <li>
+                      <a href="#" class="navigation__dropdown-link"
+                        >Product 2</a
+                      >
+                    </li>
+                    <li>
+                      <a href="#" class="navigation__dropdown-link"
+                        >Product 3</a
+                      >
+                    </li>
+                  </ul>
+                </li>
+              </ul>
+            </div>
+
+            <!-- Contact Button -->
+            <div class="navigation__contact">
+              <a href="#contactus" class="contact-btn" data-page="contactus"
+                >Contact</a
+              >
+            </div>
           </div>
         </div>
-
-        <!-- Desktop Menu -->
-        <div class="navigation__menu" id="nav-menu">
-          <ul class="navigation__list">
-            <a href="#home" class="navigation__link" data-page="home">Home</a>
-
-            <li class="navigation__item--dropdown">
-              <a href="#aboutus" class="navigation__link" data-page="aboutus"
-                >About Us</a
-              >
-              <ul class="navigation__dropdown">
-                <li>
-                  <a
-                    href="#teams"
-                    class="navigation__dropdown-link"
-                    data-page="teams"
-                    >Our Team</a
-                  >
-                </li>
-                <li>
-                  <a href="#" class="navigation__dropdown-link">Our Mission</a>
-                </li>
-                <li>
-                  <a href="#" class="navigation__dropdown-link">History</a>
-                </li>
-              </ul>
-            </li>
-
-            <li class="navigation__item--dropdown">
-              <a href="#services" class="navigation__link" data-page="services">
-                Services <i class="ri-arrow-down-s-line"></i>
-              </a>
-              <ul class="navigation__dropdown">
-                <li>
-                  <a href="#" class="navigation__dropdown-link">Consulting</a>
-                </li>
-                <li>
-                  <a href="#" class="navigation__dropdown-link">Development</a>
-                </li>
-                <li>
-                  <a href="#" class="navigation__dropdown-link">Support</a>
-                </li>
-              </ul>
-            </li>
-
-            <li class="navigation__item--dropdown">
-              <a href="#clients" class="navigation__link" data-page="clients"
-                >Clients</a
-              >
-              <ul class="navigation__dropdown">
-                <li>
-                  <a href="#" class="navigation__dropdown-link">Client</a>
-                </li>
-                <li>
-                  <a href="#" class="navigation__dropdown-link">Partner</a>
-                </li>
-                <li>
-                  <a
-                    href="#career"
-                    class="navigation__dropdown-link"
-                    data-page="career"
-                    >Careers</a
-                  >
-                </li>
-              </ul>
-            </li>
-
-            <li class="navigation__item--dropdown">
-              <a href="#products" class="navigation__link" data-page="products">
-                Products <i class="ri-arrow-down-s-line"></i>
-              </a>
-              <ul class="navigation__dropdown">
-                <li>
-                  <a href="#" class="navigation__dropdown-link">Product 1</a>
-                </li>
-                <li>
-                  <a href="#" class="navigation__dropdown-link">Product 2</a>
-                </li>
-                <li>
-                  <a href="#" class="navigation__dropdown-link">Product 3</a>
-                </li>
-              </ul>
-            </li>
-          </ul>
-        </div>
-
-        <!-- Contact Button -->
-        <div class="navigation__contact">
-          <a href="#contactus" class="contact-btn" data-page="contactus"
-            >Contact</a
-          >
-        </div>
       </div>
-    </div>
-  </div>
-</nav>
-<div class="overlay"></div>
+    </nav>
+    <div class="overlay"></div>
+
+    <!-- Include jQuery if needed -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="/frontend/assets/js/nav.js"></script>
+  </body>
+</html>

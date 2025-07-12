@@ -1,15 +1,15 @@
 function initCareerPage() {
   console.log("✅ Career page initialized");
 
-  const accordionButtons = document.querySelectorAll(".accordion__button");
-  if (!accordionButtons.length) return;
+  const accordionItems = document.querySelectorAll(".accordion__item");
 
-  accordionButtons.forEach((button) => {
-    const targetId = button.getAttribute("data-target");
-    const targetContent = document.querySelector(targetId);
-    if (!targetContent) return;
+  accordionItems.forEach((item) => {
+    const button = item.querySelector(".accordion__button");
+    const content = item.querySelector(".accordion__content");
 
-    // Ensure text has label
+    if (!button || !content) return;
+
+    // Initialize button text
     if (
       !button.textContent.includes("(Show more)") &&
       !button.textContent.includes("(Hide)")
@@ -17,13 +17,11 @@ function initCareerPage() {
       button.textContent += " (Show more)";
     }
 
-    // Hover: show only its own detail
-    button.addEventListener("mouseenter", () => {
-      if (!targetContent.classList.contains("active")) {
-        targetContent.classList.add("active");
-        targetContent.style.maxHeight = `${targetContent.scrollHeight}px`;
-        targetContent.setAttribute("aria-expanded", "true");
-        button.setAttribute("aria-expanded", "true");
+    // Hover: show content
+    item.addEventListener("mouseenter", () => {
+      if (!content.classList.contains("active")) {
+        content.classList.add("active");
+        content.style.maxHeight = `${content.scrollHeight}px`;
         button.textContent = button.textContent.replace(
           " (Show more)",
           " (Hide)"
@@ -31,26 +29,33 @@ function initCareerPage() {
       }
     });
 
-    // Click: toggle this only — don’t touch others
-    button.addEventListener("click", () => {
-      const isActive = targetContent.classList.contains("active");
+    // Mouse leave: hide content
+    item.addEventListener("mouseleave", () => {
+      if (content.classList.contains("active")) {
+        content.classList.remove("active");
+        content.style.maxHeight = "0";
+        button.textContent = button.textContent.replace(
+          " (Hide)",
+          " (Show more)"
+        );
+      }
+    });
+
+    // Click toggle
+    button.addEventListener("click", (e) => {
+      e.stopPropagation();
+      const isActive = content.classList.contains("active");
 
       if (isActive) {
-        // Hide
-        targetContent.classList.remove("active");
-        targetContent.style.maxHeight = "0";
-        targetContent.setAttribute("aria-expanded", "false");
-        button.setAttribute("aria-expanded", "false");
+        content.classList.remove("active");
+        content.style.maxHeight = "0";
         button.textContent = button.textContent.replace(
           " (Hide)",
           " (Show more)"
         );
       } else {
-        // Show
-        targetContent.classList.add("active");
-        targetContent.style.maxHeight = `${targetContent.scrollHeight}px`;
-        targetContent.setAttribute("aria-expanded", "true");
-        button.setAttribute("aria-expanded", "true");
+        content.classList.add("active");
+        content.style.maxHeight = `${content.scrollHeight}px`;
         button.textContent = button.textContent.replace(
           " (Show more)",
           " (Hide)"

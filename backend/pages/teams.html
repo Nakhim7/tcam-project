@@ -3,9 +3,9 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="description" content="Contact Management Dashboard" />
-    <title>Contact Management Dashboard</title>
-    <link rel="stylesheet" href="/backend/assets/css/pages/jobs-contacts.css" />
+    <meta name="description" content="Team Management Dashboard" />
+    <title>Team Management Dashboard</title>
+    <link rel="stylesheet" href="/backend/assets/css/pages/teams.css" />
     <link
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
@@ -19,16 +19,16 @@
     />
   </head>
   <body>
-    <div class="user-management" id="contact_contain">
+    <div class="user-management" id="team_contain">
       <div class="users-header">
-        <h2>Contact Management Dashboard</h2>
+        <h2>Team Management Dashboard</h2>
         <div class="search-filter">
           <div class="search-wrapper">
             <i class="fas fa-search search-icon"></i>
             <input
               type="text"
               id="searchInput"
-              placeholder="Search by name, ID, or email..."
+              placeholder="Search by name or ID..."
               class="search-bar"
             />
           </div>
@@ -44,18 +44,19 @@
             <tr>
               <th>ID</th>
               <th>Name</th>
-              <th>Email</th>
-              <th>Message</th>
-              <th>Submitted At</th>
+              <th>Position</th>
+              <th>Photo</th>
+              <th>Bio</th>
+              <th>Created At</th>
               <th>Actions</th>
             </tr>
           </thead>
-          <tbody id="contactTableBody"></tbody>
+          <tbody id="teamTableBody"></tbody>
         </table>
       </div>
 
       <div class="no-results" id="noResults" style="display: none">
-        No contacts found matching your criteria.
+        No team members found matching your criteria.
       </div>
 
       <div class="pagination" id="pagination">
@@ -71,7 +72,7 @@
     <div class="popup-wrap" id="modalOverlay" style="display: none">
       <div class="popup-box user-form-modal">
         <div class="modal-header">
-          <h3 id="modalTitle">Add New Contact</h3>
+          <h3 id="modalTitle">Add New Team Member</h3>
           <button class="close-btn popup-close">
             <i class="fas fa-times"></i>
           </button>
@@ -81,8 +82,12 @@
           <div class="loading-indicator" style="display: none">
             <i class="fas fa-spinner fa-spin"></i> Loading...
           </div>
-          <form id="contactForm" style="display: none">
-            <input type="hidden" id="contactId" name="id" />
+          <form
+            id="teamForm"
+            style="display: none"
+            enctype="multipart/form-data"
+          >
+            <input type="hidden" id="teamId" name="id" />
             <div class="form-row">
               <div class="form-group col-md-6">
                 <label for="name">Name <span class="required">*</span></label>
@@ -92,31 +97,41 @@
                   name="name"
                   class="form-control"
                   required
-                  placeholder="Enter contact name"
+                  placeholder="Enter team member name"
                 />
               </div>
               <div class="form-group col-md-6">
-                <label for="email">Email <span class="required">*</span></label>
+                <label for="position"
+                  >Position <span class="required">*</span></label
+                >
                 <input
-                  type="email"
-                  id="email"
-                  name="email"
+                  type="text"
+                  id="position"
+                  name="position"
                   class="form-control"
                   required
-                  placeholder="Enter email"
+                  placeholder="Enter position"
                 />
               </div>
             </div>
             <div class="form-group">
-              <label for="message"
-                >Message <span class="required">*</span></label
-              >
-              <textarea
-                id="message"
-                name="message"
+              <label for="photo">Photo (jpg, jpeg, png, webp; max 2MB)</label>
+              <input
+                type="file"
+                id="photo"
+                name="photo"
                 class="form-control"
-                required
-                placeholder="Enter message"
+                accept="image/jpeg,image/png,image/webp"
+              />
+              <div id="photoPreview" style="margin-top: 10px"></div>
+            </div>
+            <div class="form-group">
+              <label for="bio">Bio</label>
+              <textarea
+                id="bio"
+                name="bio"
+                class="form-control"
+                placeholder="Enter bio"
               ></textarea>
             </div>
             <div class="form-group">
@@ -137,7 +152,7 @@
     <div class="popup-wrap" id="viewModalOverlay" style="display: none">
       <div class="popup-box user-view-modal">
         <div class="modal-header">
-          <h3>View Contact Details</h3>
+          <h3>View Team Member Details</h3>
           <button class="close-btn" onclick="closeViewModal()">
             <i class="fas fa-times"></i>
           </button>
@@ -150,10 +165,10 @@
           <div class="view-form-content" style="display: none">
             <div class="form-row">
               <div class="form-group col-md-6">
-                <label for="viewContactId">ID</label>
+                <label for="viewTeamId">ID</label>
                 <input
                   type="text"
-                  id="viewContactId"
+                  id="viewTeamId"
                   class="form-control"
                   readonly
                 />
@@ -169,22 +184,27 @@
               </div>
             </div>
             <div class="form-group">
-              <label for="viewEmail">Email</label>
-              <input type="text" id="viewEmail" class="form-control" readonly />
-            </div>
-            <div class="form-group">
-              <label for="viewMessage">Message</label>
-              <textarea
-                id="viewMessage"
-                class="form-control"
-                readonly
-              ></textarea>
-            </div>
-            <div class="form-group">
-              <label for="viewSubmittedAt">Submitted At</label>
+              <label for="viewPosition">Position</label>
               <input
                 type="text"
-                id="viewSubmittedAt"
+                id="viewPosition"
+                class="form-control"
+                readonly
+              />
+            </div>
+            <div class="form-group">
+              <label for="viewPhoto">Photo</label>
+              <div id="viewPhotoPreview" style="margin-top: 10px"></div>
+            </div>
+            <div class="form-group">
+              <label for="viewBio">Bio</label>
+              <textarea id="viewBio" class="form-control" readonly></textarea>
+            </div>
+            <div class="form-group">
+              <label for="viewCreatedAt">Created At</label>
+              <input
+                type="text"
+                id="viewCreatedAt"
                 class="form-control"
                 readonly
               />
@@ -215,7 +235,7 @@
         <hr class="modal-divider" />
         <div class="modal-body">
           <p>
-            Are you sure you want to permanently delete this contact? This
+            Are you sure you want to permanently delete this team member? This
             action cannot be undone.
           </p>
           <div class="delete-user-actions">
@@ -235,6 +255,6 @@
     </div>
 
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script src="/backend/assets/js/contacts.js"></script>
+    <script src="teams.js"></script>
   </body>
 </html>

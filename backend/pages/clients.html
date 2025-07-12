@@ -3,326 +3,244 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Clients/Partners Management</title>
+    <meta name="description" content="Client Management Dashboard" />
+    <title>Client Management Dashboard</title>
     <link rel="stylesheet" href="/backend/assets/css/pages/clients.css" />
     <link
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+      integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,400;0,700;1,400&display=swap"
+      rel="stylesheet"
     />
   </head>
   <body>
-    <div class="clients-partners-container">
-      <div class="header">
-        <h2>Clients/Partners Management</h2>
-        <button class="btn primary" id="addClientPartnerBtn">
-          Add New Client/Partner
+    <div class="user-management" id="client_contain">
+      <div class="users-header">
+        <h2>Client Management Dashboard</h2>
+        <div class="search-filter">
+          <div class="search-wrapper">
+            <i class="fas fa-search search-icon"></i>
+            <input
+              type="text"
+              id="searchInput"
+              placeholder="Search by name or ID..."
+              class="search-bar"
+            />
+          </div>
+        </div>
+        <button class="btn primary popup-btn" data-modal="add">
+          <span><i class="fas fa-plus"></i> New</span>
         </button>
       </div>
 
-      <div class="search-filter">
-        <input
-          type="text"
-          id="searchInput"
-          placeholder="Search by ID or name..."
-          class="search-bar"
-        />
+      <div class="table-container">
+        <table class="user-table">
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Name</th>
+              <th>Logo</th>
+              <th>Category</th>
+              <th>Created At</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody id="clientTableBody"></tbody>
+        </table>
       </div>
 
-      <table class="clients-partners-table">
-        <thead>
-          <tr>
-            <th>ID</th>
-            <th>Name</th>
-            <th>Logo</th>
-            <th>Website</th>
-            <th>Created At</th>
-            <th>Actions</th>
-          </tr>
-        </thead>
-        <tbody id="clientsPartnersTbody">
-          <tr data-id="1">
-            <td>1</td>
-            <td>Tech Solutions Inc.</td>
-            <td>
-              <img
-                src="https://via.placeholder.com/50"
-                alt="Logo"
-                class="thumbnail-image"
-              />
-            </td>
-            <td>https://techsolutions.com</td>
-            <td>2025-06-20 10:00:00</td>
-            <td class="actions">
-              <button class="action-btn view" title="View">
-                <i class="fas fa-eye"></i>
-              </button>
-              <button class="action-btn edit" title="Edit">
-                <i class="fas fa-edit"></i>
-              </button>
-              <button class="action-btn delete" title="Delete">
-                <i class="fas fa-trash-alt"></i>
-              </button>
-            </td>
-          </tr>
-          <tr data-id="2">
-            <td>2</td>
-            <td>Green Energy Co.</td>
-            <td>
-              <img
-                src="https://via.placeholder.com/50"
-                alt="Logo"
-                class="thumbnail-image"
-              />
-            </td>
-            <td>-</td>
-            <td>2025-06-25 16:36:00</td>
-            <td class="actions">
-              <button class="action-btn view" title="View">
-                <i class="fas fa-eye"></i>
-              </button>
-              <button class="action-btn edit" title="Edit">
-                <i class="fas fa-edit"></i>
-              </button>
-              <button class="action-btn delete" title="Delete">
-                <i class="fas fa-trash-alt"></i>
-              </button>
-            </td>
-          </tr>
-        </tbody>
-      </table>
-
-      <div class="pagination">
-        <button class="btn" id="prevPage">Previous</button>
-        <span id="pageInfo">Page 1 of 1</span>
-        <button class="btn" id="nextPage">Next</button>
+      <div class="no-results" id="noResults" style="display: none">
+        No clients found matching your criteria.
       </div>
 
-      <div class="modal-overlay" id="modalOverlay">
-        <div class="modal">
-          <h3 id="modalTitle">Add Client/Partner</h3>
-          <form id="clientPartnerForm">
-            <label>
-              ID
-              <input type="text" name="id" required readonly />
-            </label>
-            <label>
-              Name
-              <input type="text" name="name" required />
-            </label>
-            <label>
-              Logo URL
+      <div class="pagination" id="pagination">
+        <button class="btn" onclick="changePage(currentPage - 1)">
+          Previous
+        </button>
+        <span id="pageInfo"></span>
+        <button class="btn" onclick="changePage(currentPage + 1)">Next</button>
+      </div>
+    </div>
+
+    <!-- Add/Edit Modal -->
+    <div class="popup-wrap" id="modalOverlay" style="display: none">
+      <div class="popup-box user-form-modal">
+        <div class="modal-header">
+          <h3 id="modalTitle">Add New Client</h3>
+          <button class="close-btn popup-close">
+            <i class="fas fa-times"></i>
+          </button>
+        </div>
+        <hr class="modal-divider" />
+        <div class="modal-body">
+          <div class="loading-indicator" style="display: none">
+            <i class="fas fa-spinner fa-spin"></i> Loading...
+          </div>
+          <form
+            id="clientForm"
+            style="display: none"
+            enctype="multipart/form-data"
+          >
+            <input type="hidden" id="clientId" name="id" />
+            <div class="form-row">
+              <div class="form-group col-md-6">
+                <label for="name">Name <span class="required">*</span></label>
+                <input
+                  type="text"
+                  id="name"
+                  name="name"
+                  class="form-control"
+                  required
+                  placeholder="Enter client name"
+                />
+              </div>
+              <div class="form-group col-md-6">
+                <label for="client_category_id"
+                  >Category <span class="required">*</span></label
+                >
+                <select
+                  id="client_category_id"
+                  name="client_category_id"
+                  class="form-control"
+                  required
+                >
+                  <option value="">Select a category</option>
+                </select>
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="logo">Logo (jpg, jpeg, png, webp; max 2MB)</label>
               <input
-                type="text"
+                type="file"
+                id="logo"
                 name="logo"
-                required
-                placeholder="e.g., https://via.placeholder.com/50"
+                class="form-control"
+                accept="image/jpeg,image/png,image/webp"
               />
-            </label>
-            <label>
-              Website
-              <input type="text" name="website" />
-            </label>
-            <label>
-              Created At
-              <input type="datetime-local" name="created_at" required />
-            </label>
-            <div class="form-actions">
-              <button type="submit" class="btn primary">Save</button>
-              <button type="button" class="btn" id="closeModal">Cancel</button>
+              <div id="logoPreview" style="margin-top: 10px"></div>
+            </div>
+            <div class="form-group">
+              <button type="submit" class="btn btn-primary w-100">
+                Submit
+              </button>
             </div>
           </form>
         </div>
       </div>
+      <div class="toast-notification" id="warningToast" style="display: none">
+        <p>Please use the Close button to exit the form.</p>
+        <button class="close-toast"><i class="fas fa-times"></i></button>
+      </div>
     </div>
 
-    <script>
-      document.addEventListener("DOMContentLoaded", () => {
-        const addClientPartnerBtn = document.getElementById(
-          "addClientPartnerBtn"
-        );
-        const modalOverlay = document.getElementById("modalOverlay");
-        const closeModal = document.getElementById("closeModal");
-        const clientPartnerForm = document.getElementById("clientPartnerForm");
-        const modalTitle = document.getElementById("modalTitle");
-        let editClientPartnerId = null;
+    <!-- View Modal -->
+    <div class="popup-wrap" id="viewModalOverlay" style="display: none">
+      <div class="popup-box user-view-modal">
+        <div class="modal-header">
+          <h3>View Client Details</h3>
+          <button class="close-btn" onclick="closeViewModal()">
+            <i class="fas fa-times"></i>
+          </button>
+        </div>
+        <hr class="modal-divider" />
+        <div class="modal-body">
+          <div class="loading-indicator" style="display: none">
+            <i class="fas fa-spinner fa-spin"></i> Loading...
+          </div>
+          <div class="view-form-content" style="display: none">
+            <div class="form-row">
+              <div class="form-group col-md-6">
+                <label for="viewClientId">ID</label>
+                <input
+                  type="text"
+                  id="viewClientId"
+                  class="form-control"
+                  readonly
+                />
+              </div>
+              <div class="form-group col-md-6">
+                <label for="viewName">Name</label>
+                <input
+                  type="text"
+                  id="viewName"
+                  class="form-control"
+                  readonly
+                />
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="viewCategory">Category</label>
+              <input
+                type="text"
+                id="viewCategory"
+                class="form-control"
+                readonly
+              />
+            </div>
+            <div class="form-group">
+              <label for="viewLogo">Logo</label>
+              <div id="viewLogoPreview" style="margin-top: 10px"></div>
+            </div>
+            <div class="form-group">
+              <label for="viewCreatedAt">Created At</label>
+              <input
+                type="text"
+                id="viewCreatedAt"
+                class="form-control"
+                readonly
+              />
+            </div>
+            <div class="form-group">
+              <button
+                type="button"
+                class="btn btn-primary w-100"
+                onclick="closeViewModal()"
+              >
+                Close
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
 
-        addClientPartnerBtn.addEventListener("click", () => {
-          modalTitle.textContent = "Add Client/Partner";
-          clientPartnerForm.reset();
-          clientPartnerForm.querySelector('[name="id"]').value = Date.now()
-            .toString()
-            .slice(-5);
-          clientPartnerForm.querySelector('[name="created_at"]').value =
-            new Date().toISOString().slice(0, 16);
-          modalOverlay.style.display = "flex";
-        });
+    <!-- Delete Confirmation Modal -->
+    <div class="popup-wrap" id="deleteModalOverlay" style="display: none">
+      <div class="popup-box delete-user-modal">
+        <div class="modal-header">
+          <h3>Confirm Deletion</h3>
+          <button class="close-btn" onclick="closeDeleteModal()">
+            <i class="fas fa-times"></i>
+          </button>
+        </div>
+        <hr class="modal-divider" />
+        <div class="modal-body">
+          <p>
+            Are you sure you want to permanently delete this client? This action
+            cannot be undone.
+          </p>
+          <div class="delete-user-actions">
+            <button type="button" class="btn btn-primary" id="confirmDelete">
+              Yes
+            </button>
+            <button
+              type="button"
+              class="btn btn-secondary"
+              onclick="closeDeleteModal()"
+            >
+              No
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
 
-        closeModal.addEventListener("click", () => {
-          modalOverlay.style.display = "none";
-          clientPartnerForm.reset();
-          editClientPartnerId = null;
-        });
-
-        clientPartnerForm.addEventListener("submit", (e) => {
-          e.preventDefault();
-          const formData = new FormData(clientPartnerForm);
-          const clientPartner = Object.fromEntries(formData);
-          if (editClientPartnerId) {
-            updateClientPartnerInTable(clientPartner);
-          } else {
-            addClientPartnerToTable(clientPartner);
-          }
-          modalOverlay.style.display = "none";
-          clientPartnerForm.reset();
-          editClientPartnerId = null;
-          updatePagination();
-        });
-
-        function addClientPartnerToTable(clientPartner) {
-          const tbody = document.querySelector(".clients-partners-table tbody");
-          const row = document.createElement("tr");
-          row.dataset.id = clientPartner.id;
-          row.innerHTML = `
-            <td>${clientPartner.id}</td>
-            <td>${clientPartner.name}</td>
-            <td><img src="${
-              clientPartner.logo
-            }" alt="Logo" class="thumbnail-image"></td>
-            <td>${clientPartner.website || "-"}</td>
-            <td>${clientPartner.created_at}</td>
-            <td class="actions">
-              <button class="action-btn view" title="View" data-id="${
-                clientPartner.id
-              }"><i class="fas fa-eye"></i></button>
-              <button class="action-btn edit" title="Edit" data-id="${
-                clientPartner.id
-              }"><i class="fas fa-edit"></i></button>
-              <button class="action-btn delete" title="Delete" data-id="${
-                clientPartner.id
-              }"><i class="fas fa-trash-alt"></i></button>
-            </td>
-          `;
-          tbody.appendChild(row);
-          bindActionButtons(row);
-        }
-
-        function updateClientPartnerInTable(clientPartner) {
-          const row = document.querySelector(
-            `tr[data-id="${editClientPartnerId}"]`
-          );
-          if (row) {
-            row.innerHTML = `
-              <td>${clientPartner.id}</td>
-              <td>${clientPartner.name}</td>
-              <td><img src="${
-                clientPartner.logo
-              }" alt="Logo" class="thumbnail-image"></td>
-              <td>${clientPartner.website || "-"}</td>
-              <td>${clientPartner.created_at}</td>
-              <td class="actions">
-                <button class="action-btn view" title="View" data-id="${
-                  clientPartner.id
-                }"><i class="fas fa-eye"></i></button>
-                <button class="action-btn edit" title="Edit" data-id="${
-                  clientPartner.id
-                }"><i class="fas fa-edit"></i></button>
-                <button class="action-btn delete" title="Delete" data-id="${
-                  clientPartner.id
-                }"><i class="fas fa-trash-alt"></i></button>
-              </td>
-            `;
-            row.dataset.id = clientPartner.id;
-            bindActionButtons(row);
-          }
-        }
-
-        function bindActionButtons(row) {
-          row
-            .querySelector(".action-btn.view")
-            .addEventListener("click", viewClientPartner);
-          row
-            .querySelector(".action-btn.edit")
-            .addEventListener("click", editClientPartner);
-          row
-            .querySelector(".action-btn.delete")
-            .addEventListener("click", deleteClientPartner);
-        }
-
-        function viewClientPartner(e) {
-          const id = e.target.closest("button").dataset.id;
-          const row = document.querySelector(`tr[data-id="${id}"]`);
-          const name = row.cells[1].textContent;
-          alert(`Viewing Client/Partner: ${name}\nID: ${id}`);
-        }
-
-        function editClientPartner(e) {
-          editClientPartnerId = e.target.closest("button").dataset.id;
-          const row = document.querySelector(
-            `tr[data-id="${editClientPartnerId}"]`
-          );
-          modalTitle.textContent = "Edit Client/Partner";
-          clientPartnerForm.querySelector('[name="id"]').value =
-            row.cells[0].textContent;
-          clientPartnerForm.querySelector('[name="name"]').value =
-            row.cells[1].textContent;
-          clientPartnerForm.querySelector('[name="logo"]').value =
-            row.cells[2].querySelector("img").src;
-          clientPartnerForm.querySelector('[name="website"]').value =
-            row.cells[3].textContent === "-" ? "" : row.cells[3].textContent;
-          clientPartnerForm.querySelector('[name="created_at"]').value =
-            row.cells[4].textContent;
-          modalOverlay.style.display = "flex";
-        }
-
-        function deleteClientPartner(e) {
-          const id = e.target.closest("button").dataset.id;
-          const row = document.querySelector(`tr[data-id="${id}"]`);
-          row.remove();
-          updatePagination();
-        }
-
-        let currentPage = 1;
-        const rowsPerPage = 5;
-        function updatePagination() {
-          const rows = document.querySelectorAll(
-            ".clients-partners-table tbody tr"
-          );
-          const totalPages = Math.ceil(rows.length / rowsPerPage);
-          const start = (currentPage - 1) * rowsPerPage;
-          const end = start + rowsPerPage;
-          rows.forEach((row, index) => {
-            row.style.display = index >= start && index < end ? "" : "none";
-          });
-          document.getElementById(
-            "pageInfo"
-          ).textContent = `Page ${currentPage} of ${totalPages || 1}`;
-        }
-
-        document.getElementById("searchInput").addEventListener("input", () => {
-          const searchTerm = document
-            .getElementById("searchInput")
-            .value.toLowerCase();
-          const rows = document.querySelectorAll(
-            ".clients-partners-table tbody tr"
-          );
-          rows.forEach((row) => {
-            const id = row.cells[0].textContent.toLowerCase();
-            const name = row.cells[1].textContent.toLowerCase();
-            const matches =
-              id.includes(searchTerm) || name.includes(searchTerm);
-            row.style.display = matches ? "" : "none";
-          });
-          currentPage = 1;
-          updatePagination();
-        });
-
-        document
-          .querySelectorAll(".clients-partners-table tbody tr")
-          .forEach((row) => {
-            bindActionButtons(row);
-          });
-        updatePagination();
-      });
-    </script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="/backend/assets/js/client.js"></script>
   </body>
 </html>

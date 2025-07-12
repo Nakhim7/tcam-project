@@ -3,252 +3,248 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Services Management</title>
+    <meta name="description" content="Services Management Dashboard" />
+    <title>Services Management Dashboard</title>
     <link rel="stylesheet" href="/backend/assets/css/pages/services.css" />
     <link
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+      integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,400;0,700;1,400&display=swap"
+      rel="stylesheet"
     />
   </head>
   <body>
-    <div class="services-container">
-      <div class="servie-header">
-        <h2>Services Management</h2>
-        <button class="btn primary" id="addServiceBtn">Add New Service</button>
+    <div class="user-management" id="service_contain">
+      <div class="users-header">
+        <h2>Services Management Dashboard</h2>
+        <div class="search-filter">
+          <div class="search-wrapper">
+            <i class="fas fa-search search-icon"></i>
+            <input
+              type="text"
+              id="searchInput"
+              placeholder="Search by name or ID..."
+              class="search-bar"
+            />
+          </div>
+        </div>
+        <button class="btn primary popup-btn" data-modal="add">
+          <span><i class="fas fa-plus"></i> New</span>
+        </button>
       </div>
 
-      <div class="search-filter">
-        <input
-          type="text"
-          id="searchInput"
-          placeholder="Search by title or ID..."
-          class="search-bar"
-        />
+      <div class="table-container">
+        <table class="user-table">
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Name</th>
+              <th>Description</th>
+              <th>Icon</th>
+              <th>Created At</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody id="serviceTableBody"></tbody>
+        </table>
       </div>
 
-      <table class="services-table">
-        <thead>
-          <tr>
-            <th>ID</th>
-            <th>Title</th>
-            <th>Description</th>
-            <th>Icon</th>
-            <th>Image</th>
-            <th>Created At</th>
-            <th>Actions</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td>1</td>
-            <td>IT Infrastructure</td>
-            <td>Comprehensive IT support and network solutions</td>
-            <td><i class="fas fa-server"></i></td>
-            <td>
-              <img
-                src="https://via.placeholder.com/50"
-                alt="Service Image"
-                class="service-image"
-              />
-            </td>
-            <td>2025-06-01 14:30:00</td>
-            <td class="actions">
-              <button class="action-btn view" title="View">
-                <i class="fas fa-eye"></i>
-              </button>
-              <button class="action-btn edit" title="Edit">
-                <i class="fas fa-edit"></i>
-              </button>
-              <button class="action-btn delete" title="Delete">
-                <i class="fas fa-trash-alt"></i>
-              </button>
-            </td>
-          </tr>
-          <tr>
-            <td>2</td>
-            <td>Web Development</td>
-            <td>Custom web design and development services</td>
-            <td><i class="fas fa-code"></i></td>
-            <td>
-              <img
-                src="https://via.placeholder.com/50"
-                alt="Service Image"
-                class="service-image"
-              />
-            </td>
-            <td>2025-06-02 09:15:00</td>
-            <td class="actions">
-              <button class="action-btn view" title="View">
-                <i class="fas fa-eye"></i>
-              </button>
-              <button class="action-btn edit" title="Edit">
-                <i class="fas fa-edit"></i>
-              </button>
-              <button class="action-btn delete" title="Delete">
-                <i class="fas fa-trash-alt"></i>
-              </button>
-            </td>
-          </tr>
-          <!-- Add more rows as needed -->
-        </tbody>
-      </table>
-
-      <div class="pagination">
-        <button class="btn" id="prevPage">Previous</button>
-        <span id="pageInfo">Page 1 of 1</span>
-        <button class="btn" id="nextPage">Next</button>
+      <div class="no-results" id="noResults" style="display: none">
+        No services found matching your criteria.
       </div>
 
-      <!-- Modal Form -->
-      <div class="modal-overlay" id="modalOverlay">
-        <div class="modal">
-          <h3 id="modalTitle">Add Service</h3>
-          <form id="serviceForm">
-            <label>
-              ID
-              <input type="text" name="id" required readonly />
-            </label>
-            <label>
-              Title
-              <input type="text" name="title" required />
-            </label>
-            <label>
-              Description
-              <textarea name="description" required></textarea>
-            </label>
-            <label>
-              Icon (FontAwesome Class)
-              <input
-                type="text"
-                name="icon"
-                placeholder="e.g., fas fa-server"
-              />
-            </label>
-            <label>
-              Image URL
-              <input
-                type="text"
-                name="image"
-                placeholder="e.g., https://via.placeholder.com/50"
-              />
-            </label>
-            <label>
-              Created At
-              <input type="datetime-local" name="createdAt" required />
-            </label>
-            <div class="form-actions">
-              <button type="submit" class="btn primary">Save</button>
-              <button type="button" class="btn" id="closeModal">Cancel</button>
+      <div class="pagination" id="pagination">
+        <button class="btn" onclick="changePage(currentPage - 1)">
+          Previous
+        </button>
+        <span id="pageInfo"></span>
+        <button class="btn" onclick="changePage(currentPage + 1)">Next</button>
+      </div>
+    </div>
+
+    <!-- Add/Edit Modal -->
+    <div class="popup-wrap" id="modalOverlay" style="display: none">
+      <div class="popup-box user-form-modal">
+        <div class="modal-header">
+          <h3 id="modalTitle">Add New Service</h3>
+          <button class="close-btn popup-close">
+            <i class="fas fa-times"></i>
+          </button>
+        </div>
+        <hr class="modal-divider" />
+        <div class="modal-body">
+          <div class="loading-indicator" style="display: none">
+            <i class="fas fa-spinner fa-spin"></i> Loading...
+          </div>
+          <form id="serviceForm" style="display: none">
+            <input type="hidden" id="serviceId" name="id" />
+            <div class="form-row">
+              <div class="form-group col-md-6">
+                <label for="name">Name <span class="required">*</span></label>
+                <input
+                  type="text"
+                  id="name"
+                  name="name"
+                  class="form-control"
+                  required
+                  placeholder="Enter service name"
+                />
+              </div>
+              <div class="form-group col-md-6">
+                <label for="icon_url">Icon Image</label>
+                <input
+                  type="file"
+                  id="icon_url"
+                  name="icon_url"
+                  class="form-control"
+                  accept="image/*"
+                />
+                <div class="preview-container">
+                  <img
+                    src="https://via.placeholder.com/80"
+                    id="preview"
+                    class="preview-img"
+                  />
+                </div>
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="description">Description</label>
+              <textarea
+                id="description"
+                name="description"
+                class="form-control"
+                placeholder="Enter description"
+              ></textarea>
+            </div>
+            <div class="form-group">
+              <button type="submit" class="btn btn-primary w-100">
+                Submit
+              </button>
             </div>
           </form>
         </div>
       </div>
+      <div class="toast-notification" id="warningToast" style="display: none">
+        <p>Please use the Close button to exit the form.</p>
+        <button class="close-toast"><i class="fas fa-times"></i></button>
+      </div>
     </div>
 
-    <script>
-      document.addEventListener("DOMContentLoaded", () => {
-        const addServiceBtn = document.getElementById("addServiceBtn");
-        const modalOverlay = document.getElementById("modalOverlay");
-        const closeModal = document.getElementById("closeModal");
-        const serviceForm = document.getElementById("serviceForm");
-        const modalTitle = document.getElementById("modalTitle");
+    <!-- View Modal -->
+    <div class="popup-wrap" id="viewModalOverlay" style="display: none">
+      <div class="popup-box user-view-modal">
+        <div class="modal-header">
+          <h3>View Service Details</h3>
+          <button class="close-btn" onclick="closeViewModal()">
+            <i class="fas fa-times"></i>
+          </button>
+        </div>
+        <hr class="modal-divider" />
+        <div class="modal-body">
+          <div class="loading-indicator" style="display: none">
+            <i class="fas fa-spinner fa-spin"></i> Loading...
+          </div>
+          <div class="view-form-content" style="display: none">
+            <div class="form-row">
+              <div class="form-group col-md-6">
+                <label for="viewServiceId">ID</label>
+                <input
+                  type="text"
+                  id="viewServiceId"
+                  class="form-control"
+                  readonly
+                />
+              </div>
+              <div class="form-group col-md-6">
+                <label for="viewName">Name</label>
+                <input
+                  type="text"
+                  id="viewName"
+                  class="form-control"
+                  readonly
+                />
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="viewDescription">Description</label>
+              <textarea
+                id="viewDescription"
+                class="form-control"
+                readonly
+              ></textarea>
+            </div>
+            <div class="form-group">
+              <label for="viewIconUrl">Icon</label>
+              <div class="preview-container">
+                <img
+                  id="viewIconUrl"
+                  src=""
+                  class="preview-img"
+                  onerror="this.style.display='none';"
+                />
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="viewCreatedAt">Created At</label>
+              <input
+                type="text"
+                id="viewCreatedAt"
+                class="form-control"
+                readonly
+              />
+            </div>
+            <div class="form-group">
+              <button
+                type="button"
+                class="btn btn-primary w-100"
+                onclick="closeViewModal()"
+              >
+                Close
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
 
-        addServiceBtn.addEventListener("click", () => {
-          modalTitle.textContent = "Add Service";
-          serviceForm.reset();
-          serviceForm.querySelector('[name="id"]').value = Date.now()
-            .toString()
-            .slice(-5);
-          serviceForm.querySelector('[name="createdAt"]').value = new Date()
-            .toISOString()
-            .slice(0, 16);
-          modalOverlay.style.display = "flex";
-        });
+    <!-- Delete Confirmation Modal -->
+    <div class="popup-wrap" id="deleteModalOverlay" style="display: none">
+      <div class="popup-box delete-user-modal">
+        <div class="modal-header">
+          <h3>Confirm Deletion</h3>
+          <button class="close-btn" onclick="closeDeleteModal()">
+            <i class="fas fa-times"></i>
+          </button>
+        </div>
+        <hr class="modal-divider" />
+        <div class="modal-body">
+          <p>
+            Are you sure you want to permanently delete this service? This
+            action cannot be undone.
+          </p>
+          <div class="delete-user-actions">
+            <button type="button" class="btn btn-primary" id="confirmDelete">
+              Yes
+            </button>
+            <button
+              type="button"
+              class="btn btn-secondary"
+              onclick="closeDeleteModal()"
+            >
+              No
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
 
-        closeModal.addEventListener("click", () => {
-          modalOverlay.style.display = "none";
-        });
-
-        serviceForm.addEventListener("submit", (e) => {
-          e.preventDefault();
-          const formData = new FormData(serviceForm);
-          const service = Object.fromEntries(formData);
-          addServiceToTable(service);
-          modalOverlay.style.display = "none";
-        });
-
-        function addServiceToTable(service) {
-          const tbody = document.querySelector(".services-table tbody");
-          const row = document.createElement("tr");
-          row.innerHTML = `
-          <td>${service.id}</td>
-          <td>${service.title}</td>
-          <td>${service.description}</td>
-          <td><i class="${service.icon || "fas fa-question"}"></i></td>
-          <td><img src="${
-            service.image || "https://via.placeholder.com/50"
-          }" alt="Service Image" class="service-image"></td>
-          <td>${service.createdAt}</td>
-          <td class="actions">
-            <button class="action-btn view" title="View"><i class="fas fa-eye"></i></button>
-            <button class="action-btn edit" title="Edit"><i class="fas fa-edit"></i></button>
-            <button class="action-btn delete" title="Delete"><i class="fas fa-trash-alt"></i></button>
-          </td>
-        `;
-          tbody.appendChild(row);
-        }
-
-        // Simple pagination (placeholder)
-        let currentPage = 1;
-        const rowsPerPage = 5;
-        function updatePagination() {
-          const rows = document.querySelectorAll(".services-table tbody tr");
-          const totalPages = Math.ceil(rows.length / rowsPerPage);
-          const start = (currentPage - 1) * rowsPerPage;
-          const end = start + rowsPerPage;
-          rows.forEach((row, index) => {
-            row.style.display = index >= start && index < end ? "" : "none";
-          });
-          document.getElementById(
-            "pageInfo"
-          ).textContent = `Page ${currentPage} of ${totalPages}`;
-        }
-
-        document.getElementById("prevPage").addEventListener("click", () => {
-          if (currentPage > 1) {
-            currentPage--;
-            updatePagination();
-          }
-        });
-
-        document.getElementById("nextPage").addEventListener("click", () => {
-          const rows = document.querySelectorAll(".services-table tbody tr");
-          const totalPages = Math.ceil(rows.length / rowsPerPage);
-          if (currentPage < totalPages) {
-            currentPage++;
-            updatePagination();
-          }
-        });
-
-        // Search functionality
-        document.getElementById("searchInput").addEventListener("input", () => {
-          const searchTerm = document
-            .getElementById("searchInput")
-            .value.toLowerCase();
-          const rows = document.querySelectorAll(".services-table tbody tr");
-          rows.forEach((row) => {
-            const id = row.cells[0].textContent.toLowerCase();
-            const title = row.cells[1].textContent.toLowerCase();
-            const matches =
-              id.includes(searchTerm) || title.includes(searchTerm);
-            row.style.display = matches ? "" : "none";
-          });
-          currentPage = 1;
-          updatePagination();
-        });
-
-        updatePagination();
-      });
-    </script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="/backend/assets/js/service.js"></script>
   </body>
 </html>

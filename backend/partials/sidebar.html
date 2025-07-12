@@ -1,35 +1,41 @@
-<aside id="sidebar" class="custom-sidebar">
+<aside id="sidebar" class="admin-sidebar">
   <!-- Toggle Button -->
-  <div class="sidebar-toggle-wrapper">
-    <button id="toggleSidebar" class="sidebar-toggle">
+  <div class="sidebar-control-wrapper">
+    <button id="toggleSidebar" class="sidebar-control-btn">
       <i class="fas fa-chevron-left"></i>
     </button>
   </div>
 
   <!-- Sidebar Menu -->
-  <ul class="sidebar-menu" id="menuItems">
-    <li class="sidebar-item">
-      <a href="#dashboard" class="sidebar-link" data-page="dashboard">
+  <ul class="sidebar-nav-list" id="menuItems">
+    <!-- Dashboard -->
+    <li class="sidebar-nav-item">
+      <a href="#dashboard" class="sidebar-nav-link" data-page="dashboard">
         <i class="fas fa-gauge-high"></i>
-        <span class="link-text">Dashboard</span>
+        <span class="nav-link-text">Dashboard</span>
       </a>
     </li>
 
     <!-- Users Management -->
-    <li class="sidebar-item has-submenu">
-      <a href="#" class="sidebar-link">
+    <li class="sidebar-nav-item has-subnav">
+      <a href="#" class="sidebar-nav-link">
         <i class="fas fa-users-cog"></i>
-        <span class="link-text">Users</span>
+        <span class="nav-link-text">Users</span>
       </a>
-      <ul class="submenu">
+      <ul class="subnav-list">
         <li>
-          <a href="#users" class="sidebar-link" data-page="users">All Users</a>
+          <a href="#users" class="sidebar-nav-link" data-page="users"
+            >All Users</a
+          >
         </li>
         <li>
-          <a href="#roles" class="sidebar-link" data-page="roles">Roles</a>
+          <a href="#roles" class="sidebar-nav-link" data-page="roles">Roles</a>
         </li>
         <li>
-          <a href="#permissions" class="sidebar-link" data-page="permissions"
+          <a
+            href="#permissions"
+            class="sidebar-nav-link"
+            data-page="permissions"
             >Permissions</a
           >
         </li>
@@ -37,112 +43,100 @@
     </li>
 
     <!-- Content Management -->
-    <li class="sidebar-item has-submenu">
-      <a href="#" class="sidebar-link">
+    <li class="sidebar-nav-item has-subnav">
+      <a href="#" class="sidebar-nav-link">
         <i class="fas fa-newspaper"></i>
-        <span class="link-text">Content</span>
+        <span class="nav-link-text">Content</span>
       </a>
-      <ul class="submenu">
+      <ul class="subnav-list">
         <li>
-          <a href="#pages" class="sidebar-link" data-page="pages">Pages</a>
+          <a href="#pages" class="sidebar-nav-link" data-page="pages">Pages</a>
         </li>
         <li>
-          <a href="#posts" class="sidebar-link" data-page="posts">News</a>
+          <a href="#posts" class="sidebar-nav-link" data-page="posts">News</a>
         </li>
         <li>
-          <a href="#categories" class="sidebar-link" data-page="categories"
-            >Categories</a
-          >
-        </li>
-        <li>
-          <a href="#tags" class="sidebar-link" data-page="tags">Tags</a>
-        </li>
-      </ul>
-    </li>
-
-    <!-- Products & Solutions -->
-    <li class="sidebar-item">
-      <a
-        href="#products-solutions"
-        class="sidebar-link"
-        data-page="products-solutions"
-      >
-        <i class="fas fa-box"></i>
-        <span class="link-text">Products & Solutions</span>
-      </a>
-    </li>
-
-    <!-- Services -->
-    <li class="sidebar-item">
-      <a href="#services" class="sidebar-link" data-page="services">
-        <i class="fas fa-concierge-bell"></i>
-        <span class="link-text">Services</span>
-      </a>
-    </li>
-
-    <!-- Projects -->
-    <li class="sidebar-item">
-      <a href="#projects" class="sidebar-link" data-page="projects">
-        <i class="fas fa-folder"></i>
-        <span class="link-text">Projects</span>
-      </a>
-    </li>
-
-    <!-- Jobs -->
-    <li class="sidebar-item">
-      <a href="#jobs" class="sidebar-link" data-page="jobs">
-        <i class="fas fa-briefcase"></i>
-        <span class="link-text">Jobs</span>
-      </a>
-    </li>
-
-    <!-- Contacts & Banners -->
-    <li class="sidebar-item has-submenu">
-      <a href="#" class="sidebar-link">
-        <i class="fas fa-address-book"></i>
-        <span class="link-text">Marketing</span>
-      </a>
-      <ul class="submenu">
-        <li>
-          <a href="#contacts" class="sidebar-link" data-page="contacts"
-            >Contacts</a
-          >
-        </li>
-        <li>
-          <a href="#banners" class="sidebar-link" data-page="banners"
+          <a href="#banners" class="sidebar-nav-link" data-page="banners"
             >Banners</a
           >
         </li>
         <li>
-          <a href="#clients" class="sidebar-link" data-page="clients"
-            >Clients/Partners</a
-          >
+          <a href="#tags" class="sidebar-nav-link" data-page="tags">Tags</a>
         </li>
       </ul>
     </li>
 
-    <!-- System -->
-    <li class="sidebar-item has-submenu">
-      <a href="#" class="sidebar-link">
-        <i class="fas fa-cogs"></i>
-        <span class="link-text">System</span>
+    <!-- Products -->
+    <li class="sidebar-nav-item">
+      <a href="#products" class="sidebar-nav-link" data-page="products">
+        <i class="fas fa-box"></i>
+        <span class="nav-link-text">Products</span>
       </a>
-      <ul class="submenu">
-        <li><a href="#logs" class="sidebar-link" data-page="logs">Logs</a></li>
+    </li>
+
+    <!-- Services -->
+    <li class="sidebar-nav-item">
+      <a href="#services" class="sidebar-nav-link" data-page="services">
+        <i class="fas fa-concierge-bell"></i>
+        <span class="nav-link-text">Services</span>
+      </a>
+    </li>
+
+    <!-- Locations -->
+    <li class="sidebar-nav-item">
+      <a href="#locations" class="sidebar-nav-link" data-page="locations">
+        <i class="fas fa-map-marker-alt"></i>
+        <span class="nav-link-text">Locations</span>
+      </a>
+    </li>
+
+    <!-- Projects / Clients -->
+    <li class="sidebar-nav-item has-subnav">
+      <a href="#" class="sidebar-nav-link">
+        <i class="fas fa-folder"></i>
+        <span class="nav-link-text">Projects</span>
+      </a>
+      <ul class="subnav-list">
         <li>
-          <a href="#settings" class="sidebar-link" data-page="settings"
-            >Settings</a
+          <a href="#teams" class="sidebar-nav-link" data-page="teams">Teams</a>
+        </li>
+        <li>
+          <a href="#clients" class="sidebar-nav-link" data-page="clients"
+            >Clients</a
+          >
+        </li>
+        <li>
+          <a
+            href="#client-categories"
+            class="sidebar-nav-link"
+            data-page="client-categories"
+            >Client Categories</a
           >
         </li>
       </ul>
+    </li>
+    <!-- Contacts -->
+    <li class="sidebar-nav-item">
+      <a href="#contacts" class="sidebar-nav-link" data-page="contacts">
+        <i class="fas fa-address-book"></i>
+        <span class="nav-link-text">Contacts</span>
+      </a>
+    </li>
+
+    <!-- Social Links -->
+    <li class="sidebar-nav-item">
+      <a href="#social-links" class="sidebar-nav-link" data-page="social-links">
+        <i class="fas fa-share-alt"></i>
+        <span class="nav-link-text">Social Links</span>
+      </a>
     </li>
   </ul>
 
   <!-- Footer -->
-  <div class="sidebar-footer">
-    <a href="/logout" class="sidebar-link logout-link">
+  <div class="sidebar-footer-section">
+    <a href="/logout" class="sidebar-logout-link">
       <i class="fas fa-right-from-bracket"></i>
-      <span class="link-text">Logout</span>
+      <span class="nav-link-text">Logout</span>
     </a>
   </div>
 </aside>

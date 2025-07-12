@@ -1,6 +1,6 @@
 document.addEventListener("DOMContentLoaded", function () {
-  const toggleButton = document.getElementById("toggleSidebar");
-  const sidebar = document.querySelector(".custom-sidebar");
+  const toggleButton = document.getElementById("tsb-toggle");
+  const sidebar = document.querySelector(".tsb-sidebar");
 
   if (toggleButton && sidebar) {
     toggleButton.addEventListener("click", () => {
@@ -13,30 +13,27 @@ document.addEventListener("DOMContentLoaded", function () {
   }
 
   function setActiveSidebarLink() {
-    const sidebarLinks = document.querySelectorAll(".sidebar-link");
+    const sidebarLinks = document.querySelectorAll(".tsb-link");
     const currentHash = window.location.hash.replace("#", "");
     const currentPath = window.location.pathname;
 
-    // Remove active class from all links first
     sidebarLinks.forEach((link) => {
       link.classList.remove("active");
     });
 
-    // Find the best match and set active link
     let activeLink = null;
     sidebarLinks.forEach((link) => {
       const page = link.getAttribute("data-page");
       const href = link.getAttribute("href").replace("#", "");
 
       const matchesHash = page && page === currentHash;
-      const matchesPath = href && currentPath === href; // Exact path match
+      const matchesPath = href && currentPath === href;
 
       if (matchesHash || matchesPath) {
         activeLink = link;
       }
     });
 
-    // Apply active class to the matched link
     if (activeLink) {
       activeLink.classList.add("active");
     }
@@ -45,14 +42,15 @@ document.addEventListener("DOMContentLoaded", function () {
   setActiveSidebarLink();
   window.addEventListener("hashchange", setActiveSidebarLink);
 
-  // Handle click to set active link immediately
-  document.getElementById("sidebar").addEventListener("click", function (e) {
-    const link = e.target.closest(".sidebar-link");
-    if (link) {
-      const sidebarLinks = document.querySelectorAll(".sidebar-link");
-      sidebarLinks.forEach((l) => l.classList.remove("active"));
-      link.classList.add("active");
-      setTimeout(setActiveSidebarLink, 100); // Sync with hash/path changes
-    }
-  });
+  document
+    .getElementById("tsb-sidebar")
+    .addEventListener("click", function (e) {
+      const link = e.target.closest(".tsb-link");
+      if (link) {
+        const sidebarLinks = document.querySelectorAll(".tsb-link");
+        sidebarLinks.forEach((l) => l.classList.remove("active"));
+        link.classList.add("active");
+        setTimeout(setActiveSidebarLink, 100);
+      }
+    });
 });
